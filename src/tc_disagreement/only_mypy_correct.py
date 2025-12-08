@@ -18,6 +18,7 @@ if __name__ == "__main__":
     result3 = parse("auto")
     print(result1, result2, result3)
 
+# EXPECTED means that the Agent (gemini-2.5-flash) expects the following outcomes of the type checkers
 """
 # EXPECTED:
    mypy: result1 type is bool, result2 is bool, result3 is str
@@ -28,9 +29,9 @@ if __name__ == "__main__":
 """
 """
 # ACTUAL OUTPUT:
-#   mypy: error: Cannot override final attribute "x" (previously declared in base class "Base")
+#   mypy: error: Overloaded function signatures 1 and 3 overlap with incompatible return types  [overload-overlap]
+          error: Overloaded function signatures 2 and 3 overlap with incompatible return types  [overload-overlap]
 #   ty: All checks passed!
-#   pyrefly: ERROR `x` is declared as final in parent class `Base` [bad-override]
-#   zuban: error: Cannot override final attribute "x" (previously declared in base class "Base")
-
+#   pyrefly:  INFO 0 errors
+#   zuban: Success: no issues found in 1 source file
 """
