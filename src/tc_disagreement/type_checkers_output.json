@@ -1,0 +1,10 @@
+{
+    "analyzed_file": "only_mypy_correct.py",
+    "source_code": "from typing import overload, Literal, Union\n\n@overload\ndef parse(value: Literal[\"true\"]) -> bool: ...\n@overload\ndef parse(value: Literal[\"false\"]) -> bool: ...\n@overload\ndef parse(value: str) -> str: ...\n\ndef parse(value: str) -> Union[bool, str]:\n    if value == \"true\": return True\n    if value == \"false\": return False\n    return value\n\nif __name__ == \"__main__\":\n    result1 = parse(\"true\")\n    result2 = parse(\"false\")\n    result3 = parse(\"auto\")\n    print(result1, result2, result3)\n\n# EXPECTED means that the Agent (gemini-2.0-flash) expects the following outcomes of the type checkers\n\"\"\"\n# EXPECTED:\n   mypy: result1 type is bool, result2 is bool, result3 is str\n   pyright: result1/result2 type is Union[bool, str]\n   pyre: result1/result2 type is bool\n   zuban: result1/result2 type is str|bool (may warn on overlap)\n# REASON: Literal overload discrimination is implemented inconsistently for strings.\n\"\"\"\n\"\"\"\n# ACTUAL OUTPUT:\n#   mypy: error: Overloaded function signatures 1 and 3 overlap with incompatible return types  [overload-overlap]\n          error: Overloaded function signatures 2 and 3 overlap with incompatible return types  [overload-overlap]\n#   ty: All checks passed!\n#   pyrefly:  INFO 0 errors\n#   zuban: Success: no issues found in 1 source file\n\"\"\"\n",
+    "outputs": {
+        "mypy": "only_mypy_correct.py:4: error: Overloaded function signatures 1 and 3 overlap with incompatible return types  [overload-overlap]\nonly_mypy_correct.py:6: error: Overloaded function signatures 2 and 3 overlap with incompatible return types  [overload-overlap]\nFound 2 errors in 1 file (checked 1 source file)",
+        "pyrefly": "[STDERR]\n INFO 0 errors",
+        "zuban": "Success: no issues found in 1 source file",
+        "ty": "All checks passed!"
+    }
+}
