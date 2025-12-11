@@ -7,31 +7,18 @@ import json
 
 from pydantic_core import Url
 
-class GetAccessToGitHubModels(BaseModel):
-    """LLM based agent to send requests to GitHub models."""
-    url: str = "https://models.github.ai"
-    model: str = Field(..., description="Model id, e.g. 'openai/gpt-4.1'")
-    api_base: HttpUrl = Field(HttpUrl(url), description="GitHub Models API base")
+class GetAccessToGemini(BaseModel):
+    """LLM based agent to send requests to Google Gemini."""
+    url: str = "https://generativelanguage.googleapis.com/v1beta"
+    model: str = Field(..., description="Model id, e.g. 'gemini-2.5-flash'")
+    api_base: HttpUrl = Field(HttpUrl(url), description="Google Gemini API base")
     timeout: float = Field(120.0, gt=0, description="Timeout (seconds)")
-    token: str = Field(..., description="GitHub PAT with `models:read` scope")
+    token: str = Field(..., description="Google API Key")
     
-    # Available models on GitHub Models
     AVAILABLE_MODELS: List[str] = [
-        "openai/gpt-4.1",
-        "openai/gpt-4",
-        "openai/gpt-4-turbo", 
-        "openai/gpt-4o",
-        "openai/gpt-4o-mini",
-        "deepseek/DeepSeek-R1",
-        "deepseek/DeepSeek-R1-0528",
-        "anthropic/claude-3-5-sonnet",
-        "anthropic/claude-3-opus",
-        "anthropic/claude-3-sonnet",
-        "anthropic/claude-3-haiku",
-        "mistralai/codestral-latest",
-        "meta/llama-3-70b-instruct",
-        "meta/llama-3-8b-instruct",
-        "mistralai/mixtral-8x7b-instruct",
+        "gemini-2.5-flash-light",
+        "gemini-2.5-pro",
+        "gemini-2.5-flash",
     ]
 
     def setup(
@@ -58,34 +45,44 @@ class GetAccessToGitHubModels(BaseModel):
             )
 
     def communicate(self, prompt: str) -> str:
-        """Send a prompt to GitHub Models and return the text reply."""
+        """Send a prompt to Google Gemini and return the text reply."""
         base = str(self.api_base).rstrip('/')
-        url = f"{base}/inference/chat/completions"
+        url = f"{base}/models/{self.model}:generateContent"
+        
         headers = {
-            "Accept": "application/vnd.github+json",
-            "Authorization": f"Bearer {self.token}",
-            "X-GitHub-Api-Version": "2022-11-28",
             "Content-Type": "application/json",
+            "x-goog-api-key": self.token
         }
+        
         payload = {
-            "model": self.model,
-            "messages": [{"role": "user", "content": prompt}],
+            "contents": [{
+                "parts": [{"text": prompt}]
+            }]
         }
+        
         try:
             resp = httpx.post(url, headers=headers, json=payload, timeout=self.timeout)
             resp.raise_for_status()
             data = resp.json()
-            choice0 = data.get("choices", [{}])[0]
-            msg = (choice0.get("message") or {}).get("content")
+            
+            try:
+                candidate = data.get("candidates", [{}])[0]
+                content = candidate.get("content", {})
+                parts = content.get("parts", [{}])
+                msg = parts[0].get("text")
+            except (IndexError, AttributeError):
+                msg = None
+
             if not msg:
-                raise ValueError("Invalid GitHub model response: missing choices[0].message.content")
+                raise ValueError(f"Invalid Gemini response: {data}")
             return str(msg)
+            
         except httpx.HTTPStatusError as e:
             raise ValueError(
                 f"HTTP {e.response.status_code} from {e.request.method} {e.request.url}: {e.response.text}"
             ) from e
         except httpx.HTTPError as e:
-            raise ValueError(f"Network error contacting GitHub Models: {e}") from e
+            raise ValueError(f"Network error contacting Google Gemini: {e}") from e
 
     def predict(self, prompt: str) -> str:
         return self.communicate(prompt)
@@ -296,18 +293,18 @@ Before giving me the output run the typecheckers on the examples and only give m
 """
 
 if __name__ == "__main__":
-    token = os.environ.get("GITHUB_PAT")
+    token = os.environ.get("GEMINI_API_KEY")
     if not token:
-        raise ValueError("Please set GITHUB_PAT environment variable")
+        raise ValueError("Please set GEMINI_API_KEY environment variable")
     
-    agent = GetAccessToGitHubModels(
-        model="openai/gpt-4.1",
+    agent = GetAccessToGemini(
+        model="gemini-2.5-flash",  # Changed to a valid default model
         token=token,
-        api_base=HttpUrl("https://models.github.ai"),
+        api_base=HttpUrl("https://generativelanguage.googleapis.com/v1beta"),
         timeout=320.0,
     )
     
-    # Handle command line arguments
+    # Added: Argument parsing logic
     parser = agent.cli_parser()
     args = parser.parse_args()
     
@@ -321,6 +318,7 @@ if __name__ == "__main__":
     print(f"Using model: {agent.model}")
     print("Generating type checker divergence examples...")
     
+    # Added: Actual execution
     response = agent.predict(EXPERT_PROMPT)
     print("\n" + "="*60)
     print("GENERATED CODE EXAMPLES:")
