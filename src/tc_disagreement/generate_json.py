@@ -1,79 +1,119 @@
-# /// script
-# requires-python = ">=3.12"
-# dependencies = [
-#     "mypy==1.19.0",
-#     "pyrefly==0.44.2",
-#     "zuban==0.3.0",
-#     "ty==0.0.1-alpha.32",
-# ]
-# ///
-
-import subprocess
-import json
 import os
-from typing import Dict, Any
+import re
+import json
+import datetime
+from typing import List, Dict
 
-SOURCE_FILENAME = "only_mypy_correct.py" # For simplicity I have set it to point to `only_mypy_correct.py` file
-                                         # but it can be changed to point to the other example which is `disagreement.py` 
-OUTPUT_JSON = "type_checkers_output.json"
-
-TYPE_CHECKERS = {
-    "mypy": ["mypy"],
-    "pyrefly": ["pyrefly", "check"], 
-    "zuban": ["zuban", "check"],
-    "ty": ["ty", "check"]
-}
-
-def run_command(command_args: list, filename: str) -> str:
+def parse_generated_content(response_text: str) -> List[Dict[str, str]]:
     """
-    Runs a subprocess and returns the combined stdout/stderr.
+    Parses the raw LLM response into structured dictionaries.
+    Robustly handles splitting by '# id:' and filters out artifacts like '---'.
     """
-    try:
-        full_command = command_args + [filename]
+    examples = []
+    
+    # 1. Find all occurrences of "# id: <name>" to determine boundaries
+    id_pattern = re.compile(r"^# id:\s*(?P<id>[\w-]+)", re.MULTILINE)
+    matches = list(id_pattern.finditer(response_text))
+    
+    for i, match in enumerate(matches):
+        file_id = match.group("id")
+        start_index = match.start()
         
-        result = subprocess.run(
-            full_command,
-            capture_output=True,
-            text=True,
-            check=False
-        )
-        
-        output = result.stdout
-        if result.stderr:
-            output += "\n[STDERR]\n" + result.stderr
+        # Determine the end of this current block
+        if i + 1 < len(matches):
+            end_index = matches[i+1].start()
+        else:
+            end_index = len(response_text)
             
-        return output.strip()
+        # Extract the raw chunk
+        chunk = response_text[start_index:end_index].strip()
         
-    except FileNotFoundError:
-        return f"Error: Command '{command_args[0]}' not found in system PATH."
-    except Exception as e:
-        return f"Execution Error: {str(e)}"
+        # 2. Line-by-line processing to separate Metadata from Code
+        lines = chunk.splitlines()
+        metadata_lines = []
+        code_lines = []
+        
+        capture_code = False
+        
+        for line in lines:
+            # CLEANING: Remove any lines that are just dashes (separator artifacts)
+            if "---" in line and len(line.strip()) < 5: 
+                continue
 
-def main():
-    if not os.path.exists(SOURCE_FILENAME):
-        print(f"Error: The file '{SOURCE_FILENAME}' was not found.")
-        return
+            stripped = line.strip()
+            
+            # Skip the ID line itself (we already have the ID)
+            if stripped.startswith(f"# id:"):
+                continue
+                
+            # State Machine: Metadata -> Code
+            if not capture_code:
+                if stripped.startswith("#"):
+                    metadata_lines.append(line)
+                elif stripped == "" or stripped.startswith("```"):
+                    # Ignore empty lines or markdown fences before code starts
+                    continue
+                else:
+                    # Found the start of code!
+                    capture_code = True
+                    code_lines.append(line)
+            else:
+                # Inside code block
+                # Remove closing markdown fences
+                if stripped.startswith("```"):
+                    continue
+                code_lines.append(line)
 
-    with open(SOURCE_FILENAME, "r", encoding="utf-8") as f:
-        code_content = f.read()
+        # 3. Final Cleanup
+        full_code = "\n".join(code_lines).strip()
+        full_metadata = "\n".join(metadata_lines).strip()
+        
+        # Ensure we don't save empty files
+        if file_id and full_code:
+            examples.append({
+                "id": file_id,
+                "metadata": full_metadata,
+                "code": full_code,
+                "full_content": f"# id: {file_id}\n{full_metadata}\n\n{full_code}"
+            })
+    
+    return examples
 
-    results: Dict[str, Any] = {
-        "analyzed_file": SOURCE_FILENAME,
-        "source_code": code_content,
-        "outputs": {}
+def save_output(examples: List[Dict[str, str]], raw_response: str, model_name: str):
+    """
+    Saves the parsed examples to JSON and individual .py files.
+    """
+    # 1. Create Timestamped Folder
+    now = datetime.datetime.now()
+    folder_name = now.strftime("%Y-%m-%d_%H-%M-%S")
+    
+    base_path = os.path.join("generated_examples", folder_name)
+    source_files_path = os.path.join(base_path, "source_files")
+
+    os.makedirs(source_files_path, exist_ok=True)
+    print(f"\n[INFO] Created output directory: {base_path}")
+
+    # 2. Save Individual .py files
+    for ex in examples:
+        filename = f"{ex['id']}.py"
+        file_path = os.path.join(source_files_path, filename)
+        
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(ex["full_content"])
+        print(f"  -> Saved {filename}")
+
+    # 3. Save Master JSON
+    json_path = os.path.join(base_path, "examples.json")
+    
+    output_data = {
+        "timestamp": now.isoformat(),
+        "model_used": model_name,
+        "raw_response": raw_response,
+        "examples": examples
     }
 
-    print(f"Analyzing {SOURCE_FILENAME}...")
-
-    for tool_name, command in TYPE_CHECKERS.items():
-        print(f"Running {tool_name}...")
-        output = run_command(command, SOURCE_FILENAME)
-        results["outputs"][tool_name] = output
-
-    with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
-        json.dump(results, f, indent=4)
-
-    print(f"\nSuccess! Results saved to '{OUTPUT_JSON}'")
-
-if __name__ == "__main__":
-    main()
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(output_data, f, indent=4)
+    
+    print(f"[INFO] Saved master JSON to: {json_path}")
+    print(f"[INFO] Successfully saved {len(examples)} examples.")

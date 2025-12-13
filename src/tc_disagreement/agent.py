@@ -6,6 +6,7 @@ import argparse
 import json
 
 from pydantic_core import Url
+import generate_json
 
 class GetAccessToGemini(BaseModel):
     """LLM based agent to send requests to Google Gemini."""
@@ -298,7 +299,7 @@ if __name__ == "__main__":
         raise ValueError("Please set GEMINI_API_KEY environment variable")
     
     agent = GetAccessToGemini(
-        model="gemini-2.5-flash",  # Changed to a valid default model
+        model="gemini-2.5-flash", 
         token=token,
         api_base=HttpUrl("https://generativelanguage.googleapis.com/v1beta"),
         timeout=320.0,
@@ -318,12 +319,20 @@ if __name__ == "__main__":
     print(f"Using model: {agent.model}")
     print("Generating type checker divergence examples...")
     
-    # Added: Actual execution
     response = agent.predict(EXPERT_PROMPT)
     print("\n" + "="*60)
     print("GENERATED CODE EXAMPLES:")
     print("="*60)
     print(response)
+
+    print("\n[INFO] Processing and saving output...")
+    
+    examples = generate_json.parse_generated_content(response)
+    
+    if examples:
+        generate_json.save_output(examples, response, agent.model)
+    else:
+        print("[WARNING] No code examples found to save.")
 
 """
 interactive model selection
