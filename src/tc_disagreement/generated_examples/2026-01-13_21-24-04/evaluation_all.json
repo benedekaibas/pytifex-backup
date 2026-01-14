@@ -1,0 +1,137 @@
+{
+  "method": "all",
+  "evaluations": [
+    {
+      "filename": "typed-dict-mixed-total-inheritance.py",
+      "filepath": "generated_examples/2026-01-13_21-24-04/source_files/typed-dict-mixed-total-inheritance.py",
+      "evaluations": {
+        "mypy": [
+          {
+            "verdict": "INCORRECT",
+            "reason": "The checker failed to identify the explicitly required field as missing and incorrectly identified inherited non-explicitly marked fields as required, contradicting PEP 655's rules on `Required`/`NotRequired` precedence over `total`.",
+            "accuracy": "Caught 0/1 real issues",
+            "analysis": "This analysis strictly adheres to the Python typing rules defined in the specified PEPs, ignoring any comments within the code that suggest divergent type checker behaviors.\n\n### Analysis:\n\nISSUE 1: Missing an explicitly `Required` field in a `TypedDict` assignment.\n  - Line: 59 (referring to the commented-out assignment block)\n  - Rule: When assigning a dictionary literal to a `TypedDict` type, all fields explicitly marked with `Required[T]` in the `TypedDict` definition *must* be present in the dictionary. The `invalid_config_data_missing_explicit_required` dictionary is missing the `required_setting` field, which is defined as `required_setting: Required[str]` in `ComplexConfig`.\n  - PEP Reference: PEP 655 -- \"Marking individual TypedDict items as Required or NotRequired\". Specifically, \"If a field is marked `Required[T]`, then it must be present in the dictionary at runtime. If it is not present, a type checker should report an error.\"\n  - Should Error: YES\n\n### NO ISSUES (for the uncommented code):\n\nThe `test_config_data_missing_inherited_required` dictionary is type-safe according to the PEPs. Here's the detailed breakdown for `ComplexConfig`:\n\n1.  **`ComplexConfig`'s `total` status:**\n    *   `ComplexConfig` inherits from `OptionalFeaturesBase`, which has `total=False`.\n    *   According to PEP 589 (\"TypedDict: Totality\" -> \"Inheritance\"), \"If any of the base classes has `total=False`, then the new `TypedDict` type has `total=False`.\"\n    *   Therefore, `ComplexConfig` is `total=False`.\n\n2.  **Field \"requiredness\" in `ComplexConfig`:**\n    *   **Fields explicitly marked `Required` or `NotRequired`:**\n        *   `required_setting: Required[str]`: Explicitly `Required`, overrides `ComplexConfig`'s `total=False`.\n        *   `optional_comment: NotRequired[str]`: Explicitly `NotRequired`, consistent with `ComplexConfig`'s `total=False`.\n    *   **Fields inherited without explicit `Required`/`NotRequired` marking:**\n        *   `config_id: int` and `config_name: str` (from `StrictConfigBase`, which has `total=True`): These were implicitly `Required` in `StrictConfigBase`.\n        *   `feature_a_enabled: bool` and `feature_b_value: float` (from `OptionalFeaturesBase`, which has `total=False`): These were implicitly `NotRequired` in `OptionalFeaturesBase`.\n        *   According to PEP 655 (\"TypedDict fields and total\"): \"The `Required` and `NotRequired` type qualifiers take precedence over the `total` parameter, regardless of whether the field is introduced in the current `TypedDict` or inherited from a base class.\"\n        *   Crucially, if a field is *not* explicitly marked `Required` or `NotRequired` in the *current* `TypedDict` definition, its requiredness is determined by the `total` parameter of that *current* `TypedDict`.\n        *   Since `ComplexConfig` is `total=False`, and `config_id`, `config_name`, `feature_a_enabled`, `feature_b_value` are not explicitly marked `Required` or `NotRequired` *within* the `ComplexConfig` definition, they all effectively become `NotRequired` in `ComplexConfig`.\n\n3.  **Conclusion for `test_config_data_missing_inherited_required`:**\n    *   The `test_config_data_missing_inherited_required` dictionary correctly includes `required_setting` (which is explicitly `Required`).\n    *   All other fields (`config_id`, `config_name`, `feature_a_enabled`, `feature_b_value`, `optional_comment`) are considered `NotRequired` in `ComplexConfig` based on the above rules.\n    *   Therefore, the absence of `config_id`, `config_name`, `feature_a_enabled`, and `feature_b_value` in `test_config_data_missing_inherited_required` does *not* constitute a type safety violation.\n\nThe `full_config_data` assignment is also type-safe, as all fields are present. The `process_complex_config` function correctly uses `.get()` for potentially missing fields, which is appropriate for `total=False` `TypedDicts` and `NotRequired` fields.",
+            "method": "multi_step"
+          },
+          {
+            "verdict": "INCORRECT",
+            "reason": "Code is runtime-safe. ",
+            "has_runtime_error": false,
+            "method": "runtime"
+          }
+        ],
+        "pyrefly": [
+          {
+            "verdict": "CORRECT",
+            "reason": "The type checker correctly identified that `config_id` and `config_name` are required fields because they are inherited from `StrictConfigBase` (which is `total=True`) and not explicitly marked `NotRequired` in `ComplexConfig`, aligning with the official `TypedDict` inheritance rules where `total=True` base fields remain required unless explicitly overridden.",
+            "accuracy": "Caught 2/2 real issues",
+            "analysis": "After a detailed analysis of the provided code against PEP 484, PEP 544, PEP 586, PEP 589, and PEP 655, focusing on the nuances of `TypedDict` inheritance, `total` parameter, and explicit `Required`/`NotRequired` annotations, I have determined the following:\n\n### Analysis of `ComplexConfig` Field Requirements:\n\n1.  **`ComplexConfig`'s `total` parameter:** According to PEP 589, \"If any of the base classes has `total=False`, then the new `TypedDict` type has `total=False`.\" Since `OptionalFeaturesBase` has `total=False`, `ComplexConfig` itself inherits `total=False`. This means that any field *not explicitly marked* `Required` in `ComplexConfig` will be implicitly `NotRequired`.\n\n2.  **Fields from `StrictConfigBase` (`config_id`, `config_name`):**\n    *   In `StrictConfigBase` (which is `total=True`), these fields are implicitly `Required`.\n    *   However, they are *not explicitly marked* with `Required[T]` in their definition in `StrictConfigBase`.\n    *   When inherited into `ComplexConfig` (which is `total=False`), and since they are not explicitly marked `Required[T]` or `NotRequired[T]`, their status defaults to `NotRequired` according to `ComplexConfig`'s `total=False` parameter.\n    *   PEP 655 states: \"Required/NotRequired take precedence over the 'total' parameter, regardless of whether the field is introduced in the current TypedDict or inherited from a base class.\" This rule applies to fields that are *explicitly marked* with `Required[T]` or `NotRequired[T]`. Since `config_id` and `config_name` are implicitly `Required` in their base, not explicitly, this precedence rule does not apply to them. Their status is determined by the child `TypedDict`'s `total` parameter if they are not explicitly marked.\n    *   Therefore, in `ComplexConfig`, `config_id` and `config_name` are `NotRequired[int]` and `NotRequired[str]` respectively.\n\n3.  **Fields from `OptionalFeaturesBase` (`feature_a_enabled`, `feature_b_value`):**\n    *   In `OptionalFeaturesBase` (which is `total=False`), these fields are implicitly `NotRequired`.\n    *   This is consistent with `ComplexConfig`'s `total=False`. They remain `NotRequired`.\n\n4.  **Fields defined in `ComplexConfig`:**\n    *   `required_setting: Required[str]`: Explicitly marked `Required`. This takes precedence over `ComplexConfig`'s `total=False` (as per PEP 655). So, it remains `Required`.\n    *   `optional_comment: NotRequired[str]`: Explicitly marked `NotRequired`. This is consistent with `ComplexConfig`'s `total=False`. So, it remains `NotRequired`.\n\n### Conclusion on `ComplexConfig`'s effective requirements:\n\n*   `config_id`: `NotRequired[int]`\n*   `config_name`: `NotRequired[str]`\n*   `feature_a_enabled`: `NotRequired[bool]`\n*   `feature_b_value`: `NotRequired[float]`\n*   `required_setting`: `Required[str]`\n*   `optional_comment`: `NotRequired[str]`\n\n### Type Safety Analysis of Code:\n\n1.  **`test_config_data_missing_inherited_required` (Line 58):**\n    *   This dictionary is missing `config_id`, `config_name`, `feature_a_enabled`, and `feature_b_value`.\n    *   Based on the analysis above, all these fields are `NotRequired` in `ComplexConfig`.\n    *   The dictionary *does* include `required_setting`, which is the only `Required` field.\n    *   Therefore, this assignment is **type-safe**.\n\n2.  **`full_config_data` (Line 70):**\n    *   This dictionary includes all possible fields. All `Required` fields are present, and all `NotRequired` fields are optionally present.\n    *   Therefore, this assignment is **type-safe**.\n\n3.  **`invalid_config_data_missing_explicit_required` (Commented out, Line 80):**\n    *   This dictionary is missing `\"required_setting\"`.\n    *   `required_setting` is explicitly `Required[str]` in `ComplexConfig`.\n    *   If uncommented, this assignment *would* be a type safety violation because a `Required` field is omitted. However, as it is commented out, it is not part of the executable code being analyzed.\n\nBased on the independent analysis of the *actual, uncommented* code against the Python typing rules and PEPs, there are no type safety violations.\n\nNO ISSUES: Code is type-safe",
+            "method": "multi_step"
+          },
+          {
+            "verdict": "INCORRECT",
+            "reason": "Code is runtime-safe. ",
+            "has_runtime_error": false,
+            "method": "runtime"
+          }
+        ],
+        "zuban": [
+          {
+            "verdict": "INCORRECT",
+            "reason": "The type checker produced a false positive regarding inherited fields becoming `NotRequired` and failed to identify the actual type safety violation of a missing `Required` field.",
+            "accuracy": "Caught 0/1 real issues",
+            "analysis": "ISSUE 1: Missing explicitly `Required` field in `TypedDict` instance.\n  - Line: 72 (commented out example)\n  - Rule: An instance of a `TypedDict` must include all fields explicitly marked with `Required` (or implicitly `Required` if the `TypedDict`'s `total=True` and the field is not `NotRequired`). The `ComplexConfig` `TypedDict` explicitly marks `required_setting` as `Required[str]`. The provided dictionary literal is missing this field, which is a type safety violation.\n  - PEP Reference: PEP 655 -- `Required` and `NotRequired` (specifically, \"These qualifiers take precedence over the `total` parameter, regardless of whether the field is introduced in the current TypedDict or inherited from a base class.\" and \"If a field is `Required`, it MUST be present in any dictionary assigned to a `TypedDict` of that type.\")\n  - Should Error: YES\n\n**Note on `test_config_data_missing_inherited_required` (Line 48):**\nBased on PEP 655, specifically the rule: \"If a field that is implicitly `Required` (due to being defined in a `TypedDict` with `total=True` and not explicitly marked) is inherited into a `TypedDict` with `total=False`, it becomes `NotRequired`.\"\n\n*   `StrictConfigBase` is `total=True`, making `config_id` and `config_name` implicitly `Required` within `StrictConfigBase`.\n*   `ComplexConfig` inherits from `OptionalFeaturesBase` which is `total=False`, thus `ComplexConfig` itself is `total=False` (PEP 589).\n*   Following PEP 655, when `config_id` and `config_name` are inherited into `ComplexConfig` (which is `total=False`), they become `NotRequired`.\n\nTherefore, the absence of `config_id` and `config_name` in `test_config_data_missing_inherited_required` is *not* a type safety violation according to the PEPs, and this assignment should pass type checking. The other fields (`feature_a_enabled`, `feature_b_value`, `optional_comment`) are also `NotRequired` (either implicitly or explicitly). Only `required_setting` is `Required`, and it is present.",
+            "method": "multi_step"
+          },
+          {
+            "verdict": "INCORRECT",
+            "reason": "Code is runtime-safe. ",
+            "has_runtime_error": false,
+            "method": "runtime"
+          }
+        ],
+        "ty": [
+          {
+            "verdict": "CORRECT",
+            "reason": "The type checker correctly identified both missing required keys (`config_id` and `config_name`) from the dictionary literal, matching all identified issues in the analysis.",
+            "accuracy": "Caught 2/2 real issues",
+            "analysis": "The independent analysis of the provided code based on Python typing rules and PEPs reveals the following type safety violations:\n\nISSUE 1: Dictionary literal is missing a required field (`config_id`).\n  - Line: 51 (`test_config_data_missing_inherited_required`)\n  - Rule: When assigning a dictionary literal to a `TypedDict` type, all fields that are `Required` (either explicitly via `typing.Required` or implicitly due to the `TypedDict`'s `total=True` setting in its defining class) must be present in the dictionary. `config_id` is inherited from `StrictConfigBase` (which has `total=True`), making `config_id` implicitly `Required`. According to PEP 655, this `Required` status takes precedence over the `ComplexConfig`'s `total=False` setting for inherited fields.\n  - PEP Reference: PEP 655, \"Interaction with total\" (for precedence of `Required` status, including implicitly `Required` fields inherited from `total=True` base classes); PEP 589, \"TypedDict Inheritance\" (for general inheritance rules of `TypedDict`s).\n  - Should Error: YES\n\nISSUE 2: Dictionary literal is missing a required field (`config_name`).\n  - Line: 51 (`test_config_data_missing_inherited_required`)\n  - Rule: When assigning a dictionary literal to a `TypedDict` type, all fields that are `Required` (either explicitly via `typing.Required` or implicitly due to the `TypedDict`'s `total=True` setting in its defining class) must be present in the dictionary. `config_name` is inherited from `StrictConfigBase` (which has `total=True`), making `config_name` implicitly `Required`. According to PEP 655, this `Required` status takes precedence over the `ComplexConfig`'s `total=False` setting for inherited fields.\n  - PEP Reference: PEP 655, \"Interaction with total\"; PEP 589, \"TypedDict Inheritance\".\n  - Should Error: YES",
+            "method": "multi_step"
+          },
+          {
+            "verdict": "INCORRECT",
+            "reason": "Code is runtime-safe. ",
+            "has_runtime_error": false,
+            "method": "runtime"
+          }
+        ]
+      }
+    },
+    {
+      "filename": "protocol-default-value-divergence.py",
+      "filepath": "generated_examples/2026-01-13_21-24-04/source_files/protocol-default-value-divergence.py",
+      "evaluations": {
+        "mypy": [
+          {
+            "verdict": "CORRECT",
+            "reason": "Both the analysis and the type checker correctly identified that changing the default value of an optional parameter in a protocol implementation is not a type safety violation, as type checkers focus on the parameter's optionality and type, not the specific default value.",
+            "accuracy": "Caught 0/0 real issues",
+            "analysis": "NO ISSUES: Code is type-safe\n\n**Reasoning:**\n\nThe core question revolves around whether changing the *value* of a default argument in an implementation of a `Protocol`'s method constitutes a type safety violation.\n\nAccording to PEP 484 (\"Type Hints\") and PEP 544 (\"Protocols\"), type checkers primarily focus on the *signature* of callable types during subtyping, not the specific *values* of default arguments.\n\n*   **PEP 484, Section \"Subtyping callable types\"** states: \"When a function parameter has a default value, it means that the parameter is optional. Its type is the type of the default value. If a function is overridden in a subclass, the overriding method can remove the default value, but it must still be possible to call the overridden method without the parameter.\"\n    *   This paragraph emphasizes that the key aspect is the *optionality* of the parameter and its *type*. It does not specify that the *value* of the default argument must be identical between a base callable and its subtype, or between a protocol method and its implementation.\n*   **PEP 544, Section \"Subtyping callable types in protocols\"** defers to the rules established in PEP 484 for `Callable` types.\n\nIn this code:\n\n1.  **`GreeterProtocol.greet(self, name: str = \"World\") -> str`**: Defines a method where `name` is an optional `str` parameter.\n2.  **`StandardGreeter.greet(self, name: str = \"World\") -> str`**: This implementation perfectly matches the protocol's method signature, including the default value. It is clearly type-compatible.\n3.  **`CustomDefaultGreeter.greet(self, name: str = \"Friend\") -> str`**:\n    *   The `name` parameter is still optional (it has a default).\n    *   The type of `name` is still `str`.\n    *   The return type is still `str`.\n    *   The only difference is the literal *value* of the default argument (`\"Friend\"` vs. `\"World\"`).\n\nFrom a static type checking perspective, `CustomDefaultGreeter`'s `greet` method still fulfills the contract defined by `GreeterProtocol.greet`. It can be called with a `str` argument (`greeter.greet(\"Alice\")`) and it can be called without an argument (`greeter.greet()`), returning a `str` in both cases. The type system guarantees that the call is valid and the return type is correct; it does not (and typically cannot) guarantee the *runtime value* produced by a default argument.\n\nWhile the runtime behavior of `greeter.greet()` will differ between `StandardGreeter` and `CustomDefaultGreeter` (producing \"Hello, World!\" vs. \"Greetings, Friend!\"), this is a difference in behavior, not a violation of type safety. The type contract (that `greet()` can be called without arguments and returns a `str`) is maintained.\n\nTherefore, `CustomDefaultGreeter` is type-compatible with `GreeterProtocol` according to the Python typing specification.",
+            "method": "multi_step"
+          },
+          {
+            "verdict": "CORRECT",
+            "reason": "Code is runtime-safe. ",
+            "has_runtime_error": false,
+            "method": "runtime"
+          }
+        ],
+        "pyrefly": [
+          {
+            "verdict": "CORRECT",
+            "reason": "Both the analysis and the type checker concluded that the code is type-safe and reported zero issues.",
+            "accuracy": "Caught 0/0 real issues",
+            "analysis": "NO ISSUES: Code is type-safe\n\n**Explanation:**\n\nAccording to PEP 484 (Type Hints) and PEP 544 (Protocols), the compatibility of a method in an implementing class with a method in a protocol is primarily determined by its *signature*:\n1.  **Parameter types and kinds:** Whether parameters are positional-only, positional-or-keyword, keyword-only, their type annotations, and whether they are optional (i.e., have a default value).\n2.  **Return type:** The type of the value returned by the method.\n\nThe exact *value* of a default argument is generally considered a runtime implementation detail and not part of the method's static type signature for the purpose of subtyping or protocol compatibility.\n\nIn this specific case:\n*   `GreeterProtocol.greet(self, name: str = \"World\") -> str:`\n    *   Defines a method that takes `self`, an optional parameter `name` of type `str`, and returns `str`.\n*   `StandardGreeter.greet(self, name: str = \"World\") -> str:`\n    *   This signature is identical in all aspects, including the default value. It is fully compatible.\n*   `CustomDefaultGreeter.greet(self, name: str = \"Friend\") -> str:`\n    *   This method's signature is `(self, name: str) -> str`.\n    *   The parameter `name` is still of type `str`.\n    *   The parameter `name` is still optional (it has a default value).\n    *   The return type is still `str`.\n\nAlthough the specific *value* of the default for `name` changes from `\"World\"` to `\"Friend\"`, this does not alter the static type of the `name` parameter (`str`) nor its optionality. From a type-checking perspective, `CustomDefaultGreeter.greet` remains compatible with the signature defined in `GreeterProtocol.greet`.\n\nThis interpretation aligns with how major type checkers like MyPy and Pyright handle protocol compatibility, focusing on the structural types rather than the exact runtime values of default arguments. Changing the default value is a behavioral difference, not a type safety violation.",
+            "method": "multi_step"
+          },
+          {
+            "verdict": "INCORRECT",
+            "reason": "Code is runtime-safe. ",
+            "has_runtime_error": false,
+            "method": "runtime"
+          }
+        ],
+        "zuban": [
+          {
+            "verdict": "CORRECT",
+            "reason": "Both the analysis and the type checker concluded that the code was type-safe and had no issues.",
+            "accuracy": "Caught 0/0 real issues",
+            "analysis": "NO ISSUES: Code is type-safe",
+            "method": "multi_step"
+          },
+          {
+            "verdict": "CORRECT",
+            "reason": "Code is runtime-safe. ",
+            "has_runtime_error": false,
+            "method": "runtime"
+          }
+        ],
+        "ty": [
+          {
+            "verdict": "CORRECT",
+            "reason": "The type checker correctly identified that there are no type issues, aligning with the analysis that differing default argument values do not violate protocol compatibility.",
+            "accuracy": "Caught 0/0 real issues",
+            "analysis": "NO ISSUES: Code is type-safe\n\n**Explanation:**\n\nThe primary point of analysis is whether `CustomDefaultGreeter` is compatible with `GreeterProtocol` given that it defines `greet` with a different default value for the `name` parameter.\n\nAccording to PEP 544 (Protocols and Structural Subtyping), a type `C` is a subtype of a `Protocol` `P` if `C` implements all the methods and attributes of `P` with compatible types. For methods, this means `C` must have a method with a compatible signature.\n\nA \"compatible signature\" generally implies:\n1.  **Parameter types:** Must be contravariant (or invariant if explicit).\n2.  **Return type:** Must be covariant.\n3.  **Number of parameters:** The implementation must accept at least as many arguments as the protocol requires, and any optional arguments in the protocol must also be optional in the implementation.\n4.  **Parameter kinds:** Positional-only, positional-or-keyword, keyword-only.\n\nIn the case of `GreeterProtocol.greet(self, name: str = \"World\") -> str` and `CustomDefaultGreeter.greet(self, name: str = \"Friend\") -> str`:\n\n*   Both methods expect `self`.\n*   Both methods expect `name` to be an optional `str`. The fact that `name` has a default value (making it optional) is part of the signature.\n*   Both methods return `str`.\n\nThe specific *value* of the default argument (`\"World\"` vs. `\"Friend\"`) is a runtime detail, not a part of the static type signature that type checkers typically evaluate for compatibility. The type system ensures that `greeter.greet()` (without arguments) is a valid call because `name` is optional, and `greeter.greet(\"someone\")` is a valid call because `name` accepts a `str`. The specific value used when the argument is omitted is a behavioral aspect of the implementation, not a type-level contract that current Python typing PEPs mandate for compatibility.\n\nType checkers like Mypy, Pyright, and Pylance generally follow this interpretation, allowing the assignment of `CustomDefaultGreeter` to `GreeterProtocol`. This is because the *type* of the `name` parameter (optional `str`) and the return type (`str`) remain consistent. The divergence in default *value* does not constitute a type safety violation.\n\nTherefore, based on the current understanding and common implementation of Python's static type checking rules as defined in PEP 484 and PEP 544, this code is considered type-safe.",
+            "method": "multi_step"
+          },
+          {
+            "verdict": "INCORRECT",
+            "reason": "Code is runtime-safe. ",
+            "has_runtime_error": false,
+            "method": "runtime"
+          }
+        ]
+      }
+    }
+  ]
+}

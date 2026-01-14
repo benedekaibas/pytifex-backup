@@ -1,0 +1,31 @@
+{
+    "timestamp": "2026-01-13_21-24-04",
+    "checkers_used": [
+        "mypy",
+        "pyrefly",
+        "zuban",
+        "ty"
+    ],
+    "results": [
+        {
+            "filename": "typed-dict-mixed-total-inheritance.py",
+            "filepath": "generated_examples/2026-01-13_21-24-04/source_files/typed-dict-mixed-total-inheritance.py",
+            "outputs": {
+                "mypy": "generated_examples/2026-01-13_21-24-04/source_files/typed-dict-mixed-total-inheritance.py:59: error: Missing keys (\"config_id\", \"config_name\") for TypedDict \"ComplexConfig\"  [typeddict-item]\nFound 1 error in 1 file (checked 1 source file)",
+                "pyrefly": "ERROR Missing required key `config_id` for TypedDict `ComplexConfig` [bad-typed-dict-key]\n  --> generated_examples/2026-01-13_21-24-04/source_files/typed-dict-mixed-total-inheritance.py:59:66\n   |\n59 |       test_config_data_missing_inherited_required: ComplexConfig = {\n   |  __________________________________________________________________^\n60 | |         \"required_setting\": \"enabled\",\n61 | |         \"optional_comment\": \"This is fine, it's optional\",\n62 | |         # 'config_id' and 'config_name' are MISSING.\n63 | |         # Mypy and some others would flag this as an error.\n64 | |         # Other checkers might pass, interpreting `total=False` as overriding\n   | |______________________________________________________________________________^\n   |\nERROR Missing required key `config_name` for TypedDict `ComplexConfig` [bad-typed-dict-key]\n  --> generated_examples/2026-01-13_21-24-04/source_files/typed-dict-mixed-total-inheritance.py:59:66\n   |\n59 |       test_config_data_missing_inherited_required: ComplexConfig = {\n   |  __________________________________________________________________^\n60 | |         \"required_setting\": \"enabled\",\n61 | |         \"optional_comment\": \"This is fine, it's optional\",\n62 | |         # 'config_id' and 'config_name' are MISSING.\n63 | |         # Mypy and some others would flag this as an error.\n64 | |         # Other checkers might pass, interpreting `total=False` as overriding\n   | |______________________________________________________________________________^\n   |\n\n[STDERR]\n INFO 2 errors",
+                "zuban": "generated_examples/2026-01-13_21-24-04/source_files/typed-dict-mixed-total-inheritance.py:59: error: Missing keys (\"config_id\", \"config_name\") for TypedDict \"ComplexConfig\"  [typeddict-item]\nFound 1 error in 1 file (checked 1 source file)",
+                "ty": "error[missing-typed-dict-key]: Missing required key 'config_id' in TypedDict `ComplexConfig` constructor\n  --> generated_examples/2026-01-13_21-24-04/source_files/typed-dict-mixed-total-inheritance.py:59:66\n   |\n57 |       # Will `config_id` and `config_name` remain `Required` (leading to an error here),\n58 |       # or will they become `NotRequired` due to `ComplexConfig` being `total=False` (allowing this to pass)?\n59 |       test_config_data_missing_inherited_required: ComplexConfig = {\n   |  __________________________________________________________________^\n60 | |         \"required_setting\": \"enabled\",\n61 | |         \"optional_comment\": \"This is fine, it's optional\",\n62 | |         # 'config_id' and 'config_name' are MISSING.\n63 | |         # Mypy and some others would flag this as an error.\n64 | |         # Other checkers might pass, interpreting `total=False` as overriding\n65 | |         # implicit requirements from parent `total=True` TypedDicts.\n66 | |     }\n   | |_____^\n67 |       print(\"Testing config missing inherited (implicitly) required fields:\")\n68 |       process_complex_config(test_config_data_missing_inherited_required)\n   |\ninfo: rule `missing-typed-dict-key` is enabled by default\n\nerror[missing-typed-dict-key]: Missing required key 'config_name' in TypedDict `ComplexConfig` constructor\n  --> generated_examples/2026-01-13_21-24-04/source_files/typed-dict-mixed-total-inheritance.py:59:66\n   |\n57 |       # Will `config_id` and `config_name` remain `Required` (leading to an error here),\n58 |       # or will they become `NotRequired` due to `ComplexConfig` being `total=False` (allowing this to pass)?\n59 |       test_config_data_missing_inherited_required: ComplexConfig = {\n   |  __________________________________________________________________^\n60 | |         \"required_setting\": \"enabled\",\n61 | |         \"optional_comment\": \"This is fine, it's optional\",\n62 | |         # 'config_id' and 'config_name' are MISSING.\n63 | |         # Mypy and some others would flag this as an error.\n64 | |         # Other checkers might pass, interpreting `total=False` as overriding\n65 | |         # implicit requirements from parent `total=True` TypedDicts.\n66 | |     }\n   | |_____^\n67 |       print(\"Testing config missing inherited (implicitly) required fields:\")\n68 |       process_complex_config(test_config_data_missing_inherited_required)\n   |\ninfo: rule `missing-typed-dict-key` is enabled by default\n\nFound 2 diagnostics"
+            }
+        },
+        {
+            "filename": "protocol-default-value-divergence.py",
+            "filepath": "generated_examples/2026-01-13_21-24-04/source_files/protocol-default-value-divergence.py",
+            "outputs": {
+                "mypy": "Success: no issues found in 1 source file",
+                "pyrefly": "[STDERR]\n INFO 0 errors",
+                "zuban": "Success: no issues found in 1 source file",
+                "ty": "All checks passed!"
+            }
+        }
+    ]
+}
