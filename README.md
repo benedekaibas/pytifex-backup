@@ -133,6 +133,152 @@ uv run main.py --max-refinements 0
 uv run main.py eval --eval-method consensus
 ```
 
+## Example Run
+
+Below is an annotated example of a complete Pytifex run, demonstrating the tool's output and what each section means.
+
+### 1. Pipeline Initialization
+
+```
+============================================================
+PYTIFEX - Full Pipeline (with disagreement filtering)
+============================================================
+
+[STEP 1/2] Generating examples with disagreement filtering...
+Target: 2 disagreement examples
+Using model: gemini-2.5-flash
+============================================================
+```
+
+The pipeline starts with your configuration: target number of disagreements and the LLM model being used.
+
+### 2. Seed Fetching from GitHub
+
+```
+[STEP 0] Fetching seed examples from GitHub issues...
+Fetching examples from type checker GitHub issues...
+  Fetching issues from python/mypy...
+  Found 5 code examples from python/mypy
+  Fetching issues from facebook/pyrefly...
+  No issues found in facebook/pyrefly
+  Fetching issues from astral-sh/ty...
+  Found 5 code examples from astral-sh/ty
+Total: 10 examples from GitHub issues
+```
+
+The tool fetches real bug reports from type checker repositories. These serve as seeds for generating variations that might trigger similar issues.
+
+### 3. Generation and Filtering
+
+```
+[Attempt 1/5] Generating batch of 15...
+  Using 5 GitHub issue seeds
+  Parsed 19 examples, running type checkers...
+  ✓ generic-typevar-bound-specialization: DISAGREEMENT {'mypy': 'ok', 'pyrefly': 'ok', 'zuban': 'error', 'ty': 'ok'}
+  ✓ self-in-abstract-generic-class-var: DISAGREEMENT {'mypy': 'ok', 'pyrefly': 'error', 'zuban': 'error', 'ty': 'error'}
+  ✓ self-in-protocol-default-implementation: DISAGREEMENT {'mypy': 'error', 'pyrefly': 'error', 'zuban': 'error', 'ty': 'ok'}
+  ✓ overload-decorator-any-refined: DISAGREEMENT (refined) {'mypy': 'ok', 'pyrefly': 'ok', 'zuban': 'error', 'ty': 'error'}
+  ...
+  Progress: 11/2 disagreements found
+```
+
+**Important:** The GitHub seeds are used as **inspiration only**—the LLM generates entirely **new code** based on the patterns it observes in those seeds. The original GitHub issue code is never directly tested.
+
+```
+GitHub Issue Seeds          LLM generates             Type checkers test
+(real bug examples)    →    NEW variations       →    the NEW code
+                            (not copies)
+```
+
+For each generated example:
+- The tool runs all four type checkers locally (mypy, pyrefly, zuban, ty)
+- Examples where all checkers agree are discarded
+- Only disagreements (✓) are kept
+
+**Understanding the output tags:**
+- `DISAGREEMENT` — The newly generated code caused type checkers to disagree on first try
+- `DISAGREEMENT (refined)` — The generated code initially had all checkers agree, so it was sent back to the LLM with real checker outputs as feedback, asking it to modify the code until a disagreement was achieved
+
+In this run, 19 examples were generated, and 11 produced genuine disagreements—a 58% hit rate.
+
+### 4. Evaluation Phase
+
+```
+============================================================
+File: generic-typevar-bound-specialization.py
+============================================================
+
+[Consensus Analysis]
+  ⚠️  WARNING: Consensus analysis returned no results
+
+[mypy]
+  Running multi-step analysis...
+    → Verdict: PARTIAL
+    → Accuracy: Caught 0/1 real issues
+    Reason: Mypy correctly found no issues in the active code, but it missed the one potential type
+    issue identified in the analysis because that line was commented out in the provided code.
+  Running runtime validation...
+    → Verdict: INCORRECT
+    Reason: Code would fail at runtime.
+
+[pyrefly]
+  Running multi-step analysis...
+    → Verdict: INCORRECT
+    → Accuracy: Caught 0/2 real issues
+    Reason: The type checker reported 0 errors, completely missing both type safety issues
+    identified in the analysis.
+  Running runtime validation...
+    → Verdict: INCORRECT
+    Reason: Code is runtime-safe.
+```
+
+For each disagreement, the LLM performs independent analysis:
+
+| Method | Description |
+|--------|-------------|
+| **Multi-step analysis** | LLM independently analyzes the code, then compares against each checker's output |
+| **Runtime validation** | Determines if the code would fail at runtime and whether checkers should have caught it |
+| **Consensus analysis** | Evaluates what the majority agrees on (may fail if response parsing issues occur) |
+
+**Verdict meanings:**
+- `CORRECT`: Checker accurately identified (or correctly ignored) all issues
+- `INCORRECT`: Checker missed critical issues or produced false positives
+- `PARTIAL`: Checker caught some but not all issues
+
+### 5. Summary Statistics
+
+```
+============================================================
+SUMMARY STATISTICS
+============================================================
+Tool         | Correct  | Incorrect  | Uncertain  | Accuracy
+----------------------------------------------------------------------
+mypy         | 13       | 9          | 0          | 59.1%
+pyrefly      | 7        | 14         | 1          | 31.8%
+zuban        | 3        | 19         | 0          | 13.6%
+ty           | 4        | 18         | 0          | 18.2%
+============================================================
+```
+
+Aggregated results across all evaluated files. Each file is evaluated with multiple methods (multi-step + runtime), so the total evaluations per checker equals `files × methods`.
+
+> **Note:** These accuracy scores reflect performance on edge cases specifically designed to cause disagreements. They do not represent overall type checker quality on typical codebases.
+
+### 6. Pipeline Completion
+
+```
+============================================================
+PIPELINE COMPLETE
+============================================================
+Disagreements found: 11
+Output directory: generated_examples/2026-01-13_22-04-49
+Evaluation: generated_examples/2026-01-13_22-04-49/evaluation_all.json
+```
+
+All artifacts are saved to the timestamped output directory for further analysis.
+
+---
+
 ## Output Structure
 
 Each run creates a timestamped folder:
@@ -263,6 +409,34 @@ The tool uses three methods to evaluate type checker correctness:
 3. Validates that reported errors correspond to real issues
 
 ## Architecture
+
+### System Overview
+
+Pytifex combines cloud-based LLM generation with local type checker execution:
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                           CLOUD (Gemini API)                            │
+├─────────────────────────────────────────────────────────────────────────┤
+│  • Generate Python code examples based on GitHub issue seeds            │
+│  • Refine non-divergent examples with checker feedback                  │
+│  • Evaluate which type checker is correct                               │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         LOCAL (Your Machine)                            │
+├─────────────────────────────────────────────────────────────────────────┤
+│  • Fetch issues from GitHub API                                         │
+│  • Run mypy, pyrefly, zuban, ty via subprocess                          │
+│  • Collect and compare real type checker outputs                        │
+│  • Save results to disk                                                 │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**Important:** The type checker outputs are real—they come from actual tool execution on your system, not LLM simulation.
+
+### File Structure
 
 ```
 src/tc_disagreement/
