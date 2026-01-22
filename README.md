@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Pytifex
 
 **Pytifex** is a research tool that automatically discovers disagreements between Python type checkers. It finds cases where type checkers (mypy, pyrefly, zuban, ty) produce different results on the same code—revealing false positives, false negatives, and implementation differences.
@@ -490,9 +489,3 @@ Contributions welcome! Areas for improvement:
 ## License
 
 MIT License
-=======
-# About
-
-This repository contains all the files that are required to run the latest version of the production ready Pytifex project.  
-This repository is only for backup, so the newest updates won't be stored here!
->>>>>>> e577e82b11563319bfc15dee39e308040674b04c
