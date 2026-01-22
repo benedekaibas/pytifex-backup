@@ -7,7 +7,6 @@ use them as seeds, and generate variations that might cause divergences.
 
 import os
 import subprocess
-import tempfile
 from dataclasses import dataclass
 from typing import Optional
 
@@ -36,9 +35,12 @@ class Example:
 
 def run_checker_on_code(code: str, checker_name: str, command: list[str]) -> CheckerResult:
     """Run a single type checker on code and return the result."""
-    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+    # Use current directory for temp files - zuban doesn't work with /tmp/ paths
+    temp_filename = f"_pytifex_temp_{os.getpid()}.py"
+    temp_path = os.path.join(os.getcwd(), temp_filename)
+    
+    with open(temp_path, "w") as f:
         f.write(code)
-        temp_path = f.name
 
     try:
         result = subprocess.run(
