@@ -1,0 +1,433 @@
+{
+  "method": "deterministic",
+  "average_coverage": 8.534,
+  "high_confidence_verdicts": 22,
+  "uncertain_verdicts": 0,
+  "checker_results": {
+    "mypy": {
+      "precision": 1.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "true_positives": 0,
+      "false_positives": 0,
+      "false_negatives": 22,
+      "true_negatives": 0
+    },
+    "pyrefly": {
+      "precision": 1.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "true_positives": 0,
+      "false_positives": 0,
+      "false_negatives": 22,
+      "true_negatives": 0
+    },
+    "zuban": {
+      "precision": 1.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "true_positives": 0,
+      "false_positives": 0,
+      "false_negatives": 22,
+      "true_negatives": 0
+    },
+    "ty": {
+      "precision": 1.0,
+      "recall": 0.136,
+      "f1": 0.24,
+      "true_positives": 3,
+      "false_positives": 0,
+      "false_negatives": 19,
+      "true_negatives": 0
+    }
+  },
+  "per_file": [
+    {
+      "filename": "typeddict-typeguard-notrequired-access-divergence.py",
+      "coverage": 5.442,
+      "ground_truth_count": 8,
+      "checker_results": {
+        "mypy": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 8,
+          "true_negatives": 0
+        },
+        "pyrefly": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 8,
+          "true_negatives": 0
+        },
+        "zuban": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 8,
+          "true_negatives": 0
+        },
+        "ty": {
+          "precision": 1.0,
+          "recall": 0.375,
+          "f1": 0.545,
+          "true_positives": 3,
+          "false_positives": 0,
+          "false_negatives": 5,
+          "true_negatives": 0
+        }
+      }
+    },
+    {
+      "filename": "self-constructor-divergence-refined.py",
+      "coverage": 2.481,
+      "ground_truth_count": 4,
+      "checker_results": {
+        "mypy": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 4,
+          "true_negatives": 0
+        },
+        "pyrefly": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 4,
+          "true_negatives": 0
+        },
+        "zuban": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 4,
+          "true_negatives": 0
+        },
+        "ty": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 4,
+          "true_negatives": 0
+        }
+      }
+    },
+    {
+      "filename": "newtype-typeguard-unsound-divergence.py",
+      "coverage": 3.893,
+      "ground_truth_count": 1,
+      "checker_results": {
+        "mypy": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "true_negatives": 0
+        },
+        "pyrefly": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "true_negatives": 0
+        },
+        "zuban": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "true_negatives": 0
+        },
+        "ty": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "true_negatives": 0
+        }
+      }
+    },
+    {
+      "filename": "ternary-typeguard-lambda-narrowing.py",
+      "coverage": 2.479,
+      "ground_truth_count": 1,
+      "checker_results": {
+        "mypy": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "true_negatives": 0
+        },
+        "pyrefly": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "true_negatives": 0
+        },
+        "zuban": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "true_negatives": 0
+        },
+        "ty": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "true_negatives": 0
+        }
+      }
+    },
+    {
+      "filename": "typed-dict-inheritance-notrequired-required-clash-refined.py",
+      "coverage": 3.831,
+      "ground_truth_count": 5,
+      "checker_results": {
+        "mypy": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 5,
+          "true_negatives": 0
+        },
+        "pyrefly": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 5,
+          "true_negatives": 0
+        },
+        "zuban": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 5,
+          "true_negatives": 0
+        },
+        "ty": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 5,
+          "true_negatives": 0
+        }
+      }
+    },
+    {
+      "filename": "paramspec-async-staticmethod-decorator.py",
+      "coverage": 45.947,
+      "ground_truth_count": 1,
+      "checker_results": {
+        "mypy": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "true_negatives": 0
+        },
+        "pyrefly": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "true_negatives": 0
+        },
+        "zuban": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "true_negatives": 0
+        },
+        "ty": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "true_negatives": 0
+        }
+      }
+    },
+    {
+      "filename": "dataclass-kw-only-post-init-generic-base.py",
+      "coverage": 8.079,
+      "ground_truth_count": 1,
+      "checker_results": {
+        "mypy": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "true_negatives": 0
+        },
+        "pyrefly": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "true_negatives": 0
+        },
+        "zuban": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "true_negatives": 0
+        },
+        "ty": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "true_negatives": 0
+        }
+      }
+    },
+    {
+      "filename": "ternary-union-attribute-method-call.py",
+      "coverage": 1.929,
+      "ground_truth_count": 0,
+      "checker_results": {
+        "mypy": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 0,
+          "true_negatives": 0
+        },
+        "pyrefly": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 0,
+          "true_negatives": 0
+        },
+        "zuban": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 0,
+          "true_negatives": 0
+        },
+        "ty": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 0,
+          "true_negatives": 0
+        }
+      }
+    },
+    {
+      "filename": "type-self-init-divergence-refined.py",
+      "coverage": 2.72,
+      "ground_truth_count": 1,
+      "checker_results": {
+        "mypy": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "true_negatives": 0
+        },
+        "pyrefly": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "true_negatives": 0
+        },
+        "zuban": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "true_negatives": 0
+        },
+        "ty": {
+          "precision": 1.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "true_positives": 0,
+          "false_positives": 0,
+          "false_negatives": 1,
+          "true_negatives": 0
+        }
+      }
+    }
+  ]
+}

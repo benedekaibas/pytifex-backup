@@ -107,7 +107,7 @@ uv run main.py --model gemini-2.5-pro
 | `--max-attempts N` | 5 | Maximum generation attempts before giving up |
 | `--max-refinements N` | 2 | Refinement attempts per non-divergent example |
 | `--model MODEL` | gemini-2.5-flash | Gemini model to use |
-| `--eval-method METHOD` | all | Evaluation method (multi_step, consensus, runtime, all) |
+| `--eval-method METHOD` | testing | Evaluation method (testing, deterministic, llm, multi_step, consensus, runtime, all) |
 | `--no-github` | false | Skip fetching seeds from GitHub issues |
 | `-v, --verbose` | false | Show all examples, not just disagreements |
 
@@ -388,25 +388,85 @@ The tool targets these known areas of type checker disagreement:
 
 ## Evaluation Methods
 
-The tool uses three methods to evaluate type checker correctness:
+The tool supports multiple evaluation methods, with testing-based evaluation as the default.
 
-### 1. Multi-Step Analysis (`multi_step`)
+### Testing-Based Evaluation (`testing`) — **Default, Recommended**
+
+A comprehensive, reproducible evaluation that uses multiple runtime testing techniques to establish ground truth:
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│ ORACLE 1: Runtime Exception Tracing                                │
+│   - Execute code and catch TypeError, KeyError, AttributeError     │
+│   - Uncaught exceptions = definitive type bugs                     │
+│   - Caught exceptions (try/except) = expected type bugs            │
+├─────────────────────────────────────────────────────────────────────┤
+│ ORACLE 2: Beartype Runtime Enforcement                             │
+│   - Enforce type annotations at runtime                            │
+│   - Catch violations that static checkers missed                   │
+├─────────────────────────────────────────────────────────────────────┤
+│ ORACLE 3: Hypothesis Property-Based Testing                        │
+│   - Generate random valid inputs matching declared types           │
+│   - Properties: "type-safe calls don't crash"                      │
+│   - Discovers edge cases through fuzzing                           │
+├─────────────────────────────────────────────────────────────────────┤
+│ ORACLE 4: AST Analysis                                             │
+│   - Detect unsafe access to NotRequired TypedDict fields           │
+│   - Static analysis of type annotation patterns                    │
+├─────────────────────────────────────────────────────────────────────┤
+│ VERDICT LOGIC                                                      │
+│   - Proven bugs + checker OK → INCORRECT (false negative)          │
+│   - Proven bugs + checker ERROR → CORRECT                          │
+│   - No bugs + checker OK → UNCERTAIN                               │
+│   - No bugs + checker ERROR → UNCERTAIN (possible false positive)  │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+**Key insight:** Runtime behavior is the ultimate ground truth. If code raises TypeError at runtime, any type checker that reported "OK" is definitively incorrect.
+
+```bash
+# Use testing-based evaluation (default)
+uv run main.py
+
+# Explicitly specify
+uv run main.py --eval-method testing
+```
+
+### Deterministic Evaluation (`deterministic`)
+
+A simpler LLM-free evaluation using AST analysis and beartype:
+
+```bash
+uv run main.py --eval-method deterministic
+```
+
+### LLM-Based Methods (Legacy)
+
+These methods use Gemini to analyze correctness. Less reproducible but can handle edge cases:
+
+#### Multi-Step Analysis (`multi_step`)
 
 1. LLM independently analyzes the code for type issues
 2. LLM compares each checker's output against its analysis
 3. Determines if the checker caught real issues or produced false positives/negatives
 
-### 2. Consensus Analysis (`consensus`)
+#### Consensus Analysis (`consensus`)
 
 1. Collects outputs from all 4 checkers
 2. Identifies what the majority agrees on
 3. Analyzes whether the minority or majority is likely correct
 
-### 3. Runtime Validation (`runtime`)
+#### Runtime Validation (`runtime`)
 
 1. Analyzes if the code would cause runtime errors
 2. Checks if type checkers should have caught those errors
 3. Validates that reported errors correspond to real issues
+
+```bash
+# Use LLM-based evaluation
+uv run main.py --eval-method all
+uv run main.py --eval-method consensus
+```
 
 ## Architecture
 
@@ -447,7 +507,9 @@ src/tc_disagreement/
 ├── patterns.py          # Known divergence pattern definitions
 ├── agent.py             # Gemini API client
 ├── run_checkers.py      # Type checker execution
-├── eval.py              # Correctness evaluation
+├── testing_eval.py      # Testing-based evaluation (Hypothesis + beartype) - DEFAULT
+├── deterministic_eval.py # AST + runtime evaluation (no LLM)
+├── eval.py              # LLM-based correctness evaluation
 ├── generate_json.py     # Parsing LLM output
 └── config.py            # Shared constants
 ```

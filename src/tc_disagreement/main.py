@@ -91,9 +91,9 @@ Options:
     )
     parser.add_argument(
         "--eval-method",
-        choices=["multi_step", "consensus", "runtime", "all"],
-        default="all",
-        help="Evaluation method (default: all)",
+        choices=["multi_step", "consensus", "runtime", "all", "deterministic", "llm", "testing"],
+        default="testing",
+        help="Evaluation method (default: testing = runtime testing with Hypothesis/beartype)",
     )
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="Verbose output"
@@ -124,9 +124,27 @@ Options:
 
             print(f"\n[STEP 2/2] Evaluating {len(disagreements)} disagreements...")
             results_path = f"{base_path}/results.json"
-            eval_path = evaluate_results(
-                results_path, method=args.eval_method, verbose=args.verbose
-            )
+            
+            if args.eval_method == "testing":
+                # Use testing-based evaluation (Hypothesis + beartype)
+                from testing_eval import evaluate_results_testing
+                evaluate_results_testing(results_path)
+                eval_path = f"{base_path}/evaluation_testing.json"
+            elif args.eval_method == "llm":
+                # Use LLM-based evaluation
+                from deterministic_eval import evaluate_results_llm
+                evaluate_results_llm(results_path, model=args.model)
+                eval_path = f"{base_path}/evaluation_llm.json"
+            elif args.eval_method == "deterministic":
+                # Use deterministic evaluation (no LLM, less accurate)
+                from deterministic_eval import evaluate_results_deterministic
+                evaluate_results_deterministic(results_path)
+                eval_path = f"{base_path}/evaluation_deterministic.json"
+            else:
+                # Use LLM-based evaluation
+                eval_path = evaluate_results(
+                    results_path, method=args.eval_method, verbose=args.verbose
+                )
 
             print("\n" + "=" * 60)
             print("PIPELINE COMPLETE")
@@ -152,9 +170,31 @@ Options:
             print(f"\n[SUCCESS] Results saved to: {results_path}")
 
         elif args.command == "eval":
-            eval_path = evaluate_results(
-                method=args.eval_method, verbose=args.verbose
-            )
+            # Find the latest results file
+            from config import BASE_GEN_DIR
+            import glob
+            results_files = sorted(glob.glob(f"{BASE_GEN_DIR}/*/results.json"))
+            if not results_files:
+                print("[ERROR] No results.json found. Run 'generate' first.")
+                sys.exit(1)
+            results_path = results_files[-1]
+            
+            if args.eval_method == "testing":
+                from testing_eval import evaluate_results_testing
+                evaluate_results_testing(results_path)
+                eval_path = results_path.replace("results.json", "evaluation_testing.json")
+            elif args.eval_method == "llm":
+                from deterministic_eval import evaluate_results_llm
+                evaluate_results_llm(results_path, model=args.model)
+                eval_path = results_path.replace("results.json", "evaluation_llm.json")
+            elif args.eval_method == "deterministic":
+                from deterministic_eval import evaluate_results_deterministic
+                evaluate_results_deterministic(results_path)
+                eval_path = results_path.replace("results.json", "evaluation_deterministic.json")
+            else:
+                eval_path = evaluate_results(
+                    results_path, method=args.eval_method, verbose=args.verbose
+                )
             print(f"\n[SUCCESS] Evaluation saved to: {eval_path}")
 
     except ValueError as e:

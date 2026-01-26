@@ -1,0 +1,159 @@
+{
+  "timestamp": "2026-01-22T15:11:04.151045",
+  "model_used": "gemini-2.5-flash",
+  "total_generated": 15,
+  "disagreements_found": 9,
+  "success_rate": "60.0%",
+  "checkers_used": [
+    "mypy",
+    "pyrefly",
+    "zuban",
+    "ty"
+  ],
+  "results": [
+    {
+      "filename": "typeddict-typeguard-notrequired-access-divergence.py",
+      "filepath": "generated_examples/2026-01-22_15-11-04/source_files/typeddict-typeguard-notrequired-access-divergence.py",
+      "outputs": {
+        "mypy": "Success: no issues found in 1 source file",
+        "pyrefly": "INFO 0 errors",
+        "zuban": "Success: no issues found in 1 source file",
+        "ty": "error[invalid-key]: Unknown key \"description\" for TypedDict `BaseConfig`\n  --> _pytifex_temp_3312576.py:55:33\n   |\n53 |         # to be present and of type str within this block.\n54 |         print(f\"Processing Active Config (ID: {config['id']}):\")\n55 |         print(f\"  Description: {config['description']}\") # Safe due to TypeGuard.\n   |                                 ------ ^^^^^^^^^^^^^ Unknown key \"description\"\n   |                                 |\n   |                                 TypedDict `BaseConfig`\n56 |         print(f\"  Start Date: {config['startDate']}\")   # Safe due to TypeGuard.\n   |\ninfo: rule `invalid-key` is enabled by default\n\nerror[invalid-key]: Unknown key \"startDate\" for TypedDict `BaseConfig`\n  --> _pytifex_temp_3312576.py:56:32\n   |\n54 |         print(f\"Processing Active Config (ID: {config['id']}):\")\n55 |         print(f\"  Description: {config['description']}\") # Safe due to TypeGuard.\n56 |         print(f\"  Start Date: {config['startDate']}\")   # Safe due to TypeGuard.\n   |                                ------ ^^^^^^^^^^^ Unknown key \"startDate\"\n   |                                |\n   |                                TypedDict `BaseConfig`\n57 |\n58 |         # Divergence point: Accessing 'deadline' directly without prior presence check.\n   |\ninfo: rule `invalid-key` is enabled by default\n\nerror[invalid-key]: Unknown key \"startDate\" for TypedDict `DetailedConfig`\n  --> _pytifex_temp_3312576.py:56:32\n   |\n54 |         print(f\"Processing Active Config (ID: {config['id']}):\")\n55 |         print(f\"  Description: {config['description']}\") # Safe due to TypeGuard.\n56 |         print(f\"  Start Date: {config['startDate']}\")   # Safe due to TypeGuard.\n   |                                ------ ^^^^^^^^^^^ Unknown key \"startDate\"\n   |                                |\n   |                                TypedDict `DetailedConfig`\n57 |\n58 |         # Divergence point: Accessing 'deadline' directly without prior presence check.\n   |\ninfo: rule `invalid-key` is enabled by default\n\nerror[invalid-key]: Unknown key \"deadline\" for TypedDict `BaseConfig`\n  --> _pytifex_temp_3312576.py:71:34\n   |\n69 |             # This 'try-except' block is for runtime safety and demonstration.\n70 |             # The static analysis error is expected on the line below it.\n71 |             print(f\"  Deadline: {config['deadline']}\")\n   |                                  ------ ^^^^^^^^^^ Unknown key \"deadline\"\n   |                                  |\n   |                                  TypedDict `BaseConfig`\n72 |         except KeyError:\n73 |             print(f\"  Deadline: Not specified (runtime KeyError handled)\")\n   |\ninfo: rule `invalid-key` is enabled by default\n\nerror[invalid-key]: Unknown key \"deadline\" for TypedDict `BaseConfig`\n  --> _pytifex_temp_3312576.py:81:13\n   |\n79 |         # Others might incorrectly allow it, possibly due to over-eager narrowing\n80 |         # or lenient handling of NotRequired fields after some checks.\n81 |         _ = config['deadline'] \n   |             ------ ^^^^^^^^^^ Unknown key \"deadline\"\n   |             |\n   |             TypedDict `BaseConfig`\n82 |\n83 |     else:\n   |\ninfo: rule `invalid-key` is enabled by default\n\nFound 5 diagnostics"
+      },
+      "statuses": {
+        "mypy": "ok",
+        "pyrefly": "ok",
+        "zuban": "ok",
+        "ty": "error"
+      }
+    },
+    {
+      "filename": "self-constructor-divergence-refined.py",
+      "filepath": "generated_examples/2026-01-22_15-11-04/source_files/self-constructor-divergence-refined.py",
+      "outputs": {
+        "mypy": "Success: no issues found in 1 source file",
+        "pyrefly": "INFO 0 errors (1 suppressed)",
+        "zuban": "_pytifex_temp_3312576.py:14: error: \"type[Cls]\" has no attribute \"__name__\"  [attr-defined]\nFound 1 error in 1 file (checked 1 source file)",
+        "ty": "error[unresolved-attribute]: Object of type `(...) -> R@log_classmethod_calls` has no attribute `__name__`\n  --> _pytifex_temp_3312576.py:14:40\n   |\n12 |     @functools.wraps(func)\n13 |     def wrapper(cls: Type[Cls], *args: P.args, **kwargs: P.kwargs) -> R:\n14 |         print(f\"Calling class method '{func.__name__}' on class '{cls.__name__}' with args {args}, kwargs {kwargs}\")\n   |                                        ^^^^^^^^^^^^^\n15 |         return func(cls, *args, **kwargs)\n16 |     return wrapper\n   |\ninfo: rule `unresolved-attribute` is enabled by default\n\nFound 1 diagnostic"
+      },
+      "statuses": {
+        "mypy": "ok",
+        "pyrefly": "ok",
+        "zuban": "error",
+        "ty": "error"
+      }
+    },
+    {
+      "filename": "newtype-typeguard-unsound-divergence.py",
+      "filepath": "generated_examples/2026-01-22_15-11-04/source_files/newtype-typeguard-unsound-divergence.py",
+      "outputs": {
+        "mypy": "_pytifex_temp_3312576.py:31: note: Revealed type is \"_pytifex_temp_3312576.UserID\"\n_pytifex_temp_3312576.py:39: note: Revealed type is \"builtins.int | _pytifex_temp_3312576.UserID\"\n_pytifex_temp_3312576.py:57: note: Revealed type is \"_pytifex_temp_3312576.UserID\"\n_pytifex_temp_3312576.py:60: note: Revealed type is \"builtins.int\"\nSuccess: no issues found in 1 source file",
+        "pyrefly": "INFO revealed type: UserID [reveal-type]\n  --> _pytifex_temp_3312576.py:31:20\n   |\n31 |         reveal_type(id_val)\n   |                    --------\n   |\n INFO revealed type: UserID | int [reveal-type]\n  --> _pytifex_temp_3312576.py:39:20\n   |\n39 |         reveal_type(id_val)\n   |                    --------\n   |\n INFO revealed type: UserID [reveal-type]\n  --> _pytifex_temp_3312576.py:57:24\n   |\n57 |             reveal_type(item)\n   |                        ------\n   |\n INFO revealed type: UserID | int [reveal-type]\n  --> _pytifex_temp_3312576.py:60:24\n   |\n60 |             reveal_type(item)\n   |                        ------\n   |\n INFO 0 errors",
+        "zuban": "_pytifex_temp_3312576.py:31: note: Revealed type is \"_pytifex_temp_3312576.UserID\"\n_pytifex_temp_3312576.py:39: note: Revealed type is \"builtins.int | _pytifex_temp_3312576.UserID\"\n_pytifex_temp_3312576.py:57: note: Revealed type is \"_pytifex_temp_3312576.UserID\"\n_pytifex_temp_3312576.py:60: note: Revealed type is \"builtins.int | _pytifex_temp_3312576.UserID\"\nSuccess: no issues found in 1 source file",
+        "ty": "info[revealed-type]: Revealed type\n  --> _pytifex_temp_3312576.py:31:21\n   |\n29 |         # - Some checkers might refine to `UserID`.\n30 |         # - Others might detect unsoundness and keep `Union[int, UserID]`, or report an error.\n31 |         reveal_type(id_val)\n   |                     ^^^^^^ `int`\n32 |         print(f\"  Refined to UserID: {id_val}\")\n33 |     else:\n   |\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_3312576.py:39:21\n   |\n37 |         # - Some checkers might infer `NoReturn`.\n38 |         # - Others might infer `int` (if they don't fully track the TypeGuard's runtime behavior).\n39 |         reveal_type(id_val)\n   |                     ^^^^^^ `int`\n40 |         print(f\"  Remains as int (should be unreachable): {id_val}\")\n   |\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_3312576.py:57:25\n   |\n55 |         if is_userid_unsound(item):\n56 |             # Divergence point 3: Type of `item` within the loop\n57 |             reveal_type(item)\n   |                         ^^^^ `int`\n58 |             print(f\"  List item refined to UserID: {item}\")\n59 |         else:\n   |\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_3312576.py:60:25\n   |\n58 |             print(f\"  List item refined to UserID: {item}\")\n59 |         else:\n60 |             reveal_type(item)\n   |                         ^^^^ `int`\n61 |             print(f\"  List item remains as int (should be unreachable): {item}\")\n   |\n\nFound 4 diagnostics"
+      },
+      "statuses": {
+        "mypy": "ok",
+        "pyrefly": "ok",
+        "zuban": "ok",
+        "ty": "error"
+      }
+    },
+    {
+      "filename": "ternary-typeguard-lambda-narrowing.py",
+      "filepath": "generated_examples/2026-01-22_15-11-04/source_files/ternary-typeguard-lambda-narrowing.py",
+      "outputs": {
+        "mypy": "_pytifex_temp_3312576.py:28: note: Revealed type is \"def ()\"\n_pytifex_temp_3312576.py:44: note: Revealed type is \"def () -> builtins.str\"\nSuccess: no issues found in 1 source file",
+        "pyrefly": "INFO revealed type: () -> None [reveal-type]\n  --> _pytifex_temp_3312576.py:28:16\n   |\n28 |     reveal_type(action_lambda) # N: Revealed type is \"def ()\" or similar\n   |                ---------------\n   |\n INFO revealed type: () -> str [reveal-type]\n  --> _pytifex_temp_3312576.py:44:16\n   |\n44 |     reveal_type(get_description_lambda) # N: Revealed type should be \"def () -> str\"\n   |                ------------------------\n   |\n INFO 0 errors",
+        "zuban": "_pytifex_temp_3312576.py:28: note: Revealed type is \"def ()\"\n_pytifex_temp_3312576.py:44: note: Revealed type is \"def () -> builtins.str\"\nSuccess: no issues found in 1 source file",
+        "ty": "error[unresolved-attribute]: Object of type `Config | None` has no attribute `perform_special_action`\n  --> _pytifex_temp_3312576.py:24:18\n   |\n22 |     # Original issue was about x in `foo(x)`. Here, we have `item` in `item.describe()`\n23 |     action_lambda: Callable[[], None] = (\n24 |         (lambda: item.perform_special_action()) # should narrow to SpecialConfig\n   |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n25 |         if is_special_config(item) else\n26 |         (lambda: print(f\"Normal config: {item.describe()}\" if item else \"No config\")) # should narrow to Config or None\n   |\ninfo: rule `unresolved-attribute` is enabled by default\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_3312576.py:28:17\n   |\n26 |         (lambda: print(f\"Normal config: {item.describe()}\" if item else \"No config\")) # should narrow to Config or None\n27 |     )\n28 |     reveal_type(action_lambda) # N: Revealed type is \"def ()\" or similar\n   |                 ^^^^^^^^^^^^^ `() -> Unknown`\n29 |\n30 |     action_lambda()\n   |\n\nwarning[possibly-missing-attribute]: Attribute `describe` may be missing on object of type `Config | None`\n  --> _pytifex_temp_3312576.py:40:18\n   |\n38 |     # What if the return type of the lambda changes based on narrowing?\n39 |     get_description_lambda = (\n40 |         (lambda: item.describe() + \" (Validated)\") # Item is SpecialConfig\n   |                  ^^^^^^^^^^^^^\n41 |         if is_special_config(item) and item.validate() else\n42 |         (lambda: item.describe() if item else \"No item available\") # Item is Config or None\n   |\ninfo: rule `possibly-missing-attribute` is enabled by default\n\nwarning[possibly-missing-attribute]: Attribute `validate` may be missing on object of type `Config | None`\n  --> _pytifex_temp_3312576.py:41:40\n   |\n39 |     get_description_lambda = (\n40 |         (lambda: item.describe() + \" (Validated)\") # Item is SpecialConfig\n41 |         if is_special_config(item) and item.validate() else\n   |                                        ^^^^^^^^^^^^^\n42 |         (lambda: item.describe() if item else \"No item available\") # Item is Config or None\n43 |     )\n   |\ninfo: rule `possibly-missing-attribute` is enabled by default\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_3312576.py:44:17\n   |\n42 |         (lambda: item.describe() if item else \"No item available\") # Item is Config or None\n43 |     )\n44 |     reveal_type(get_description_lambda) # N: Revealed type should be \"def () -> str\"\n   |                 ^^^^^^^^^^^^^^^^^^^^^^ `() -> Unknown`\n45 |\n46 |     print(get_description_lambda())\n   |\n\nFound 5 diagnostics"
+      },
+      "statuses": {
+        "mypy": "ok",
+        "pyrefly": "ok",
+        "zuban": "ok",
+        "ty": "error"
+      }
+    },
+    {
+      "filename": "typed-dict-inheritance-notrequired-required-clash-refined.py",
+      "filepath": "generated_examples/2026-01-22_15-11-04/source_files/typed-dict-inheritance-notrequired-required-clash-refined.py",
+      "outputs": {
+        "mypy": "_pytifex_temp_3312576.py:39: error: Cannot use isinstance() with TypedDict type  [misc]\n_pytifex_temp_3312576.py:53: error: Cannot use isinstance() with TypedDict type  [misc]\nFound 2 errors in 1 file (checked 1 source file)",
+        "pyrefly": "ERROR TypedDict `ComputeResource` not allowed as second argument to isinstance() [invalid-argument]\n  --> _pytifex_temp_3312576.py:39:25\n   |\n39 |     if isinstance(data, ComputeResource):\n   |                         ^^^^^^^^^^^^^^^\n   |\nERROR TypedDict `StorageResource` not allowed as second argument to isinstance() [invalid-argument]\n  --> _pytifex_temp_3312576.py:53:27\n   |\n53 |     elif isinstance(data, StorageResource):\n   |                           ^^^^^^^^^^^^^^^\n   |\n INFO 2 errors",
+        "zuban": "_pytifex_temp_3312576.py:39: error: Cannot use isinstance() with TypedDict type  [misc]\n_pytifex_temp_3312576.py:53: error: Cannot use isinstance() with TypedDict type  [misc]\nFound 2 errors in 1 file (checked 1 source file)",
+        "ty": "All checks passed!"
+      },
+      "statuses": {
+        "mypy": "error",
+        "pyrefly": "error",
+        "zuban": "error",
+        "ty": "ok"
+      }
+    },
+    {
+      "filename": "paramspec-async-staticmethod-decorator.py",
+      "filepath": "generated_examples/2026-01-22_15-11-04/source_files/paramspec-async-staticmethod-decorator.py",
+      "outputs": {
+        "mypy": "Success: no issues found in 1 source file",
+        "pyrefly": "INFO 0 errors",
+        "zuban": "Success: no issues found in 1 source file",
+        "ty": "error[unresolved-attribute]: Object of type `(**P@async_static_timer) -> Awaitable[R@async_static_timer]` has no attribute `__name__`\n  --> _pytifex_temp_3312576.py:9:39\n   |\n 7 | def async_static_timer(func: Callable[P, Awaitable[R]]) -> Callable[P, Awaitable[R]]:\n 8 |     async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:\n 9 |         print(f\"Async static method '{func.__name__}' started...\")\n   |                                       ^^^^^^^^^^^^^\n10 |         start_time = asyncio.get_event_loop().time()\n11 |         result = await func(*args, **kwargs)\n   |\ninfo: rule `unresolved-attribute` is enabled by default\n\nerror[unresolved-attribute]: Object of type `(**P@async_static_timer) -> Awaitable[R@async_static_timer]` has no attribute `__name__`\n  --> _pytifex_temp_3312576.py:13:39\n   |\n11 |         result = await func(*args, **kwargs)\n12 |         end_time = asyncio.get_event_loop().time()\n13 |         print(f\"Async static method '{func.__name__}' finished in {end_time - start_time:.4f}s\")\n   |                                       ^^^^^^^^^^^^^\n14 |         return result\n15 |     return wrapper\n   |\ninfo: rule `unresolved-attribute` is enabled by default\n\nFound 2 diagnostics"
+      },
+      "statuses": {
+        "mypy": "ok",
+        "pyrefly": "ok",
+        "zuban": "ok",
+        "ty": "error"
+      }
+    },
+    {
+      "filename": "dataclass-kw-only-post-init-generic-base.py",
+      "filepath": "generated_examples/2026-01-22_15-11-04/source_files/dataclass-kw-only-post-init-generic-base.py",
+      "outputs": {
+        "mypy": "Success: no issues found in 1 source file",
+        "pyrefly": "ERROR Class member `ExtendedAdvancedSettings.processed_flag` overrides parent class `AdvancedSettings` in an inconsistent manner [bad-override]\n  --> _pytifex_temp_3312576.py:40:5\n   |\n40 |     processed_flag: bool = False # Override default of Optional[bool] to bool, make it required via kw_only\n   |     ^^^^^^^^^^^^^^\n   |\n  `ExtendedAdvancedSettings.processed_flag` has type `bool`, which is not consistent with `bool | None` in `AdvancedSettings.processed_flag` (the type of read-write attributes cannot be changed)\n INFO 1 error",
+        "zuban": "Success: no issues found in 1 source file",
+        "ty": "All checks passed!"
+      },
+      "statuses": {
+        "mypy": "ok",
+        "pyrefly": "error",
+        "zuban": "ok",
+        "ty": "ok"
+      }
+    },
+    {
+      "filename": "ternary-union-attribute-method-call.py",
+      "filepath": "generated_examples/2026-01-22_15-11-04/source_files/ternary-union-attribute-method-call.py",
+      "outputs": {
+        "mypy": "_pytifex_temp_3312576.py:29: note: Revealed type is \"def () -> builtins.str\"\n_pytifex_temp_3312576.py:39: note: Revealed type is \"def () -> builtins.str | None\"\n_pytifex_temp_3312576.py:49: note: Revealed type is \"def ()\"\nSuccess: no issues found in 1 source file",
+        "pyrefly": "INFO revealed type: () -> str [reveal-type]\n  --> _pytifex_temp_3312576.py:29:16\n   |\n29 |     reveal_type(action_callable) # N: Revealed type is \"def () -> str\"\n   |                -----------------\n   |\n INFO revealed type: () -> str | None [reveal-type]\n  --> _pytifex_temp_3312576.py:39:16\n   |\n39 |     reveal_type(status_info) # N: Revealed type is \"def () -> Union[str, None]\"\n   |                -------------\n   |\n INFO revealed type: () -> None [reveal-type]\n  --> _pytifex_temp_3312576.py:49:16\n   |\n49 |     reveal_type(final_task) # N: Revealed type is \"def ()\"\n   |                ------------\n   |\n INFO 0 errors",
+        "zuban": "_pytifex_temp_3312576.py:29: note: Revealed type is \"def () -> builtins.str\"\n_pytifex_temp_3312576.py:39: note: Revealed type is \"def () -> builtins.str | None\"\n_pytifex_temp_3312576.py:49: note: Revealed type is \"def ()\"\nSuccess: no issues found in 1 source file",
+        "ty": "info[revealed-type]: Revealed type\n  --> _pytifex_temp_3312576.py:29:17\n   |\n27 |         (lambda: entity.report_error(400) if isinstance(entity, ErrorReporter) and entity.has_errors() else \"No error/No reporter\")\n28 |     )\n29 |     reveal_type(action_callable) # N: Revealed type is \"def () -> str\"\n   |                 ^^^^^^^^^^^^^^^ `() -> Unknown`\n30 |\n31 |     print(f\"Action result: {action_callable()}\")\n   |\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_3312576.py:39:17\n   |\n37 |         (lambda: entity.report_error(500) if isinstance(entity, ErrorReporter) else None)\n38 |     )\n39 |     reveal_type(status_info) # N: Revealed type is \"def () -> Union[str, None]\"\n   |                 ^^^^^^^^^^^ `() -> Unknown`\n40 |\n41 |     print(f\"Status info: {status_info()}\")\n   |\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_3312576.py:49:17\n   |\n47 |         (lambda: NoOp().no_op_action())\n48 |     )\n49 |     reveal_type(final_task) # N: Revealed type is \"def ()\"\n   |                 ^^^^^^^^^^ `() -> Unknown`\n50 |     final_task()\n   |\n\nFound 3 diagnostics"
+      },
+      "statuses": {
+        "mypy": "ok",
+        "pyrefly": "ok",
+        "zuban": "ok",
+        "ty": "error"
+      }
+    },
+    {
+      "filename": "type-self-init-divergence-refined.py",
+      "filepath": "generated_examples/2026-01-22_15-11-04/source_files/type-self-init-divergence-refined.py",
+      "outputs": {
+        "mypy": "_pytifex_temp_3312576.py:6: error: Invariant type variable \"_P\" used in protocol where covariant one is expected  [misc]\nFound 1 error in 1 file (checked 1 source file)",
+        "pyrefly": "ERROR Expected a type variable, got `Unknown` [invalid-type-var]\n --> _pytifex_temp_3312576.py:6:7\n  |\n6 | class ConfigurableComponent(Protocol[_P]):\n  |       ^^^^^^^^^^^^^^^^^^^^^\n  |\n INFO 1 error",
+        "zuban": "_pytifex_temp_3312576.py:6: error: Invariant type variable \"_P\" used in protocol where Covariant one is expected  [misc]\n_pytifex_temp_3312576.py:72: error: Definition of \"create_nested_component\" in base class \"BasicService\" is incompatible with definition in base class \"ConfigurableComponent\"  [misc]\n_pytifex_temp_3312576.py:72: error: Definition of \"reset_state\" in base class \"BasicService\" is incompatible with definition in base class \"ConfigurableComponent\"  [misc]\nFound 3 errors in 1 file (checked 1 source file)",
+        "ty": "All checks passed!"
+      },
+      "statuses": {
+        "mypy": "error",
+        "pyrefly": "error",
+        "zuban": "error",
+        "ty": "ok"
+      }
+    }
+  ]
+}
