@@ -1,0 +1,504 @@
+{
+  "method": "testing",
+  "total_bugs_found": 14,
+  "proven_bugs": 9,
+  "summary": {
+    "mypy": {
+      "correct": 2,
+      "incorrect": 3,
+      "uncertain": 4
+    },
+    "pyrefly": {
+      "correct": 3,
+      "incorrect": 2,
+      "uncertain": 4
+    },
+    "zuban": {
+      "correct": 3,
+      "incorrect": 2,
+      "uncertain": 4
+    },
+    "ty": {
+      "correct": 2,
+      "incorrect": 3,
+      "uncertain": 4
+    }
+  },
+  "results": [
+    {
+      "filename": "typeddict-typeguard-notrequired-access-divergence.py",
+      "bugs_found": [
+        {
+          "line": 81,
+          "type": "KeyError",
+          "message": "KeyError: 'deadline'",
+          "source": "runtime_uncaught",
+          "confidence": 1.0
+        },
+        {
+          "line": 71,
+          "type": "KeyError",
+          "message": "Code expects KeyError (try block at line 68)",
+          "source": "runtime_caught",
+          "confidence": 0.9
+        },
+        {
+          "line": 55,
+          "type": "KeyError",
+          "message": "Access to NotRequired key 'description' without existence check",
+          "source": "ast_analysis",
+          "confidence": 0.85
+        }
+      ],
+      "execution_success": false,
+      "verdicts": {
+        "mypy": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 2 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 81,
+              "type": "KeyError",
+              "message": "KeyError: 'deadline'"
+            },
+            {
+              "line": 71,
+              "type": "KeyError",
+              "message": "Code expects KeyError (try block at line 68)"
+            }
+          ]
+        },
+        "pyrefly": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 2 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 81,
+              "type": "KeyError",
+              "message": "KeyError: 'deadline'"
+            },
+            {
+              "line": 71,
+              "type": "KeyError",
+              "message": "Code expects KeyError (try block at line 68)"
+            }
+          ]
+        },
+        "zuban": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 2 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 81,
+              "type": "KeyError",
+              "message": "KeyError: 'deadline'"
+            },
+            {
+              "line": 71,
+              "type": "KeyError",
+              "message": "Code expects KeyError (try block at line 68)"
+            }
+          ]
+        },
+        "ty": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        }
+      }
+    },
+    {
+      "filename": "self-constructor-divergence-refined.py",
+      "bugs_found": [
+        {
+          "line": 75,
+          "type": "TypeError",
+          "message": "Code expects TypeError (try block at line 74)",
+          "source": "runtime_caught",
+          "confidence": 0.9
+        },
+        {
+          "line": 86,
+          "type": "TypeError",
+          "message": "Code expects TypeError (try block at line 85)",
+          "source": "runtime_caught",
+          "confidence": 0.9
+        }
+      ],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 2 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 75,
+              "type": "TypeError",
+              "message": "Code expects TypeError (try block at line 74)"
+            },
+            {
+              "line": 86,
+              "type": "TypeError",
+              "message": "Code expects TypeError (try block at line 85)"
+            }
+          ]
+        },
+        "pyrefly": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 2 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 75,
+              "type": "TypeError",
+              "message": "Code expects TypeError (try block at line 74)"
+            },
+            {
+              "line": 86,
+              "type": "TypeError",
+              "message": "Code expects TypeError (try block at line 85)"
+            }
+          ]
+        },
+        "zuban": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "ty": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        }
+      }
+    },
+    {
+      "filename": "newtype-typeguard-unsound-divergence.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        }
+      }
+    },
+    {
+      "filename": "ternary-typeguard-lambda-narrowing.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        }
+      }
+    },
+    {
+      "filename": "typed-dict-inheritance-notrequired-required-clash-refined.py",
+      "bugs_found": [
+        {
+          "line": 2970,
+          "type": "TypeError",
+          "message": "TypedDict does not support instance and class checks",
+          "source": "runtime_uncaught",
+          "confidence": 1.0
+        },
+        {
+          "line": 38,
+          "type": "KeyError",
+          "message": "Access to NotRequired key 'name' without existence check",
+          "source": "ast_analysis",
+          "confidence": 0.85
+        },
+        {
+          "line": 46,
+          "type": "KeyError",
+          "message": "Access to NotRequired key 'ip_address' without existence check",
+          "source": "ast_analysis",
+          "confidence": 0.85
+        },
+        {
+          "line": 50,
+          "type": "KeyError",
+          "message": "Access to NotRequired key 'port' without existence check",
+          "source": "ast_analysis",
+          "confidence": 0.85
+        },
+        {
+          "line": 56,
+          "type": "KeyError",
+          "message": "Access to NotRequired key 'capacity_gb' without existence check",
+          "source": "ast_analysis",
+          "confidence": 0.85
+        }
+      ],
+      "execution_success": false,
+      "verdicts": {
+        "mypy": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "pyrefly": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "zuban": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "ty": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 2970,
+              "type": "TypeError",
+              "message": "TypedDict does not support instance and class checks"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "filename": "paramspec-async-staticmethod-decorator.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        }
+      }
+    },
+    {
+      "filename": "dataclass-kw-only-post-init-generic-base.py",
+      "bugs_found": [
+        {
+          "line": 66,
+          "type": "TypeError",
+          "message": "Code expects TypeError (try block at line 63)",
+          "source": "runtime_caught",
+          "confidence": 0.9
+        },
+        {
+          "line": 92,
+          "type": "ValueError",
+          "message": "Code expects ValueError (try block at line 91)",
+          "source": "runtime_caught",
+          "confidence": 0.9
+        },
+        {
+          "line": 97,
+          "type": "ValueError",
+          "message": "Code expects ValueError (try block at line 96)",
+          "source": "runtime_caught",
+          "confidence": 0.9
+        }
+      ],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 3 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 66,
+              "type": "TypeError",
+              "message": "Code expects TypeError (try block at line 63)"
+            },
+            {
+              "line": 92,
+              "type": "ValueError",
+              "message": "Code expects ValueError (try block at line 91)"
+            },
+            {
+              "line": 97,
+              "type": "ValueError",
+              "message": "Code expects ValueError (try block at line 96)"
+            }
+          ]
+        },
+        "pyrefly": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "zuban": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 3 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 66,
+              "type": "TypeError",
+              "message": "Code expects TypeError (try block at line 63)"
+            },
+            {
+              "line": 92,
+              "type": "ValueError",
+              "message": "Code expects ValueError (try block at line 91)"
+            },
+            {
+              "line": 97,
+              "type": "ValueError",
+              "message": "Code expects ValueError (try block at line 96)"
+            }
+          ]
+        },
+        "ty": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 3 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 66,
+              "type": "TypeError",
+              "message": "Code expects TypeError (try block at line 63)"
+            },
+            {
+              "line": 92,
+              "type": "ValueError",
+              "message": "Code expects ValueError (try block at line 91)"
+            },
+            {
+              "line": 97,
+              "type": "ValueError",
+              "message": "Code expects ValueError (try block at line 96)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "filename": "ternary-union-attribute-method-call.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        }
+      }
+    },
+    {
+      "filename": "type-self-init-divergence-refined.py",
+      "bugs_found": [
+        {
+          "line": 70,
+          "type": "TypeError",
+          "message": "DatabaseConnector.__init__() missing 1 required positional argument: 'db_url'",
+          "source": "runtime_uncaught",
+          "confidence": 1.0
+        }
+      ],
+      "execution_success": false,
+      "verdicts": {
+        "mypy": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "pyrefly": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "zuban": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "ty": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 70,
+              "type": "TypeError",
+              "message": "DatabaseConnector.__init__() missing 1 required positional argument: 'db_url'"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

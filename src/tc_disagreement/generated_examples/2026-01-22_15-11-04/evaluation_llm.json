@@ -1,0 +1,298 @@
+{
+  "method": "llm",
+  "model": "gemini-2.5-flash",
+  "summary": {
+    "mypy": {
+      "correct": 4,
+      "incorrect": 4,
+      "partial": 1
+    },
+    "pyrefly": {
+      "correct": 4,
+      "incorrect": 4,
+      "partial": 1
+    },
+    "zuban": {
+      "correct": 4,
+      "incorrect": 4,
+      "partial": 1
+    },
+    "ty": {
+      "correct": 0,
+      "incorrect": 8,
+      "partial": 1
+    }
+  },
+  "evaluations": [
+    {
+      "filename": "typeddict-typeguard-notrequired-access-divergence.py",
+      "verdicts": {
+        "mypy": {
+          "verdict": "INCORRECT",
+          "reason": "Mypy failed to flag the potential `KeyError` when accessing `config['deadline']`. In `ActiveConfig`, `deadline` is `NotRequired[int]`. The `TypeGuard[ActiveConfig]` (specifically `is_active_config`) does not ensure the presence of 'deadline', only that *if* present, it's an `int`. Therefore, a direct `config['deadline']` access without a prior `in` check is unsafe and leads to the observed runtime `KeyError`. Mypy correctly handled the narrowing for `description` and `startDate` due to the TypeGuard.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "pyrefly": {
+          "verdict": "INCORRECT",
+          "reason": "Pyrefly failed to flag the potential `KeyError` when accessing `config['deadline']`. Similar to mypy, it did not identify that `deadline` is `NotRequired[int]` in `ActiveConfig` and that the `TypeGuard` does not guarantee its presence. This direct access leads to the observed runtime `KeyError`. Pyrefly correctly handled the narrowing for `description` and `startDate` due to the TypeGuard.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "zuban": {
+          "verdict": "INCORRECT",
+          "reason": "Zuban failed to flag the potential `KeyError` when accessing `config['deadline']`. It missed that `deadline` is `NotRequired[int]` in `ActiveConfig` and that the `TypeGuard` does not ensure its presence, leading to the runtime `KeyError`. Zuban correctly handled the narrowing for `description` and `startDate` due to the TypeGuard.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "ty": {
+          "verdict": "INCORRECT",
+          "reason": "Ty reported a false positive error: `error[invalid-key]: Unknown key 'description' for TypedDict `BaseConfig` at `config['description']`. Inside the `is_active_config` block, `config` should be narrowed to `ActiveConfig`, which defines `description`. Furthermore, the `TypeGuard` explicitly checks for the presence of `description`, making the access safe. This indicates a failure in `ty` to correctly apply TypeGuard narrowing or handle `TypedDict` inheritance for this scenario. It did not even get to the actual `KeyError` issue for 'deadline' due to this earlier false positive.",
+          "missed_issues": [],
+          "false_positives": []
+        }
+      },
+      "runtime_result": "RUNTIME ERROR: KeyError: 'deadline'\n\nStdout before error:\n--- Processing cfg1 ---\nProcessing other config (ID: 1)\n\n--- Processing cfg2 ---\nProcessing other config (ID: 2)\n  Description: task A\n\n--- Processing cfg3 ---\nProcessing other config (ID: 3)\n\n--- Processing cfg4 (Lacks 'deadline') ---\nProcessing Active Config (ID: 4):\n  Description: task B\n  Start Date: 2023-02-01\n  Deadline: Not specified (runtime KeyError handled)\n"
+    },
+    {
+      "filename": "self-constructor-divergence-refined.py",
+      "verdicts": {
+        "mypy": {
+          "verdict": "INCORRECT",
+          "reason": "Mypy failed to identify the core type mismatch: in `BaseProcessor.create_instance`, `cls(name)` is called where `name` is a `str`. For `IntProcessor`, this means `IntProcessor.__init__(value: int)` is called with a `str`, which leads to a `TypeError` at runtime. Mypy reported no issues, despite a real runtime error occurring.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "pyrefly": {
+          "verdict": "INCORRECT",
+          "reason": "Pyreflly failed to identify the core type mismatch: in `BaseProcessor.create_instance`, `cls(name)` is called where `name` is a `str`. For `IntProcessor`, this means `IntProcessor.__init__(value: int)` is called with a `str`, which leads to a `TypeError` at runtime. Pyreflly reported no errors (ignoring the suppressed one for this analysis), despite a real runtime error occurring.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "zuban": {
+          "verdict": "INCORRECT",
+          "reason": "Zuban incorrectly reported an `attr-defined` error on `func.__name__` inside the `log_classmethod_calls` decorator. While `Callable` itself doesn't guarantee a `__name__` attribute, `functools.wraps` helps ensure that the wrapped `func` (which is a method here) will have `__name__` at runtime, making this a false positive as the code executes successfully. More importantly, Zuban missed the primary type error where `IntProcessor.__init__` (expecting `int`) is called with a `str` from `create_instance`, which results in a `TypeError` at runtime.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "ty": {
+          "verdict": "INCORRECT",
+          "reason": "Ty incorrectly reported an `unresolved-attribute` error on `func.__name__` inside the `log_classmethod_calls` decorator. Similar to Zuban, `functools.wraps` and the context of `func` being a method mean `__name__` is available at runtime, making this a false positive as the code executes successfully. Crucially, Ty also missed the primary type error where `IntProcessor.__init__` (expecting `int`) is called with a `str` from `create_instance`, which results in a `TypeError` at runtime.",
+          "missed_issues": [],
+          "false_positives": []
+        }
+      },
+      "runtime_result": "SUCCESS (no runtime errors)\n\nStdout:\nCalling class method 'create_instance' on class 'StringProcessor' with args (), kwargs {'name': 'hello_world'}\nBaseProcessor.create_instance called with name: hello_world\nBaseProcessor __init__ called with data: hello_world\nProcessed: HELLO_WORLD\nCalling class method 'create_instance' on class 'IntProcessor' with args (), kwargs {'name': '123'}\nBaseProcessor.create_instance called with name: 123\nBaseProcessor __init__ called with data: 123\nCaught expected run"
+    },
+    {
+      "filename": "newtype-typeguard-unsound-divergence.py",
+      "verdicts": {
+        "mypy": {
+          "verdict": "INCORRECT",
+          "reason": "Mypy trusts the `TypeGuard`'s assertion in the 'if' branches, refining to `UserID`. However, it fails to detect that the 'else' branches are unreachable due to the `TypeGuard`'s unsoundness and `NewType`'s runtime identity (revealing `Union[int, UserID]` and `int` for the unreachable 'else' branches). It also does not report any warning or error on the `is_userid_unsound` definition itself.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "pyrefly": {
+          "verdict": "INCORRECT",
+          "reason": "Pyrefly trusts the `TypeGuard`'s assertion in the 'if' branches, refining to `UserID`. It fails to detect that the 'else' branches are unreachable due to the `TypeGuard`'s unsoundness and `NewType`'s runtime identity (revealing `Union[int, UserID]` for the unreachable 'else' branches). It also does not report any warning or error on the `is_userid_unsound` definition itself.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "zuban": {
+          "verdict": "INCORRECT",
+          "reason": "Zuban trusts the `TypeGuard`'s assertion in the 'if' branches, refining to `UserID`. It consistently fails to detect that the 'else' branches are unreachable due to the `TypeGuard`'s unsoundness and `NewType`'s runtime identity (revealing `Union[int, UserID]` for the unreachable 'else' branches). It also does not report any warning or error on the `is_userid_unsound` definition itself.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "ty": {
+          "verdict": "PARTIAL",
+          "reason": "Ty demonstrates sophisticated analysis by correctly inferring `NoReturn` for the 'else' branches, indicating it has detected that these branches are unreachable due to the `TypeGuard`'s unsoundness and `NewType`'s runtime identity. However, in the 'if' branches (where `TypeGuard[UserID]` is asserted), it reveals `int` instead of `UserID`, which dilutes the static distinction intended by `NewType`. It also does not report an explicit error or warning on the `is_userid_unsound` definition itself, which would be ideal for such an unsound `TypeGuard`.",
+          "missed_issues": [],
+          "false_positives": []
+        }
+      },
+      "runtime_result": "SUCCESS (no runtime errors)\n\nStdout:\n--- Test 1: Plain int ---\nProcessing: 10 (runtime type: <class 'int'>)\nRuntime type is 'int'\n  Refined to UserID: 10\n\n--- Test 2: UserID ---\nProcessing: 20 (runtime type: <class 'int'>)\nRuntime type is 'int'\n  Refined to UserID: 20\n\n--- Test 3: Mixed list elements ---\nRuntime type is 'int'\n  List item refined to UserID: 1\nRuntime type is 'int'\n  List item refined to UserID: 2\nRuntime type is 'int'\n  List item refined to UserID: 3\nRuntime type is 'int'\n  List "
+    },
+    {
+      "filename": "ternary-typeguard-lambda-narrowing.py",
+      "verdicts": {
+        "mypy": {
+          "verdict": "CORRECT",
+          "reason": "Mypy correctly applies type narrowing based on the TypeGuard `is_special_config` within the ternary expressions. It correctly infers the types of the lambda functions and reports no issues, which aligns with the code's type-safety and successful runtime execution.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "pyrefly": {
+          "verdict": "CORRECT",
+          "reason": "Pyrefly correctly applies type narrowing based on the TypeGuard `is_special_config` within the ternary expressions. It correctly infers the types of the lambda functions and reports no issues, which aligns with the code's type-safety and successful runtime execution.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "zuban": {
+          "verdict": "CORRECT",
+          "reason": "Zuban correctly applies type narrowing based on the TypeGuard `is_special_config` within the ternary expressions. It correctly infers the types of the lambda functions and reports no issues, which aligns with the code's type-safety and successful runtime execution.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "ty": {
+          "verdict": "INCORRECT",
+          "reason": "Ty reports an `unresolved-attribute` error for `item.perform_special_action()` (line 24). This occurs in the `if` branch of the ternary expression, where `is_special_config(item)` should narrow `item` to `SpecialConfig`. `SpecialConfig` does have the `perform_special_action` attribute. This indicates that Ty fails to correctly apply type narrowing from the TypeGuard condition to the `item` variable inside the lambda function within the conditional branch. Since the code is type-safe and runs without errors, this is a false positive.",
+          "missed_issues": [],
+          "false_positives": []
+        }
+      },
+      "runtime_result": "SUCCESS (no runtime errors)\n\nStdout:\n\n--- Processing c1 (Config) ---\nRuntime type is 'function'\nNormal config: Config: general\nRuntime type is 'function'\nConfig: general\n\n--- Processing c2 (SpecialConfig) ---\nRuntime type is 'function'\nPerformed special action for specific\nRuntime type is 'function'\nSpecial Config: SPECIFIC (Validated)\n\n--- Processing c3 (None) ---\nRuntime type is 'function'\nNo config\nRuntime type is 'function'\nNo item available\nPerformed special action for direct\n"
+    },
+    {
+      "filename": "typed-dict-inheritance-notrequired-required-clash-refined.py",
+      "verdicts": {
+        "mypy": {
+          "verdict": "CORRECT",
+          "reason": "mypy correctly identified the runtime TypeError caused by attempting to use `isinstance()` with a `TypedDict` type, reporting errors on lines 39 and 53. This directly matches the observed runtime error.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "pyrefly": {
+          "verdict": "CORRECT",
+          "reason": "pyrefly correctly identified the runtime TypeError caused by attempting to use `isinstance()` with a `TypedDict` type, reporting errors on lines 39 and 53. This directly matches the observed runtime error.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "zuban": {
+          "verdict": "CORRECT",
+          "reason": "zuban correctly identified the runtime TypeError caused by attempting to use `isinstance()` with a `TypedDict` type, reporting errors on lines 39 and 53. This directly matches the observed runtime error.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "ty": {
+          "verdict": "INCORRECT",
+          "reason": "ty failed to detect the runtime TypeError caused by attempting to use `isinstance()` with a `TypedDict` type. It reported 'All checks passed!' despite a critical runtime error occurring.",
+          "missed_issues": [],
+          "false_positives": []
+        }
+      },
+      "runtime_result": "RUNTIME ERROR: TypeError: TypedDict does not support instance and class checks\n\nStdout before error:\nProcessing resource with ID: res-001\n  Name: Base Item\n"
+    },
+    {
+      "filename": "paramspec-async-staticmethod-decorator.py",
+      "verdicts": {
+        "mypy": {
+          "verdict": "CORRECT",
+          "reason": "The code is functionally correct and executes without runtime errors. Mypy correctly infers the types, including the complex ParamSpec usage for the decorator, and finds no issues. This indicates accurate type checking without false positives or missed errors.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "pyrefly": {
+          "verdict": "CORRECT",
+          "reason": "The code is functionally correct and executes without runtime errors. Pyrefly correctly infers the types and finds no issues, aligning with the code's correctness and demonstrating accurate type checking.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "zuban": {
+          "verdict": "CORRECT",
+          "reason": "The code is functionally correct and executes without runtime errors. Zuban correctly infers the types and finds no issues, indicating accurate type checking of the decorator with ParamSpec.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "ty": {
+          "verdict": "INCORRECT",
+          "reason": "Ty reports an 'unresolved-attribute' error for `func.__name__`. While `typing.Callable` itself doesn't formally specify a `__name__` attribute, in the context of a decorator, `func` will always be a function object at runtime, which *does* possess a `__name__` attribute. The code runs perfectly fine, making this a false positive. Ty is being overly strict compared to runtime behavior and other type checkers.",
+          "missed_issues": [],
+          "false_positives": []
+        }
+      },
+      "runtime_result": "SUCCESS (no runtime errors)\n\nStdout:\nAsync static method 'fetch_data' started...\n  Fetching data from https://example.com/api/data with timeout 10s\nAsync static method 'fetch_data' finished in 0.1004s\nFetch result: Data from https://example.com/api/data (size: 38)\nAsync static method 'fetch_data' started...\n  Fetching data from https://another.com with timeout 5s\nAsync static method 'fetch_data' finished in 0.1002s\nFetch result (default timeout): Data from https://another.com (size: 24)\nAsync st"
+    },
+    {
+      "filename": "dataclass-kw-only-post-init-generic-base.py",
+      "verdicts": {
+        "mypy": {
+          "verdict": "INCORRECT",
+          "reason": "Mypy reported no issues but missed a runtime TypeError that occurs when `AdvancedSettings` (a kw_only dataclass) is instantiated with positional arguments for its inherited fields. It also did not flag the type narrowing of `processed_flag` in `ExtendedAdvancedSettings`.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "pyrefly": {
+          "verdict": "PARTIAL",
+          "reason": "Pyrefly correctly identified a type inconsistency where `ExtendedAdvancedSettings.processed_flag` narrows its type from `Optional[bool]` to `bool` compared to its parent, which affects the constructor signature. However, it missed the critical runtime TypeError that occurs when `AdvancedSettings` is instantiated with positional arguments for inherited fields.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "zuban": {
+          "verdict": "INCORRECT",
+          "reason": "Zuban reported no issues but missed a runtime TypeError that occurs when `AdvancedSettings` (a kw_only dataclass) is instantiated with positional arguments for its inherited fields. It also did not flag the type narrowing of `processed_flag` in `ExtendedAdvancedSettings`.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "ty": {
+          "verdict": "INCORRECT",
+          "reason": "Ty reported no issues but missed a runtime TypeError that occurs when `AdvancedSettings` (a kw_only dataclass) is instantiated with positional arguments for its inherited fields. It also did not flag the type narrowing of `processed_flag` in `ExtendedAdvancedSettings`.",
+          "missed_issues": [],
+          "false_positives": []
+        }
+      },
+      "runtime_result": "SUCCESS (no runtime errors)\n\nStdout:\nSettings 1: AdvancedSettings(base_id='CONF-A1', data_source='api_v2', timeout=60, log_level='INFO', tags=['critical'], processed_flag=None)\nSettings 1 data source: api_v2\nExtendedAdvancedSettings post_init called for 'CONF-X1'\nExtended Settings 1: ExtendedAdvancedSettings(base_id='CONF-X1', data_source='db_connection', timeout=120, log_level='INFO', tags=[], processed_flag=True, additional_param=1.5)\nExtendedAdvancedSettings post_init called for 'CONF-X2'\n  P"
+    },
+    {
+      "filename": "ternary-union-attribute-method-call.py",
+      "verdicts": {
+        "mypy": {
+          "verdict": "CORRECT",
+          "reason": "Mypy correctly infers the types of all lambda functions within the complex ternary expressions. It successfully applies type narrowing for the `entity` variable inside the lambda closures, resulting in accurate `Callable` types. All `reveal_type` outputs match the expected types, and no errors or false positives are reported.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "pyrefly": {
+          "verdict": "CORRECT",
+          "reason": "Pyrefly correctly infers the types of all lambda functions, demonstrating proper handling of type narrowing for `entity` within the closures and across the ternary assignments. Its `reveal_type` outputs are consistent with the expected types, and no issues are reported, aligning with the successful runtime behavior.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "zuban": {
+          "verdict": "CORRECT",
+          "reason": "Zuban accurately infers the return types of all lambda functions and the overall types of the `Callable` variables. It correctly handles the type narrowing of `entity` within the nested scopes of the ternary expression and lambda closures. The `reveal_type` outputs are precise and match the expected types, with no issues found.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "ty": {
+          "verdict": "INCORRECT",
+          "reason": "Ty fails to correctly infer the return type of `action_callable`, reporting `() -> Unknown` instead of the expected `() -> str`. This indicates a significant failure in its ability to perform type narrowing for `entity` within the lambda function's closure or to correctly combine the types from the different branches of the complex ternary expression. The output for subsequent `reveal_type` calls is also truncated, but the initial failure is sufficient to deem it incorrect.",
+          "missed_issues": [],
+          "false_positives": []
+        }
+      },
+      "runtime_result": "SUCCESS (no runtime errors)\n\nStdout:\n--- Processing Validator ---\nRuntime type is 'function'\nAction result: Validator is valid.\nRuntime type is 'function'\nStatus info: Validator is valid.\nRuntime type is 'function'\nProcessing: Validator is valid.\n\n--- Processing ErrorReporter ---\nRuntime type is 'function'\nAction result: Error 400 reported.\nRuntime type is 'function'\nStatus info: Error 500 reported.\nRuntime type is 'function'\nNo operation performed.\n\n--- Processing None ---\nRuntime type is 'func"
+    },
+    {
+      "filename": "type-self-init-divergence-refined.py",
+      "verdicts": {
+        "mypy": {
+          "verdict": "PARTIAL",
+          "reason": "Mypy correctly identified the need for a covariant TypeVar (`_P`) in the protocol definition for type-safety best practices. However, it failed to detect the LSP violation in `BasicService.create_nested_component` where the `type(self)(...)` constructor call is unsafe for certain implementing subclasses (like `DatabaseConnector`), leading to a runtime TypeError.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "pyrefly": {
+          "verdict": "INCORRECT",
+          "reason": "Pyrefly reported a vague 'invalid-type-var' error for the protocol's TypeVar, which is less precise than Mypy's or Zuban's. Most critically, it completely missed the LSP violation in `BasicService.create_nested_component` that causes a runtime TypeError, despite the explicit rule to flag any checker as INCORRECT if it missed such an error.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "zuban": {
+          "verdict": "PARTIAL",
+          "reason": "Zuban correctly identified the need for a covariant TypeVar (`_P`). Crucially, it also reported an incompatibility for `create_nested_component` in `BasicService`, the method directly responsible for the runtime TypeError. This is a significant correct catch. However, it also reported an incompatibility for `reset_state`, likely a false positive as changing default parameter values is generally not considered an LSP violation for type compatibility.",
+          "missed_issues": [],
+          "false_positives": []
+        },
+        "ty": {
+          "verdict": "INCORRECT",
+          "reason": "Ty reported 'All checks passed!' It missed both the TypeVar covariance issue and the critical LSP violation in `create_nested_component` that leads to a runtime TypeError, making it incorrect according to the specified rules.",
+          "missed_issues": [],
+          "false_positives": []
+        }
+      },
+      "runtime_result": "RUNTIME ERROR: TypeError: DatabaseConnector.__init__() missing 1 required positional argument: 'db_url'\n\nStdout before error:\n\n--- Setting up ServiceA ---\nServiceA configured with: DEFAULT_CONFIG\nServiceA state reset to: -1\n  Final state: ServiceA config: DEFAULT_CONFIG, state: -1\n  Nested component created: ServiceA-nested (Type: BasicService)\nServiceA-nested configured with: DEFAULT_CONFIG\n\n--- Setting up MyDBConnector ---\nMyDBConnector configured with: DB_CONFIG\n  Database specific configurat"
+    }
+  ]
+}

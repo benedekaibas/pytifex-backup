@@ -539,9 +539,9 @@ def main():
     parser = argparse.ArgumentParser(description="Evaluate type checker correctness")
     parser.add_argument(
         "--method",
-        choices=["multi_step", "consensus", "runtime", "all"],
+        choices=["multi_step", "consensus", "runtime", "all", "deterministic"],
         default="all",
-        help="Evaluation method to use",
+        help="Evaluation method to use (deterministic = AST + runtime, no LLM)",
     )
     parser.add_argument(
         "--verbose",
@@ -552,7 +552,16 @@ def main():
     args = parser.parse_args()
 
     try:
-        evaluate_results(method=args.method, verbose=args.verbose)
+        if args.method == "deterministic":
+            # Use the new deterministic evaluation (no LLM)
+            from deterministic_eval import evaluate_results_deterministic
+            results_path = get_latest_results_file()
+            if not results_path:
+                raise FileNotFoundError("No results.json found. Run generation first.")
+            evaluate_results_deterministic(results_path)
+        else:
+            # Use LLM-based evaluation
+            evaluate_results(method=args.method, verbose=args.verbose)
     except (ValueError, FileNotFoundError) as e:
         print(f"[ERROR] {e}")
         sys.exit(1)
