@@ -1,0 +1,419 @@
+{
+  "method": "testing",
+  "total_bugs_found": 3,
+  "proven_bugs": 3,
+  "summary": {
+    "mypy": {
+      "correct": 0,
+      "incorrect": 3,
+      "uncertain": 8
+    },
+    "pyrefly": {
+      "correct": 2,
+      "incorrect": 1,
+      "uncertain": 8
+    },
+    "zuban": {
+      "correct": 0,
+      "incorrect": 3,
+      "uncertain": 8
+    },
+    "ty": {
+      "correct": 2,
+      "incorrect": 1,
+      "uncertain": 8
+    }
+  },
+  "results": [
+    {
+      "filename": "literal-str-variable-assignment-divergence.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        }
+      }
+    },
+    {
+      "filename": "typeguard-tvar-refinement.py",
+      "bugs_found": [],
+      "execution_success": false,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        }
+      }
+    },
+    {
+      "filename": "self-generic-narrowing-with-factory.py",
+      "bugs_found": [],
+      "execution_success": false,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        }
+      }
+    },
+    {
+      "filename": "newtype-dummy-var-comprehension.py",
+      "bugs_found": [
+        {
+          "line": 17,
+          "type": "ValueError",
+          "message": "Code expects ValueError (try block at line 16)",
+          "source": "runtime_caught",
+          "confidence": 0.9
+        }
+      ],
+      "execution_success": false,
+      "verdicts": {
+        "mypy": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 17,
+              "type": "ValueError",
+              "message": "Code expects ValueError (try block at line 16)"
+            }
+          ]
+        },
+        "pyrefly": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 17,
+              "type": "ValueError",
+              "message": "Code expects ValueError (try block at line 16)"
+            }
+          ]
+        },
+        "zuban": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 17,
+              "type": "ValueError",
+              "message": "Code expects ValueError (try block at line 16)"
+            }
+          ]
+        },
+        "ty": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        }
+      }
+    },
+    {
+      "filename": "typeddict-total-multi-line-instantiation-ignore.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        }
+      }
+    },
+    {
+      "filename": "paramspec-dummy-var-return-decorator.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        }
+      }
+    },
+    {
+      "filename": "typeguard-typeddict-soundness.py",
+      "bugs_found": [
+        {
+          "line": 37,
+          "type": "KeyError",
+          "message": "KeyError: 'value'",
+          "source": "runtime_uncaught",
+          "confidence": 1.0
+        }
+      ],
+      "execution_success": false,
+      "verdicts": {
+        "mypy": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 37,
+              "type": "KeyError",
+              "message": "KeyError: 'value'"
+            }
+          ]
+        },
+        "pyrefly": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "zuban": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 37,
+              "type": "KeyError",
+              "message": "KeyError: 'value'"
+            }
+          ]
+        },
+        "ty": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 37,
+              "type": "KeyError",
+              "message": "KeyError: 'value'"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "filename": "self-generic-dummy-var-abstract-method.py",
+      "bugs_found": [
+        {
+          "line": 47,
+          "type": "ValueError",
+          "message": "Code expects ValueError (try block at line 46)",
+          "source": "runtime_caught",
+          "confidence": 0.9
+        }
+      ],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 47,
+              "type": "ValueError",
+              "message": "Code expects ValueError (try block at line 46)"
+            }
+          ]
+        },
+        "pyrefly": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "zuban": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 47,
+              "type": "ValueError",
+              "message": "Code expects ValueError (try block at line 46)"
+            }
+          ]
+        },
+        "ty": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        }
+      }
+    },
+    {
+      "filename": "newtype-nested-multi-line-ignore.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        }
+      }
+    },
+    {
+      "filename": "typeddict-total-union-field-narrowing.py",
+      "bugs_found": [],
+      "execution_success": false,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        }
+      }
+    },
+    {
+      "filename": "self-mutation-divergence-refined.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        }
+      }
+    }
+  ]
+}

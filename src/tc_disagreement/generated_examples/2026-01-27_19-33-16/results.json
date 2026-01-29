@@ -1,0 +1,202 @@
+{
+  "timestamp": "2026-01-27T19:33:16.276232",
+  "model_used": "gemini-2.5-flash",
+  "total_generated": 15,
+  "disagreements_found": 11,
+  "success_rate": "73.3%",
+  "checkers_used": [
+    "mypy",
+    "pyrefly",
+    "zuban",
+    "ty"
+  ],
+  "results": [
+    {
+      "filename": "literal-str-variable-assignment-divergence.py",
+      "filepath": "generated_examples/2026-01-27_19-33-16/source_files/literal-str-variable-assignment-divergence.py",
+      "seed_issue": null,
+      "outputs": {
+        "mypy": "_pytifex_temp_405909.py:48: error: Incompatible types in assignment (expression has type \"str\", variable has type \"Literal['active', 'inactive']\")  [assignment]\nFound 1 error in 1 file (checked 1 source file)",
+        "pyrefly": "ERROR `str` is not assignable to `Literal['active', 'inactive']` [bad-assignment]\n  --> _pytifex_temp_405909.py:48:32\n   |\n48 |     literal_test: UserStatus = dynamic_status_str # <--- POTENTIAL DIVERGENCE POINT\n   |                                ^^^^^^^^^^^^^^^^^^\n   |\n INFO 1 error",
+        "zuban": "_pytifex_temp_405909.py:48: error: Incompatible types in assignment (expression has type \"str\", variable has type \"Literal['active', 'inactive']\")  [assignment]\nFound 1 error in 1 file (checked 1 source file)",
+        "ty": "All checks passed!"
+      },
+      "statuses": {
+        "mypy": "error",
+        "pyrefly": "error",
+        "zuban": "error",
+        "ty": "ok"
+      }
+    },
+    {
+      "filename": "typeguard-tvar-refinement.py",
+      "filepath": "generated_examples/2026-01-27_19-33-16/source_files/typeguard-tvar-refinement.py",
+      "seed_issue": null,
+      "outputs": {
+        "mypy": "_pytifex_temp_405909.py:55: note: Revealed type is \"builtins.list[builtins.int | builtins.float | Any]\"\n_pytifex_temp_405909.py:72: note: Revealed type is \"builtins.list[builtins.int | builtins.float]\"\n_pytifex_temp_405909.py:78: note: Revealed type is \"builtins.list[builtins.int | builtins.float]\"\n_pytifex_temp_405909.py:86: note: Revealed type is \"builtins.list[builtins.int | builtins.float]\"\n_pytifex_temp_405909.py:88: note: Revealed type is \"builtins.list[builtins.int | builtins.float]\"\n_pytifex_temp_405909.py:96: note: Revealed type is \"builtins.list[builtins.int | builtins.float | Any]\"\n_pytifex_temp_405909.py:99: note: Revealed type is \"builtins.list[builtins.int | builtins.float | Any]\"\nSuccess: no issues found in 1 source file",
+        "pyrefly": "ERROR `reveal_type` must be imported from `typing` for runtime usage [unknown-name]\n  --> _pytifex_temp_405909.py:55:9\n   |\n55 |         reveal_type(items) # Crucial reveal_type to observe the narrowed type\n   |         ^^^^^^^^^^^\n   |\n INFO revealed type: list[float] [reveal-type]\n  --> _pytifex_temp_405909.py:55:20\n   |\n55 |         reveal_type(items) # Crucial reveal_type to observe the narrowed type\n   |                    -------\n   |\nERROR `reveal_type` must be imported from `typing` for runtime usage [unknown-name]\n  --> _pytifex_temp_405909.py:72:5\n   |\n72 |     reveal_type(all_ints_numeric_list) # Expect List[Union[int, float]]\n   |     ^^^^^^^^^^^\n   |\n INFO revealed type: list[float | int] [reveal-type]\n  --> _pytifex_temp_405909.py:72:16\n   |\n72 |     reveal_type(all_ints_numeric_list) # Expect List[Union[int, float]]\n   |                -----------------------\n   |\nERROR `reveal_type` must be imported from `typing` for runtime usage [unknown-name]\n  --> _pytifex_temp_405909.py:78:9\n   |\n78 |         reveal_type(all_ints_numeric_list) # THIS is the critical reveal_type for divergence\n   |         ^^^^^^^^^^^\n   |\n INFO revealed type: list[float] [reveal-type]\n  --> _pytifex_temp_405909.py:78:20\n   |\n78 |         reveal_type(all_ints_numeric_list) # THIS is the critical reveal_type for divergence\n   |                    -----------------------\n   |\nERROR `reveal_type` must be imported from `typing` for runtime usage [unknown-name]\n  --> _pytifex_temp_405909.py:86:5\n   |\n86 |     reveal_type(mixed_numeric_list) # Expect List[Union[int, float]]\n   |     ^^^^^^^^^^^\n   |\n INFO revealed type: list[float | int] [reveal-type]\n  --> _pytifex_temp_405909.py:86:16\n   |\n86 |     reveal_type(mixed_numeric_list) # Expect List[Union[int, float]]\n   |                --------------------\n   |\nERROR `reveal_type` must be imported from `typing` for runtime usage [unknown-name]\n  --> _pytifex_temp_405909.py:88:9\n   |\n88 |         reveal_type(mixed_numeric_list) # Should not narrow here\n   |         ^^^^^^^^^^^\n   |\n INFO revealed type: list[float] [reveal-type]\n  --> _pytifex_temp_405909.py:88:20\n   |\n88 |         reveal_type(mixed_numeric_list) # Should not narrow here\n   |                    --------------------\n   |\nERROR `reveal_type` must be imported from `typing` for runtime usage [unknown-name]\n  --> _pytifex_temp_405909.py:96:5\n   |\n96 |     reveal_type(original_items_all_ints) # Expect List[Union[int, float, Any]]\n   |     ^^^^^^^^^^^\n   |\n INFO revealed type: list[float | int | Any] [reveal-type]\n  --> _pytifex_temp_405909.py:96:16\n   |\n96 |     reveal_type(original_items_all_ints) # Expect List[Union[int, float, Any]]\n   |                -------------------------\n   |\nERROR `reveal_type` must be imported from `typing` for runtime usage [unknown-name]\n  --> _pytifex_temp_405909.py:99:9\n   |\n99 |         reveal_type(original_items_all_ints) # Expect List[int] or List[Union[int, float]] or List[Union[int, float, Any]]\n   |         ^^^^^^^^^^^\n   |\n INFO revealed type: list[float] [reveal-type]\n  --> _pytifex_temp_405909.py:99:20\n   |\n99 |         reveal_type(original_items_all_ints) # Expect List[int] or List[Union[int, float]] or List[Union[int, float, Any]]\n   |                    -------------------------\n   |\n INFO 7 errors",
+        "zuban": "_pytifex_temp_405909.py:55: note: Revealed type is \"builtins.list[builtins.int | builtins.float | Any]\"\n_pytifex_temp_405909.py:72: note: Revealed type is \"builtins.list[builtins.int | builtins.float]\"\n_pytifex_temp_405909.py:78: note: Revealed type is \"builtins.list[builtins.int | builtins.float]\"\n_pytifex_temp_405909.py:86: note: Revealed type is \"builtins.list[builtins.int | builtins.float]\"\n_pytifex_temp_405909.py:88: note: Revealed type is \"builtins.list[builtins.int | builtins.float]\"\n_pytifex_temp_405909.py:96: note: Revealed type is \"builtins.list[builtins.int | builtins.float | Any]\"\n_pytifex_temp_405909.py:99: note: Revealed type is \"builtins.list[builtins.int | builtins.float | Any]\"\nSuccess: no issues found in 1 source file",
+        "ty": "warning[undefined-reveal]: `reveal_type` used without importing it\n  --> _pytifex_temp_405909.py:55:9\n   |\n53 |         # If 'T' is 'Union[int, float]', this is also safe but less precise.\n54 |         print(\"All items are integers:\", [x * 2 for x in items])\n55 |         reveal_type(items) # Crucial reveal_type to observe the narrowed type\n   |         ^^^^^^^^^^^\n56 |     else:\n57 |         print(\"Not all items are integers:\", items)\n   |\ninfo: This is allowed for debugging convenience but will fail at runtime\ninfo: rule `undefined-reveal` is enabled by default\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_405909.py:55:21\n   |\n53 |         # If 'T' is 'Union[int, float]', this is also safe but less precise.\n54 |         print(\"All items are integers:\", [x * 2 for x in items])\n55 |         reveal_type(items) # Crucial reveal_type to observe the narrowed type\n   |                     ^^^^^ `list[int | float | Any]`\n56 |     else:\n57 |         print(\"Not all items are integers:\", items)\n   |\n\nwarning[undefined-reveal]: `reveal_type` used without importing it\n  --> _pytifex_temp_405909.py:72:5\n   |\n70 |     # A list declared with int|float, but at runtime contains only ints.\n71 |     all_ints_numeric_list: List[Union[int, float]] = [1, 2, 3]\n72 |     reveal_type(all_ints_numeric_list) # Expect List[Union[int, float]]\n   |     ^^^^^^^^^^^\n73 |\n74 |     if are_all_ints_in_union_list_constrained(all_ints_numeric_list): # This will return True\n   |\ninfo: This is allowed for debugging convenience but will fail at runtime\ninfo: rule `undefined-reveal` is enabled by default\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_405909.py:72:17\n   |\n70 |     # A list declared with int|float, but at runtime contains only ints.\n71 |     all_ints_numeric_list: List[Union[int, float]] = [1, 2, 3]\n72 |     reveal_type(all_ints_numeric_list) # Expect List[Union[int, float]]\n   |                 ^^^^^^^^^^^^^^^^^^^^^ `list[int | float]`\n73 |\n74 |     if are_all_ints_in_union_list_constrained(all_ints_numeric_list): # This will return True\n   |\n\nwarning[undefined-reveal]: `reveal_type` used without importing it\n  --> _pytifex_temp_405909.py:78:9\n   |\n76 |         # - Some checkers might narrow `all_ints_numeric_list` to `List[int]` (correct refinement).\n77 |         # - Others might narrow it to `List[Union[int, float]]` (sticking to T's bound).\n78 |         reveal_type(all_ints_numeric_list) # THIS is the critical reveal_type for divergence\n   |         ^^^^^^^^^^^\n79 |         print(\"All items in numeric list are integers:\", [x * 2 for x in all_ints_numeric_list])\n80 |     else:\n   |\ninfo: This is allowed for debugging convenience but will fail at runtime\ninfo: rule `undefined-reveal` is enabled by default\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_405909.py:78:21\n   |\n76 |         # - Some checkers might narrow `all_ints_numeric_list` to `List[int]` (correct refinement).\n77 |         # - Others might narrow it to `List[Union[int, float]]` (sticking to T's bound).\n78 |         reveal_type(all_ints_numeric_list) # THIS is the critical reveal_type for divergence\n   |                     ^^^^^^^^^^^^^^^^^^^^^ `list[int | float]`\n79 |         print(\"All items in numeric list are integers:\", [x * 2 for x in all_ints_numeric_list])\n80 |     else:\n   |\n\nwarning[undefined-reveal]: `reveal_type` used without importing it\n  --> _pytifex_temp_405909.py:86:5\n   |\n84 |     # Another list with int|float, but containing a float.\n85 |     mixed_numeric_list: List[Union[int, float]] = [1, 2, 3.0]\n86 |     reveal_type(mixed_numeric_list) # Expect List[Union[int, float]]\n   |     ^^^^^^^^^^^\n87 |     if are_all_ints_in_union_list_constrained(mixed_numeric_list): # This will return False\n88 |         reveal_type(mixed_numeric_list) # Should not narrow here\n   |\ninfo: This is allowed for debugging convenience but will fail at runtime\ninfo: rule `undefined-reveal` is enabled by default\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_405909.py:86:17\n   |\n84 |     # Another list with int|float, but containing a float.\n85 |     mixed_numeric_list: List[Union[int, float]] = [1, 2, 3.0]\n86 |     reveal_type(mixed_numeric_list) # Expect List[Union[int, float]]\n   |                 ^^^^^^^^^^^^^^^^^^ `list[int | float]`\n87 |     if are_all_ints_in_union_list_constrained(mixed_numeric_list): # This will return False\n88 |         reveal_type(mixed_numeric_list) # Should not narrow here\n   |\n\nwarning[undefined-reveal]: `reveal_type` used without importing it\n  --> _pytifex_temp_405909.py:88:9\n   |\n86 |     reveal_type(mixed_numeric_list) # Expect List[Union[int, float]]\n87 |     if are_all_ints_in_union_list_constrained(mixed_numeric_list): # This will return False\n88 |         reveal_type(mixed_numeric_list) # Should not narrow here\n   |         ^^^^^^^^^^^\n89 |         print(\"Error: This branch should not be taken for mixed_numeric_list\")\n90 |     else:\n   |\ninfo: This is allowed for debugging convenience but will fail at runtime\ninfo: rule `undefined-reveal` is enabled by default\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_405909.py:88:21\n   |\n86 |     reveal_type(mixed_numeric_list) # Expect List[Union[int, float]]\n87 |     if are_all_ints_in_union_list_constrained(mixed_numeric_list): # This will return False\n88 |         reveal_type(mixed_numeric_list) # Should not narrow here\n   |                     ^^^^^^^^^^^^^^^^^^ `list[int | float]`\n89 |         print(\"Error: This branch should not be taken for mixed_numeric_list\")\n90 |     else:\n   |\n\nwarning[undefined-reveal]: `reveal_type` used without importing it\n  --> _pytifex_temp_405909.py:96:5\n   |\n94 |     # actually contains only integers.\n95 |     original_items_all_ints: List[Union[int, float, Any]] = [1, 2, 3]\n96 |     reveal_type(original_items_all_ints) # Expect List[Union[int, float, Any]]\n   |     ^^^^^^^^^^^\n97 |     if are_all_ints_in_union_list_constrained(original_items_all_ints):\n98 |         # Similar divergence expected here as with `all_ints_numeric_list`.\n   |\ninfo: This is allowed for debugging convenience but will fail at runtime\ninfo: rule `undefined-reveal` is enabled by default\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_405909.py:96:17\n   |\n94 |     # actually contains only integers.\n95 |     original_items_all_ints: List[Union[int, float, Any]] = [1, 2, 3]\n96 |     reveal_type(original_items_all_ints) # Expect List[Union[int, float, Any]]\n   |                 ^^^^^^^^^^^^^^^^^^^^^^^ `list[int | float | Any]`\n97 |     if are_all_ints_in_union_list_constrained(original_items_all_ints):\n98 |         # Similar divergence expected here as with `all_ints_numeric_list`.\n   |\n\nwarning[undefined-reveal]: `reveal_type` used without importing it\n   --> _pytifex_temp_405909.py:99:9\n    |\n 97 |     if are_all_ints_in_union_list_constrained(original_items_all_ints):\n 98 |         # Similar divergence expected here as with `all_ints_numeric_list`.\n 99 |         reveal_type(original_items_all_ints) # Expect List[int] or List[Union[int, float]] or List[Union[int, float, Any]]\n    |         ^^^^^^^^^^^\n100 |         print(\"Original items type, all integers:\", [x * 2 for x in original_items_all_ints])\n101 |     else:\n    |\ninfo: This is allowed for debugging convenience but will fail at runtime\ninfo: rule `undefined-reveal` is enabled by default\n\ninfo[revealed-type]: Revealed type\n   --> _pytifex_temp_405909.py:99:21\n    |\n 97 |     if are_all_ints_in_union_list_constrained(original_items_all_ints):\n 98 |         # Similar divergence expected here as with `all_ints_numeric_list`.\n 99 |         reveal_type(original_items_all_ints) # Expect List[int] or List[Union[int, float]] or List[Union[int, float, Any]]\n    |                     ^^^^^^^^^^^^^^^^^^^^^^^ `list[int | float | Any]`\n100 |         print(\"Original items type, all integers:\", [x * 2 for x in original_items_all_ints])\n101 |     else:\n    |\n\nFound 14 diagnostics"
+      },
+      "statuses": {
+        "mypy": "ok",
+        "pyrefly": "error",
+        "zuban": "ok",
+        "ty": "error"
+      }
+    },
+    {
+      "filename": "self-generic-narrowing-with-factory.py",
+      "filepath": "generated_examples/2026-01-27_19-33-16/source_files/self-generic-narrowing-with-factory.py",
+      "seed_issue": "astral-sh/ty#2460",
+      "outputs": {
+        "mypy": "_pytifex_temp_405909.py:48: note: Revealed type is \"_pytifex_temp_405909.MyResource[builtins.str]\"\n_pytifex_temp_405909.py:50: note: Revealed type is \"_pytifex_temp_405909.MyResource[builtins.str]\"\nSuccess: no issues found in 1 source file",
+        "pyrefly": "ERROR `reveal_type` must be imported from `typing` for runtime usage [unknown-name]\n  --> _pytifex_temp_405909.py:48:5\n   |\n48 |     reveal_type(active_res)\n   |     ^^^^^^^^^^^\n   |\n INFO revealed type: MyResource[Unknown] [reveal-type]\n  --> _pytifex_temp_405909.py:48:16\n   |\n48 |     reveal_type(active_res)\n   |                ------------\n   |\nERROR `reveal_type` must be imported from `typing` for runtime usage [unknown-name]\n  --> _pytifex_temp_405909.py:50:9\n   |\n50 |         reveal_type(active_res) # Should still be MyResource[str] but potentially some refined state?\n   |         ^^^^^^^^^^^\n   |\n INFO revealed type: MyResource[Unknown] (_.is_active: Literal[True]) [reveal-type]\n  --> _pytifex_temp_405909.py:50:20\n   |\n50 |         reveal_type(active_res) # Should still be MyResource[str] but potentially some refined state?\n   |                    ------------\n   |\n INFO 2 errors",
+        "zuban": "_pytifex_temp_405909.py:48: note: Revealed type is \"_pytifex_temp_405909.MyResource[builtins.str]\"\n_pytifex_temp_405909.py:50: note: Revealed type is \"_pytifex_temp_405909.MyResource[builtins.str]\"\nSuccess: no issues found in 1 source file",
+        "ty": "warning[undefined-reveal]: `reveal_type` used without importing it\n  --> _pytifex_temp_405909.py:48:5\n   |\n47 |     # Reveal type here to see how checkers handle `Self` combined with narrowing conditions\n48 |     reveal_type(active_res)\n   |     ^^^^^^^^^^^\n49 |     if active_res.is_active:\n50 |         reveal_type(active_res) # Should still be MyResource[str] but potentially some refined state?\n   |\ninfo: This is allowed for debugging convenience but will fail at runtime\ninfo: rule `undefined-reveal` is enabled by default\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_405909.py:48:17\n   |\n47 |     # Reveal type here to see how checkers handle `Self` combined with narrowing conditions\n48 |     reveal_type(active_res)\n   |                 ^^^^^^^^^^ `MyResource[Unknown]`\n49 |     if active_res.is_active:\n50 |         reveal_type(active_res) # Should still be MyResource[str] but potentially some refined state?\n   |\n\nwarning[undefined-reveal]: `reveal_type` used without importing it\n  --> _pytifex_temp_405909.py:50:9\n   |\n48 |     reveal_type(active_res)\n49 |     if active_res.is_active:\n50 |         reveal_type(active_res) # Should still be MyResource[str] but potentially some refined state?\n   |         ^^^^^^^^^^^\n   |\ninfo: This is allowed for debugging convenience but will fail at runtime\ninfo: rule `undefined-reveal` is enabled by default\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_405909.py:50:21\n   |\n48 |     reveal_type(active_res)\n49 |     if active_res.is_active:\n50 |         reveal_type(active_res) # Should still be MyResource[str] but potentially some refined state?\n   |                     ^^^^^^^^^^ `MyResource[Unknown]`\n   |\n\nFound 4 diagnostics"
+      },
+      "statuses": {
+        "mypy": "ok",
+        "pyrefly": "error",
+        "zuban": "ok",
+        "ty": "ok"
+      }
+    },
+    {
+      "filename": "newtype-dummy-var-comprehension.py",
+      "filepath": "generated_examples/2026-01-27_19-33-16/source_files/newtype-dummy-var-comprehension.py",
+      "seed_issue": "https://github.com/zubanls/zuban/issues/180",
+      "outputs": {
+        "mypy": "Success: no issues found in 1 source file",
+        "pyrefly": "INFO 0 errors",
+        "zuban": "Success: no issues found in 1 source file",
+        "ty": "error[invalid-newtype]: invalid base for `typing.NewType`\n --> _pytifex_temp_405909.py:4:26\n  |\n3 | ItemId = NewType('ItemId', int)\n4 | Price = NewType('Price', float)\n  |                          ^^^^^ type `int | float`\n5 |\n6 | def process_items_with_prices(items_prices: List[Tuple[ItemId, Price]]) -> None:\n  |\ninfo: The base of a `NewType` must be a class type or another `NewType`.\ninfo: rule `invalid-newtype` is enabled by default\n\nFound 1 diagnostic"
+      },
+      "statuses": {
+        "mypy": "ok",
+        "pyrefly": "ok",
+        "zuban": "ok",
+        "ty": "error"
+      }
+    },
+    {
+      "filename": "typeddict-total-multi-line-instantiation-ignore.py",
+      "filepath": "generated_examples/2026-01-27_19-33-16/source_files/typeddict-total-multi-line-instantiation-ignore.py",
+      "seed_issue": "https://github.com/python/mypy/issues/20471",
+      "outputs": {
+        "mypy": "Success: no issues found in 1 source file",
+        "pyrefly": "ERROR Missing required key `api_key` for TypedDict `FinalConfig` [bad-typed-dict-key]\n  --> _pytifex_temp_405909.py:38:34\n   |\n38 |       broken_config: FinalConfig = {\n   |  __________________________________^\n39 | |         'version': 2,\n40 | |         'debug_mode': False,\n41 | |         'log_level': 'DEBUG',\n42 | |         'timeout_seconds': 60,\n43 | |         # 'api_key' is intentionally missing to see if checkers would report it\n   | |________________________________________________________________________________^\n   |\n INFO 1 error",
+        "zuban": "Success: no issues found in 1 source file",
+        "ty": "All checks passed!"
+      },
+      "statuses": {
+        "mypy": "ok",
+        "pyrefly": "error",
+        "zuban": "ok",
+        "ty": "ok"
+      }
+    },
+    {
+      "filename": "paramspec-dummy-var-return-decorator.py",
+      "filepath": "generated_examples/2026-01-27_19-33-16/source_files/paramspec-dummy-var-return-decorator.py",
+      "seed_issue": "https://github.com/zubanls/zuban/issues/180",
+      "outputs": {
+        "mypy": "_pytifex_temp_405909.py:37: error: Incompatible types in assignment (expression has type \"str\", variable has type \"int\")  [assignment]\nFound 1 error in 1 file (checked 1 source file)",
+        "pyrefly": "INFO 0 errors",
+        "zuban": "Success: no issues found in 1 source file",
+        "ty": "error[unresolved-attribute]: Object of type `(**P@my_decorator) -> R@my_decorator` has no attribute `__name__`\n  --> _pytifex_temp_405909.py:10:38\n   |\n 8 |     @wraps(func)\n 9 |     def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:\n10 |         print(f\"Decorated function '{func.__name__}' called.\")\n   |                                      ^^^^^^^^^^^^^\n11 |         result = func(*args, **kwargs)\n12 |         # Here, `_` holds the result. zuban#180 flagged `_ = ...` for needing annotation.\n   |\ninfo: rule `unresolved-attribute` is enabled by default\n\nerror[unresolved-attribute]: Object of type `(**P@my_decorator) -> R@my_decorator` has no attribute `__name__`\n  --> _pytifex_temp_405909.py:16:38\n   |\n14 |         # requires an annotation or if its type is trivially inferable.\n15 |         _ = result \n16 |         print(f\"Decorated function '{func.__name__}' finished (result assigned to _).\")\n   |                                      ^^^^^^^^^^^^^\n17 |         return result\n18 |     return wrapper\n   |\ninfo: rule `unresolved-attribute` is enabled by default\n\nFound 2 diagnostics"
+      },
+      "statuses": {
+        "mypy": "error",
+        "pyrefly": "ok",
+        "zuban": "ok",
+        "ty": "error"
+      }
+    },
+    {
+      "filename": "typeguard-typeddict-soundness.py",
+      "filepath": "generated_examples/2026-01-27_19-33-16/source_files/typeguard-typeddict-soundness.py",
+      "seed_issue": null,
+      "outputs": {
+        "mypy": "_pytifex_temp_405909.py:57: note: Revealed type is \"TypedDict('_pytifex_temp_405909.ConfigEntryEnabled', {'value': Any, 'status': Literal['enabled']})\"\n_pytifex_temp_405909.py:58: note: Revealed type is \"Literal['enabled']\"\n_pytifex_temp_405909.py:69: note: Revealed type is \"TypedDict('_pytifex_temp_405909.ConfigEntryEnabled', {'value': Any, 'status': Literal['enabled']})\"\n_pytifex_temp_405909.py:82: note: Revealed type is \"TypedDict('_pytifex_temp_405909.ConfigEntry', {'value'?: Any, 'status'?: Literal['enabled'] | Literal['disabled']})\"\n_pytifex_temp_405909.py:89: note: Revealed type is \"TypedDict('_pytifex_temp_405909.ConfigEntry', {'value'?: Any, 'status'?: Literal['enabled'] | Literal['disabled']})\"\nSuccess: no issues found in 1 source file",
+        "pyrefly": "ERROR `reveal_type` must be imported from `typing` for runtime usage [unknown-name]\n  --> _pytifex_temp_405909.py:57:9\n   |\n57 |         reveal_type(entry_fully_compliant) # Expect ConfigEntryEnabled\n   |         ^^^^^^^^^^^\n   |\n INFO revealed type: ConfigEntryEnabled [reveal-type]\n  --> _pytifex_temp_405909.py:57:20\n   |\n57 |         reveal_type(entry_fully_compliant) # Expect ConfigEntryEnabled\n   |                    -----------------------\n   |\nERROR `reveal_type` must be imported from `typing` for runtime usage [unknown-name]\n  --> _pytifex_temp_405909.py:58:9\n   |\n58 |         reveal_type(entry_fully_compliant['status']) # Expect Literal['enabled']\n   |         ^^^^^^^^^^^\n   |\n INFO revealed type: Literal['enabled'] [reveal-type]\n  --> _pytifex_temp_405909.py:58:20\n   |\n58 |         reveal_type(entry_fully_compliant['status']) # Expect Literal['enabled']\n   |                    ---------------------------------\n   |\nERROR `reveal_type` must be imported from `typing` for runtime usage [unknown-name]\n  --> _pytifex_temp_405909.py:69:9\n   |\n69 |         reveal_type(entry_missing_value) # Expect ConfigEntryEnabled, but this is a lie\n   |         ^^^^^^^^^^^\n   |\n INFO revealed type: ConfigEntryEnabled [reveal-type]\n  --> _pytifex_temp_405909.py:69:20\n   |\n69 |         reveal_type(entry_missing_value) # Expect ConfigEntryEnabled, but this is a lie\n   |                    ---------------------\n   |\nERROR `reveal_type` must be imported from `typing` for runtime usage [unknown-name]\n  --> _pytifex_temp_405909.py:82:9\n   |\n82 |         reveal_type(entry_not_enabled) # Expect ConfigEntry (original type)\n   |         ^^^^^^^^^^^\n   |\n INFO revealed type: ConfigEntry [reveal-type]\n  --> _pytifex_temp_405909.py:82:20\n   |\n82 |         reveal_type(entry_not_enabled) # Expect ConfigEntry (original type)\n   |                    -------------------\n   |\nERROR `reveal_type` must be imported from `typing` for runtime usage [unknown-name]\n  --> _pytifex_temp_405909.py:89:9\n   |\n89 |         reveal_type(entry_missing_status) # Expect ConfigEntry (original type)\n   |         ^^^^^^^^^^^\n   |\n INFO revealed type: ConfigEntry [reveal-type]\n  --> _pytifex_temp_405909.py:89:20\n   |\n89 |         reveal_type(entry_missing_status) # Expect ConfigEntry (original type)\n   |                    ----------------------\n   |\n INFO 5 errors",
+        "zuban": "_pytifex_temp_405909.py:57: note: Revealed type is \"TypedDict('_pytifex_temp_405909.ConfigEntryEnabled', {'value': Any, 'status': Literal['enabled']})\"\n_pytifex_temp_405909.py:58: note: Revealed type is \"Literal['enabled']\"\n_pytifex_temp_405909.py:69: note: Revealed type is \"TypedDict('_pytifex_temp_405909.ConfigEntryEnabled', {'value': Any, 'status': Literal['enabled']})\"\n_pytifex_temp_405909.py:82: note: Revealed type is \"TypedDict('_pytifex_temp_405909.ConfigEntry', {'value'?: Any, 'status'?: Literal['enabled'] | Literal['disabled']})\"\n_pytifex_temp_405909.py:89: note: Revealed type is \"TypedDict('_pytifex_temp_405909.ConfigEntry', {'value'?: Any, 'status'?: Literal['enabled'] | Literal['disabled']})\"\nSuccess: no issues found in 1 source file",
+        "ty": "warning[undefined-reveal]: `reveal_type` used without importing it\n  --> _pytifex_temp_405909.py:57:9\n   |\n55 |     entry_fully_compliant: ConfigEntry = {\"value\": \"test\", \"status\": \"enabled\"}\n56 |     if has_enabled_status(entry_fully_compliant):\n57 |         reveal_type(entry_fully_compliant) # Expect ConfigEntryEnabled\n   |         ^^^^^^^^^^^\n58 |         reveal_type(entry_fully_compliant['status']) # Expect Literal['enabled']\n59 |         print(f\"Fully compliant: Value = {entry_fully_compliant['value']}\")\n   |\ninfo: This is allowed for debugging convenience but will fail at runtime\ninfo: rule `undefined-reveal` is enabled by default\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_405909.py:57:21\n   |\n55 |     entry_fully_compliant: ConfigEntry = {\"value\": \"test\", \"status\": \"enabled\"}\n56 |     if has_enabled_status(entry_fully_compliant):\n57 |         reveal_type(entry_fully_compliant) # Expect ConfigEntryEnabled\n   |                     ^^^^^^^^^^^^^^^^^^^^^ `ConfigEntry`\n58 |         reveal_type(entry_fully_compliant['status']) # Expect Literal['enabled']\n59 |         print(f\"Fully compliant: Value = {entry_fully_compliant['value']}\")\n   |\n\nwarning[undefined-reveal]: `reveal_type` used without importing it\n  --> _pytifex_temp_405909.py:58:9\n   |\n56 |     if has_enabled_status(entry_fully_compliant):\n57 |         reveal_type(entry_fully_compliant) # Expect ConfigEntryEnabled\n58 |         reveal_type(entry_fully_compliant['status']) # Expect Literal['enabled']\n   |         ^^^^^^^^^^^\n59 |         print(f\"Fully compliant: Value = {entry_fully_compliant['value']}\")\n   |\ninfo: This is allowed for debugging convenience but will fail at runtime\ninfo: rule `undefined-reveal` is enabled by default\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_405909.py:58:21\n   |\n56 |     if has_enabled_status(entry_fully_compliant):\n57 |         reveal_type(entry_fully_compliant) # Expect ConfigEntryEnabled\n58 |         reveal_type(entry_fully_compliant['status']) # Expect Literal['enabled']\n   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `Literal[\"enabled\", \"disabled\"]`\n59 |         print(f\"Fully compliant: Value = {entry_fully_compliant['value']}\")\n   |\n\nwarning[undefined-reveal]: `reveal_type` used without importing it\n  --> _pytifex_temp_405909.py:69:9\n   |\n67 |         # According to the TypeGuard, entry_missing_value should now be ConfigEntryEnabled.\n68 |         # But at runtime, it's `{\"status\": \"enabled\"}`, which does not have a 'value' key.\n69 |         reveal_type(entry_missing_value) # Expect ConfigEntryEnabled, but this is a lie\n   |         ^^^^^^^^^^^\n70 |         # Accessing 'value' here is unsound.\n71 |         print(f\"Missing value (supposedly enabled): Value = {entry_missing_value['value']}\")\n   |\ninfo: This is allowed for debugging convenience but will fail at runtime\ninfo: rule `undefined-reveal` is enabled by default\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_405909.py:69:21\n   |\n67 |         # According to the TypeGuard, entry_missing_value should now be ConfigEntryEnabled.\n68 |         # But at runtime, it's `{\"status\": \"enabled\"}`, which does not have a 'value' key.\n69 |         reveal_type(entry_missing_value) # Expect ConfigEntryEnabled, but this is a lie\n   |                     ^^^^^^^^^^^^^^^^^^^ `ConfigEntry`\n70 |         # Accessing 'value' here is unsound.\n71 |         print(f\"Missing value (supposedly enabled): Value = {entry_missing_value['value']}\")\n   |\n\nwarning[undefined-reveal]: `reveal_type` used without importing it\n  --> _pytifex_temp_405909.py:82:9\n   |\n80 |         print(f\"Not enabled entry passed the guard (unexpected): Value = {entry_not_enabled['value']}\")\n81 |     else:\n82 |         reveal_type(entry_not_enabled) # Expect ConfigEntry (original type)\n   |         ^^^^^^^^^^^\n83 |         print(\"Not enabled entry correctly failed the guard.\")\n   |\ninfo: This is allowed for debugging convenience but will fail at runtime\ninfo: rule `undefined-reveal` is enabled by default\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_405909.py:82:21\n   |\n80 |         print(f\"Not enabled entry passed the guard (unexpected): Value = {entry_not_enabled['value']}\")\n81 |     else:\n82 |         reveal_type(entry_not_enabled) # Expect ConfigEntry (original type)\n   |                     ^^^^^^^^^^^^^^^^^ `ConfigEntry`\n83 |         print(\"Not enabled entry correctly failed the guard.\")\n   |\n\nwarning[undefined-reveal]: `reveal_type` used without importing it\n  --> _pytifex_temp_405909.py:89:9\n   |\n87 |         print(f\"Missing status entry passed the guard (unexpected): Value = {entry_missing_status['value']}\")\n88 |     else:\n89 |         reveal_type(entry_missing_status) # Expect ConfigEntry (original type)\n   |         ^^^^^^^^^^^\n90 |         print(\"Missing status entry correctly failed the guard.\")\n   |\ninfo: This is allowed for debugging convenience but will fail at runtime\ninfo: rule `undefined-reveal` is enabled by default\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_405909.py:89:21\n   |\n87 |         print(f\"Missing status entry passed the guard (unexpected): Value = {entry_missing_status['value']}\")\n88 |     else:\n89 |         reveal_type(entry_missing_status) # Expect ConfigEntry (original type)\n   |                     ^^^^^^^^^^^^^^^^^^^^ `ConfigEntry`\n90 |         print(\"Missing status entry correctly failed the guard.\")\n   |\n\nFound 10 diagnostics"
+      },
+      "statuses": {
+        "mypy": "ok",
+        "pyrefly": "error",
+        "zuban": "ok",
+        "ty": "ok"
+      }
+    },
+    {
+      "filename": "self-generic-dummy-var-abstract-method.py",
+      "filepath": "generated_examples/2026-01-27_19-33-16/source_files/self-generic-dummy-var-abstract-method.py",
+      "seed_issue": "https://github.com/zubanls/zuban/issues/180",
+      "outputs": {
+        "mypy": "_pytifex_temp_405909.py:25: note: By default the bodies of untyped functions are not checked, consider using --check-untyped-defs  [annotation-unchecked]\nSuccess: no issues found in 1 source file",
+        "pyrefly": "ERROR Class member `UserRepository.save` overrides parent class `BaseRepository` in an inconsistent manner [bad-param-name-override]\n  --> _pytifex_temp_405909.py:33:9\n   |\n33 |     def save(self, user: User) -> Self:\n   |         ^^^^\n   |\n  Got parameter name `user`, expected `entity`\n INFO 1 error",
+        "zuban": "Success: no issues found in 1 source file",
+        "ty": "error[invalid-method-override]: Invalid override of method `save`\n  --> _pytifex_temp_405909.py:33:9\n   |\n31 |         return self # Returning Self here\n32 |\n33 |     def save(self, user: User) -> Self:\n   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Definition is incompatible with `BaseRepository.save`\n34 |         self._users[user.uid] = user\n35 |         return self # Returning Self here\n   |\n  ::: _pytifex_temp_405909.py:12:9\n   |\n11 |     @abstractmethod\n12 |     def save(self, entity: T) -> Self:\n   |         ----------------------------- `BaseRepository.save` defined here\n13 |         pass\n   |\ninfo: This violates the Liskov Substitution Principle\ninfo: rule `invalid-method-override` is enabled by default\n\nFound 1 diagnostic"
+      },
+      "statuses": {
+        "mypy": "ok",
+        "pyrefly": "error",
+        "zuban": "ok",
+        "ty": "error"
+      }
+    },
+    {
+      "filename": "newtype-nested-multi-line-ignore.py",
+      "filepath": "generated_examples/2026-01-27_19-33-16/source_files/newtype-nested-multi-line-ignore.py",
+      "seed_issue": "https://github.com/python/mypy/issues/20471",
+      "outputs": {
+        "mypy": "Success: no issues found in 1 source file",
+        "pyrefly": "INFO 0 errors",
+        "zuban": "Success: no issues found in 1 source file",
+        "ty": "error[invalid-newtype]: invalid base for `typing.NewType`\n --> _pytifex_temp_405909.py:5:28\n  |\n3 | ItemId = NewType('ItemId', int)\n4 | Tag = NewType('Tag', str)\n5 | Weight = NewType('Weight', float)\n  |                            ^^^^^ type `int | float`\n6 |\n7 | # Complex nested structure using NewTypes\n  |\ninfo: The base of a `NewType` must be a class type or another `NewType`.\ninfo: rule `invalid-newtype` is enabled by default\n\nerror[no-matching-overload]: No overload of function `sum` matches arguments\n  --> _pytifex_temp_405909.py:37:39\n   |\n35 |       # The `type: ignore` on the second line here could be problematic if\n36 |       # it applies to the whole expression or is mis-scoped.\n37 |       total_weight: Union[float, int] = sum(\n   |  _______________________________________^\n38 | |         item_data[1] for item_id, item_data in my_inventory.items() # type: ignore[attr-defined]\n39 | |         # This ignore is for `item_data[1]` possibly not being iterable or having `__float__`\n40 | |         # if the checker is over-strict on NewType conversion.\n41 | |     )\n   | |_____^\n42 |       print(f\"Total weight: {total_weight}\")\n   |\ninfo: First overload defined here\n    --> stdlib/builtins.pyi:4337:5\n     |\n4335 | # Instead, we special-case the most common examples of this: bool and literal integers.\n4336 | @overload\n4337 | def sum(iterable: Iterable[bool | _LiteralInteger], /, start: int = 0) -> int:\n     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n4338 |     \"\"\"Return the sum of a 'start' value (default: 0) plus an iterable of numbers\n     |\ninfo: Possible overloads for function `sum`:\ninfo:   (iterable: Iterable[bool | Literal[1, 2, 3, 4, 5, ... omitted 41 literals]], /, start: int = Literal[0]) -> int\ninfo:   (iterable: Iterable[_SupportsSumNoDefaultT@sum], /) -> _SupportsSumNoDefaultT@sum | Literal[0]\ninfo:   (iterable: Iterable[_AddableT1@sum], /, start: _AddableT2@sum) -> _AddableT1@sum | _AddableT2@sum\ninfo: rule `no-matching-overload` is enabled by default\n\nFound 2 diagnostics"
+      },
+      "statuses": {
+        "mypy": "ok",
+        "pyrefly": "ok",
+        "zuban": "ok",
+        "ty": "error"
+      }
+    },
+    {
+      "filename": "typeddict-total-union-field-narrowing.py",
+      "filepath": "generated_examples/2026-01-27_19-33-16/source_files/typeddict-total-union-field-narrowing.py",
+      "seed_issue": "astral-sh/ty#2460",
+      "outputs": {
+        "mypy": "_pytifex_temp_405909.py:54: note: Revealed type is \"builtins.int\"\nSuccess: no issues found in 1 source file",
+        "pyrefly": "ERROR `reveal_type` must be imported from `typing` for runtime usage [unknown-name]\n  --> _pytifex_temp_405909.py:54:9\n   |\n54 |         reveal_type(item1['price']) # Expect int, but might be Union[int, float] or Any\n   |         ^^^^^^^^^^^\n   |\n INFO revealed type: int [reveal-type]\n  --> _pytifex_temp_405909.py:54:20\n   |\n54 |         reveal_type(item1['price']) # Expect int, but might be Union[int, float] or Any\n   |                    ----------------\n   |\n INFO 1 error",
+        "zuban": "_pytifex_temp_405909.py:54: note: Revealed type is \"builtins.int\"\nSuccess: no issues found in 1 source file",
+        "ty": "warning[undefined-reveal]: `reveal_type` used without importing it\n  --> _pytifex_temp_405909.py:54:9\n   |\n52 |     # Reveal type for a narrowed field\n53 |     if 'price' in item1 and type(item1['price']) == int:\n54 |         reveal_type(item1['price']) # Expect int, but might be Union[int, float] or Any\n   |         ^^^^^^^^^^^\n   |\ninfo: This is allowed for debugging convenience but will fail at runtime\ninfo: rule `undefined-reveal` is enabled by default\n\ninfo[revealed-type]: Revealed type\n  --> _pytifex_temp_405909.py:54:21\n   |\n52 |     # Reveal type for a narrowed field\n53 |     if 'price' in item1 and type(item1['price']) == int:\n54 |         reveal_type(item1['price']) # Expect int, but might be Union[int, float] or Any\n   |                     ^^^^^^^^^^^^^^ `int | float`\n   |\n\nFound 2 diagnostics"
+      },
+      "statuses": {
+        "mypy": "ok",
+        "pyrefly": "error",
+        "zuban": "ok",
+        "ty": "ok"
+      }
+    },
+    {
+      "filename": "self-mutation-divergence-refined.py",
+      "filepath": "generated_examples/2026-01-27_19-33-16/source_files/self-mutation-divergence-refined.py",
+      "seed_issue": null,
+      "outputs": {
+        "mypy": "Success: no issues found in 1 source file",
+        "pyrefly": "INFO 0 errors",
+        "zuban": "_pytifex_temp_405909.py:27: error: \"type[T]\" has no attribute \"__name__\"  [attr-defined]\nFound 1 error in 1 file (checked 1 source file)",
+        "ty": "error[unresolved-attribute]: Object of type `(T@ChainableProcessor, /) -> Any` has no attribute `__name__`\n  --> _pytifex_temp_405909.py:27:49\n   |\n25 |         # Assigning `Any` to `T` is an incompatible assignment for strict type checkers.\n26 |         self._data = func(self._data)\n27 |         self._history.append(f\"Transformation '{func.__name__}' applied. New data type: {type(self._data).__name__}\")\n   |                                                 ^^^^^^^^^^^^^\n28 |         return self\n   |\ninfo: rule `unresolved-attribute` is enabled by default\n\nFound 1 diagnostic"
+      },
+      "statuses": {
+        "mypy": "ok",
+        "pyrefly": "ok",
+        "zuban": "error",
+        "ty": "error"
+      }
+    }
+  ]
+}

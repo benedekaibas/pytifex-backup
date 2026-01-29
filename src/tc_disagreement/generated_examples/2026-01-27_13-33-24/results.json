@@ -1,0 +1,168 @@
+{
+  "timestamp": "2026-01-27T13:33:24.454260",
+  "model_used": "gemini-2.5-flash",
+  "total_generated": 15,
+  "disagreements_found": 9,
+  "success_rate": "60.0%",
+  "checkers_used": [
+    "mypy",
+    "pyrefly",
+    "zuban",
+    "ty"
+  ],
+  "results": [
+    {
+      "filename": "typealias-protocol-generic.py",
+      "filepath": "generated_examples/2026-01-27_13-33-24/source_files/typealias-protocol-generic.py",
+      "seed_issue": "python/mypy #20531",
+      "outputs": {
+        "mypy": "_pytifex_temp_3552082.py:5: error: Invariant type variable \"T\" used in protocol where contravariant one is expected  [misc]\nFound 1 error in 1 file (checked 1 source file)",
+        "pyrefly": "INFO 0 errors",
+        "zuban": "_pytifex_temp_3552082.py:5: error: Invariant type variable \"T\" used in protocol where Contravariant one is expected  [misc]\nFound 1 error in 1 file (checked 1 source file)",
+        "ty": "All checks passed!"
+      },
+      "statuses": {
+        "mypy": "error",
+        "pyrefly": "ok",
+        "zuban": "error",
+        "ty": "ok"
+      }
+    },
+    {
+      "filename": "recursive-typealiastype-generic-class-union.py",
+      "filepath": "generated_examples/2026-01-27_13-33-24/source_files/recursive-typealiastype-generic-class-union.py",
+      "seed_issue": "astral-sh/ty #1848",
+      "outputs": {
+        "mypy": "_pytifex_temp_3552082.py:8: error: Cannot resolve name \"NestedData\" (possible cyclic definition)  [misc]\nFound 1 error in 1 file (checked 1 source file)",
+        "pyrefly": "INFO 0 errors",
+        "zuban": "_pytifex_temp_3552082.py:49: error: Argument 1 to \"LinkedList\" has incompatible type \"int\"; expected \"str\"  [arg-type]\nFound 1 error in 1 file (checked 1 source file)",
+        "ty": "All checks passed!"
+      },
+      "statuses": {
+        "mypy": "error",
+        "pyrefly": "ok",
+        "zuban": "error",
+        "ty": "ok"
+      }
+    },
+    {
+      "filename": "decorator-generics-divergence.py",
+      "filepath": "generated_examples/2026-01-27_13-33-24/source_files/decorator-generics-divergence.py",
+      "seed_issue": null,
+      "outputs": {
+        "mypy": "Success: no issues found in 1 source file",
+        "pyrefly": "INFO 0 errors",
+        "zuban": "Success: no issues found in 1 source file",
+        "ty": "error[unresolved-attribute]: Object of type `(**P@call_tracker) -> R@call_tracker` has no attribute `__qualname__`\n  --> _pytifex_temp_3552082.py:13:27\n   |\n11 |     def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:\n12 |         # ty currently reports an unresolved-attribute error on func.__qualname__ here.\n13 |         print(f\"Tracker: {func.__qualname__} called with args={args}, kwargs={kwargs}\")\n   |                           ^^^^^^^^^^^^^^^^^\n14 |         return func(*args, **kwargs)\n15 |     return wrapper\n   |\ninfo: rule `unresolved-attribute` is enabled by default\n\nerror[no-matching-overload]: No overload matches arguments\n  --> _pytifex_temp_3552082.py:63:15\n   |\n61 | if __name__ == \"__main__\":\n62 |     # Test with integers\n63 |     res_int = DataProcessor[int].process(10)\n   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n64 |     # reveal_type(res_int) # Expected: int, Actual: T | List[T] | Any (potential type inference issue)\n65 |     print(f\"Processed single int: {res_int}\")\n   |\ninfo: rule `no-matching-overload` is enabled by default\n\nerror[no-matching-overload]: No overload matches arguments\n  --> _pytifex_temp_3552082.py:68:20\n   |\n66 |     print(f\"All processed ints: {DataProcessor[int].get_all_processed()}\")\n67 |\n68 |     res_int_list = DataProcessor[int].process([20, 30])\n   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n69 |     # reveal_type(res_int_list) # Expected: List[int], Actual: T | List[T] | Any\n70 |     print(f\"Processed int list: {res_int_list}\")\n   |\ninfo: rule `no-matching-overload` is enabled by default\n\nerror[no-matching-overload]: No overload matches arguments\n  --> _pytifex_temp_3552082.py:78:15\n   |\n76 |     # This demonstrates a runtime effect of the type change for the type checker.\n77 |     # The 'cast' tells the type checker to treat it as List[T] for each context.\n78 |     res_str = DataProcessor[str].process(\"hello\")\n   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n79 |     # reveal_type(res_str) # Expected: str\n80 |     print(f\"Processed single string: {res_str}\")\n   |\ninfo: rule `no-matching-overload` is enabled by default\n\nerror[no-matching-overload]: No overload matches arguments\n  --> _pytifex_temp_3552082.py:83:20\n   |\n81 |     print(f\"All processed strings: {DataProcessor[str].get_all_processed()}\") # This will also contain ints!\n82 |\n83 |     res_str_list = DataProcessor[str].process([\"world\", \"!\"])\n   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n84 |     print(f\"Processed string list: {res_str_list}\")\n85 |     print(f\"All processed strings: {DataProcessor[str].get_all_processed()}\") # Still same shared list\n   |\ninfo: rule `no-matching-overload` is enabled by default\n\nFound 5 diagnostics"
+      },
+      "statuses": {
+        "mypy": "ok",
+        "pyrefly": "ok",
+        "zuban": "ok",
+        "ty": "error"
+      }
+    },
+    {
+      "filename": "T-variance-divergence.py",
+      "filepath": "generated_examples/2026-01-27_13-33-24/source_files/T-variance-divergence.py",
+      "seed_issue": null,
+      "outputs": {
+        "mypy": "_pytifex_temp_3552082.py:7: error: Invariant type variable \"T\" used in protocol where contravariant one is expected  [misc]\nFound 1 error in 1 file (checked 1 source file)",
+        "pyrefly": "INFO 0 errors",
+        "zuban": "Success: no issues found in 1 source file",
+        "ty": "All checks passed!"
+      },
+      "statuses": {
+        "mypy": "error",
+        "pyrefly": "ok",
+        "zuban": "ok",
+        "ty": "ok"
+      }
+    },
+    {
+      "filename": "newtype-generic-container-typeguard-union.py",
+      "filepath": "generated_examples/2026-01-27_13-33-24/source_files/newtype-generic-container-typeguard-union.py",
+      "seed_issue": null,
+      "outputs": {
+        "mypy": "Success: no issues found in 1 source file",
+        "pyrefly": "INFO 0 errors",
+        "zuban": "Success: no issues found in 1 source file",
+        "ty": "error[invalid-assignment]: Object of type `OrderID | SKU` is not assignable to `OrderID`\n  --> _pytifex_temp_3552082.py:27:19\n   |\n25 |     if is_list_of_order_ids(ids):\n26 |         # 'ids' should now be List[OrderID]\n27 |         first_id: OrderID = ids[0] # Expected: fine\n   |                   -------   ^^^^^^ Incompatible value of type `OrderID | SKU`\n   |                   |\n   |                   Declared type\n28 |         print(f\"  First OrderID: {first_id + 100}\") # OrderID supports int operations\n29 |     # This branch tests narrowing from MixedIDList to List[SKU]\n   |\ninfo: rule `invalid-assignment` is enabled by default\n\nerror[invalid-assignment]: Object of type `OrderID | SKU` is not assignable to `SKU`\n  --> _pytifex_temp_3552082.py:32:20\n   |\n30 |     elif is_list_of_skus(ids):\n31 |         # 'ids' should now be List[SKU]\n32 |         first_sku: SKU = ids[0] # Expected: fine\n   |                    ---   ^^^^^^ Incompatible value of type `OrderID | SKU`\n   |                    |\n   |                    Declared type\n33 |         print(f\"  First SKU: {first_sku.upper()}\") # SKU supports str operations\n34 |     else:\n   |\ninfo: rule `invalid-assignment` is enabled by default\n\nerror[invalid-assignment]: Object of type `int` is not assignable to `OrderID`\n  --> _pytifex_temp_3552082.py:53:12\n   |\n51 |     if is_list_of_order_ids(plain_ints):\n52 |         # reveal_type(plain_ints) # Expected: List[OrderID]\n53 |         x: OrderID = plain_ints[0] # Should be valid if correctly narrowed\n   |            -------   ^^^^^^^^^^^^^ Incompatible value of type `int`\n   |            |\n   |            Declared type\n54 |         print(f\"Plain ints narrowed to OrderID: {x}\")\n55 |         # x.upper() # Expected: Type error, as OrderID is int.\n   |\ninfo: rule `invalid-assignment` is enabled by default\n\nFound 3 diagnostics"
+      },
+      "statuses": {
+        "mypy": "ok",
+        "pyrefly": "ok",
+        "zuban": "ok",
+        "ty": "error"
+      }
+    },
+    {
+      "filename": "typeddict-kwargs-from-generic-dict-refined.py",
+      "filepath": "generated_examples/2026-01-27_13-33-24/source_files/typeddict-kwargs-from-generic-dict-refined.py",
+      "seed_issue": null,
+      "outputs": {
+        "mypy": "_pytifex_temp_3552082.py:37: error: Missing keys (\"env_name\", \"db_conn_str\") for TypedDict \"ProductionSettings\"  [typeddict-item]\nFound 1 error in 1 file (checked 1 source file)",
+        "pyrefly": "INFO 0 errors",
+        "zuban": "_pytifex_temp_3552082.py:37: error: Unexpected argument to \"ProductionSettings\"  [call-arg]\nFound 1 error in 1 file (checked 1 source file)",
+        "ty": "error[missing-typed-dict-key]: Missing required key 'env_name' in TypedDict `ProductionSettings` constructor\n  --> _pytifex_temp_3552082.py:37:12\n   |\n35 |     # This addresses the initial \"bad constructor signature\" error,\n36 |     # now forcing type checkers to analyze the dictionary contents when spread.\n37 |     return ProductionSettings(**data)\n   |            ^^^^^^^^^^^^^^^^^^\n38 |\n39 | if __name__ == \"__main__\":\n   |\ninfo: rule `missing-typed-dict-key` is enabled by default\n\nerror[missing-typed-dict-key]: Missing required key 'db_conn_str' in TypedDict `ProductionSettings` constructor\n  --> _pytifex_temp_3552082.py:37:12\n   |\n35 |     # This addresses the initial \"bad constructor signature\" error,\n36 |     # now forcing type checkers to analyze the dictionary contents when spread.\n37 |     return ProductionSettings(**data)\n   |            ^^^^^^^^^^^^^^^^^^\n38 |\n39 | if __name__ == \"__main__\":\n   |\ninfo: rule `missing-typed-dict-key` is enabled by default\n\nFound 2 diagnostics"
+      },
+      "statuses": {
+        "mypy": "error",
+        "pyrefly": "ok",
+        "zuban": "error",
+        "ty": "error"
+      }
+    },
+    {
+      "filename": "typeguard-generic-protocol-union-narrowing.py",
+      "filepath": "generated_examples/2026-01-27_13-33-24/source_files/typeguard-generic-protocol-union-narrowing.py",
+      "seed_issue": null,
+      "outputs": {
+        "mypy": "_pytifex_temp_3552082.py:6: error: Invariant type variable \"T\" used in protocol where contravariant one is expected  [misc]\nFound 1 error in 1 file (checked 1 source file)",
+        "pyrefly": "INFO 0 errors",
+        "zuban": "_pytifex_temp_3552082.py:6: error: Invariant type variable \"T\" used in protocol where Contravariant one is expected  [misc]\nFound 1 error in 1 file (checked 1 source file)",
+        "ty": "error[invalid-argument-type]: Argument to bound method `process_data` is incorrect\n  --> _pytifex_temp_3552082.py:33:36\n   |\n31 |         # 'item' should now be HasMetadata[str]\n32 |         print(f\"String processor found: {item.metadata.get('name')}\")\n33 |         result = item.process_data(\"input_text\") # Uses default tag from SimpleProcessor\n   |                                    ^^^^^^^^^^^^ Expected `int`, found `Literal[\"input_text\"]`\n34 |         print(f\"  Result: {result}\")\n35 |     else:\n   |\ninfo: Method defined here\n  --> _pytifex_temp_3552082.py:20:9\n   |\n18 |     def __init__(self, metadata: dict[str, str]):\n19 |         self.metadata = metadata\n20 |     def process_data(self, data: int, *, tags: List[str] = []) -> str: # Same default\n   |         ^^^^^^^^^^^^       --------- Parameter declared here\n21 |         return f\"Complex {self.metadata.get('id', 'N/A')}: {data * 2}\"\n   |\ninfo: Union variant `bound method ComplexProcessor.process_data(data: int, *, tags: list[str] = list[Unknown]) -> str` is incompatible with this call site\ninfo: Attempted to call union type `(bound method SimpleProcessor.process_data(data: str, *, tags: list[str] = list[Unknown | str]) -> str) | (bound method ComplexProcessor.process_data(data: int, *, tags: list[str] = list[Unknown]) -> str) | Any`\ninfo: rule `invalid-argument-type` is enabled by default\n\nFound 1 diagnostic"
+      },
+      "statuses": {
+        "mypy": "error",
+        "pyrefly": "ok",
+        "zuban": "error",
+        "ty": "error"
+      }
+    },
+    {
+      "filename": "cast-generic-protocol-method-signature-change.py",
+      "filepath": "generated_examples/2026-01-27_13-33-24/source_files/cast-generic-protocol-method-signature-change.py",
+      "seed_issue": "python/mypy #20500",
+      "outputs": {
+        "mypy": "_pytifex_temp_3552082.py:6: error: Invariant type variable \"T\" used in protocol where contravariant one is expected  [misc]\n_pytifex_temp_3552082.py:6: error: Invariant type variable \"U\" used in protocol where covariant one is expected  [misc]\nFound 2 errors in 1 file (checked 1 source file)",
+        "pyrefly": "INFO 0 errors",
+        "zuban": "_pytifex_temp_3552082.py:6: error: Invariant type variable \"T\" used in protocol where Contravariant one is expected  [misc]\n_pytifex_temp_3552082.py:6: error: Invariant type variable \"U\" used in protocol where Covariant one is expected  [misc]\nFound 2 errors in 1 file (checked 1 source file)",
+        "ty": "All checks passed!"
+      },
+      "statuses": {
+        "mypy": "error",
+        "pyrefly": "ok",
+        "zuban": "error",
+        "ty": "ok"
+      }
+    },
+    {
+      "filename": "overloaded-decorator-generic-typealiastype-recursive-refined.py",
+      "filepath": "generated_examples/2026-01-27_13-33-24/source_files/overloaded-decorator-generic-typealiastype-recursive-refined.py",
+      "seed_issue": null,
+      "outputs": {
+        "mypy": "_pytifex_temp_3552082.py:9: error: Cannot resolve name \"NestedPayload\" (possible cyclic definition)  [misc]\n_pytifex_temp_3552082.py:26: error: Overloaded function signature 2 will never be matched: signature 1's parameter type(s) are the same or broader  [overload-cannot-match]\nFound 2 errors in 1 file (checked 1 source file)",
+        "pyrefly": "INFO 0 errors",
+        "zuban": "thread 'main' (3597418) has overflowed its stack\nfatal runtime error: stack overflow, aborting",
+        "ty": "error[unresolved-attribute]: Object of type `(...) -> Any` has no attribute `__name__`\n  --> _pytifex_temp_3552082.py:15:35\n   |\n13 |     @functools.wraps(func) # Use functools.wraps to preserve metadata for better introspection\n14 |     def wrapper(*args: Any, **kwargs: Any) -> Any:\n15 |         print(f\"TRACE: Executing {func.__name__}...\")\n   |                                   ^^^^^^^^^^^^^\n16 |         result = func(*args, **kwargs)\n17 |         print(f\"TRACE: {func.__name__} finished.\")\n   |\ninfo: rule `unresolved-attribute` is enabled by default\n\nerror[unresolved-attribute]: Object of type `(...) -> Any` has no attribute `__name__`\n  --> _pytifex_temp_3552082.py:17:25\n   |\n15 |         print(f\"TRACE: Executing {func.__name__}...\")\n16 |         result = func(*args, **kwargs)\n17 |         print(f\"TRACE: {func.__name__} finished.\")\n   |                         ^^^^^^^^^^^^^\n18 |         return result\n19 |     return wrapper\n   |\ninfo: rule `unresolved-attribute` is enabled by default\n\nFound 2 diagnostics"
+      },
+      "statuses": {
+        "mypy": "error",
+        "pyrefly": "ok",
+        "zuban": "error",
+        "ty": "error"
+      }
+    }
+  ]
+}

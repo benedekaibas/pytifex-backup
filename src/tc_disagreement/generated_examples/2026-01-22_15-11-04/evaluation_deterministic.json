@@ -1,6 +1,6 @@
 {
   "method": "deterministic",
-  "average_coverage": 8.534,
+  "average_coverage": 7.878,
   "high_confidence_verdicts": 22,
   "uncertain_verdicts": 0,
   "checker_results": {
@@ -216,7 +216,7 @@
     },
     {
       "filename": "typed-dict-inheritance-notrequired-required-clash-refined.py",
-      "coverage": 3.831,
+      "coverage": 3.688,
       "ground_truth_count": 5,
       "checker_results": {
         "mypy": {
@@ -259,7 +259,7 @@
     },
     {
       "filename": "paramspec-async-staticmethod-decorator.py",
-      "coverage": 45.947,
+      "coverage": 40.368,
       "ground_truth_count": 1,
       "checker_results": {
         "mypy": {
@@ -388,7 +388,7 @@
     },
     {
       "filename": "type-self-init-divergence-refined.py",
-      "coverage": 2.72,
+      "coverage": 2.538,
       "ground_truth_count": 1,
       "checker_results": {
         "mypy": {

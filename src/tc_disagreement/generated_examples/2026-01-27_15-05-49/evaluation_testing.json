@@ -1,0 +1,339 @@
+{
+  "method": "testing",
+  "total_bugs_found": 1,
+  "proven_bugs": 1,
+  "summary": {
+    "mypy": {
+      "correct": 0,
+      "incorrect": 1,
+      "uncertain": 9
+    },
+    "pyrefly": {
+      "correct": 1,
+      "incorrect": 0,
+      "uncertain": 9
+    },
+    "zuban": {
+      "correct": 1,
+      "incorrect": 0,
+      "uncertain": 9
+    },
+    "ty": {
+      "correct": 0,
+      "incorrect": 1,
+      "uncertain": 9
+    }
+  },
+  "results": [
+    {
+      "filename": "newtype-protocol-divergence-refined.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        }
+      }
+    },
+    {
+      "filename": "kwargs-splat-protocol.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        }
+      }
+    },
+    {
+      "filename": "paramspec-union-return-type.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        }
+      }
+    },
+    {
+      "filename": "ternary-typeguard-generic-lambda.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        }
+      }
+    },
+    {
+      "filename": "typeddict-inheritance-total-divergence.py",
+      "bugs_found": [
+        {
+          "line": 27,
+          "type": "KeyError",
+          "message": "KeyError: 'api_key'",
+          "source": "runtime_uncaught",
+          "confidence": 1.0
+        }
+      ],
+      "execution_success": false,
+      "verdicts": {
+        "mypy": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 27,
+              "type": "KeyError",
+              "message": "KeyError: 'api_key'"
+            }
+          ]
+        },
+        "pyrefly": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "zuban": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "ty": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 27,
+              "type": "KeyError",
+              "message": "KeyError: 'api_key'"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "filename": "paramspec-classmethod-decorator.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        }
+      }
+    },
+    {
+      "filename": "typeguard-typevar-bound-divergence.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        }
+      }
+    },
+    {
+      "filename": "kwargs-splat-union-custom-mapping.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        }
+      }
+    },
+    {
+      "filename": "nested-paramspec-callable-return.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        }
+      }
+    },
+    {
+      "filename": "ternary-literal-type-inference.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,351 @@
+{
+  "method": "testing",
+  "total_bugs_found": 4,
+  "proven_bugs": 4,
+  "summary": {
+    "mypy": {
+      "correct": 2,
+      "incorrect": 0,
+      "uncertain": 7
+    },
+    "pyrefly": {
+      "correct": 0,
+      "incorrect": 2,
+      "uncertain": 7
+    },
+    "zuban": {
+      "correct": 2,
+      "incorrect": 0,
+      "uncertain": 7
+    },
+    "ty": {
+      "correct": 1,
+      "incorrect": 1,
+      "uncertain": 7
+    }
+  },
+  "results": [
+    {
+      "filename": "typealias-protocol-generic.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        }
+      }
+    },
+    {
+      "filename": "recursive-typealiastype-generic-class-union.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        }
+      }
+    },
+    {
+      "filename": "decorator-generics-divergence.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        }
+      }
+    },
+    {
+      "filename": "T-variance-divergence.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        }
+      }
+    },
+    {
+      "filename": "newtype-generic-container-typeguard-union.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        }
+      }
+    },
+    {
+      "filename": "typeddict-kwargs-from-generic-dict-refined.py",
+      "bugs_found": [
+        {
+          "line": 53,
+          "type": "TypeError",
+          "message": "Code expects TypeError (try block at line 52)",
+          "source": "runtime_caught",
+          "confidence": 0.9
+        },
+        {
+          "line": 67,
+          "type": "TypeError",
+          "message": "Code expects TypeError (try block at line 66)",
+          "source": "runtime_caught",
+          "confidence": 0.9
+        }
+      ],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "pyrefly": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 2 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 53,
+              "type": "TypeError",
+              "message": "Code expects TypeError (try block at line 52)"
+            },
+            {
+              "line": 67,
+              "type": "TypeError",
+              "message": "Code expects TypeError (try block at line 66)"
+            }
+          ]
+        },
+        "zuban": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "ty": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        }
+      }
+    },
+    {
+      "filename": "typeguard-generic-protocol-union-narrowing.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        }
+      }
+    },
+    {
+      "filename": "cast-generic-protocol-method-signature-change.py",
+      "bugs_found": [
+        {
+          "line": 61,
+          "type": "TypeError",
+          "message": "Code expects TypeError (try block at line 58)",
+          "source": "runtime_caught",
+          "confidence": 0.9
+        },
+        {
+          "line": 61,
+          "type": "AttributeError",
+          "message": "Code expects AttributeError (try block at line 58)",
+          "source": "runtime_caught",
+          "confidence": 0.9
+        }
+      ],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "pyrefly": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 2 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 61,
+              "type": "TypeError",
+              "message": "Code expects TypeError (try block at line 58)"
+            },
+            {
+              "line": 61,
+              "type": "AttributeError",
+              "message": "Code expects AttributeError (try block at line 58)"
+            }
+          ]
+        },
+        "zuban": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "ty": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 2 proven type bug(s)",
+          "confidence": 1.0,
+          "missed_bugs": [
+            {
+              "line": 61,
+              "type": "TypeError",
+              "message": "Code expects TypeError (try block at line 58)"
+            },
+            {
+              "line": 61,
+              "type": "AttributeError",
+              "message": "Code expects AttributeError (try block at line 58)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "filename": "overloaded-decorator-generic-typealiastype-recursive-refined.py",
+      "bugs_found": [],
+      "execution_success": true,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "No type bugs detected, checker agrees",
+          "confidence": 0.5
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be false positive or bug not triggered at runtime"
+        }
+      }
+    }
+  ]
+}
