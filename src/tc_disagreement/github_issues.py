@@ -23,12 +23,14 @@ class IssueExample:
     is_false_negative: bool
 
 
-# Type checker repositories to crawl
+# Type checker repositories to visit
+# Note: We fetch from multiple repos to get diverse bug patterns
 REPOS = {
     "mypy": "python/mypy",
-    "pyrefly": "facebook/pyrefly",  # Also known as Pyre
+    "pyrefly": "facebook/pyrefly",
     "ty": "astral-sh/ty",
-    # zuban doesn't have a public repo with issues
+    "pyright": "microsoft/pyright",  # Additional source for diverse patterns
+    "zuban": "zubanls/zuban",
 }
 
 # Labels that indicate false positive/negative bugs
@@ -61,19 +63,89 @@ BUG_LABELS = [
 ]
 
 
+def extract_pyrefly_sandbox_code(text: str) -> list[str]:
+    """
+    Extract Python code from pyrefly sandbox links.
+    
+    Pyrefly issues often contain links like:
+    https://pyrefly.org/sandbox/?project=<base64_encoded_data>
+    
+    The project parameter contains base64-encoded JSON with the code.
+    """
+    import base64
+    import json
+    import urllib.parse
+    
+    codes = []
+    
+    # Find pyrefly sandbox URLs
+    sandbox_pattern = r'https://pyrefly\.org/sandbox/\?project=([A-Za-z0-9%+/=]+)'
+    matches = re.findall(sandbox_pattern, text)
+    
+    for encoded in matches:
+        try:
+            # URL decode first (in case of %2B etc.)
+            decoded_url = urllib.parse.unquote(encoded)
+            # Base64 decode
+            decoded_bytes = base64.b64decode(decoded_url)
+            decoded_str = decoded_bytes.decode('utf-8')
+            
+            # Try to parse as JSON (pyrefly format)
+            try:
+                data = json.loads(decoded_str)
+                # Extract code from various possible structures
+                if isinstance(data, dict):
+                    # Look for code in common keys
+                    for key in ['code', 'source', 'content', 'files']:
+                        if key in data:
+                            value = data[key]
+                            if isinstance(value, str) and len(value) > 50:
+                                codes.append(value)
+                            elif isinstance(value, dict):
+                                # Files dict: {filename: content}
+                                for content in value.values():
+                                    if isinstance(content, str) and len(content) > 50:
+                                        codes.append(content)
+            except json.JSONDecodeError:
+                # Not JSON, might be plain code
+                if len(decoded_str) > 50 and ('def ' in decoded_str or 'class ' in decoded_str):
+                    codes.append(decoded_str)
+        except Exception:
+            # Failed to decode, skip this sandbox link
+            continue
+    
+    return codes
+
+
 def extract_python_code(text: str) -> list[str]:
     """Extract Python code blocks from markdown text."""
+    codes = []
+    
+    # First, try to extract from pyrefly sandbox links
+    sandbox_codes = extract_pyrefly_sandbox_code(text)
+    codes.extend(sandbox_codes)
+    
     # Match ```python or ```py code blocks
     pattern = r"```(?:python|py)\n(.*?)```"
     matches = re.findall(pattern, text, re.DOTALL | re.IGNORECASE)
+    codes.extend(matches)
     
     # Also try to find indented code blocks after "Example:" or similar
-    if not matches:
+    if not codes:
         pattern = r"(?:Example|Code|Reproduce|MRE|Minimal).*?:\n```\n?(.*?)```"
         matches = re.findall(pattern, text, re.DOTALL | re.IGNORECASE)
+        codes.extend(matches)
     
-    # Filter out very short snippets (likely not useful)
-    return [m.strip() for m in matches if len(m.strip()) > 50]
+    # Filter out very short snippets (likely not useful) and deduplicate
+    seen = set()
+    result = []
+    for code in codes:
+        code = code.strip()
+        if len(code) > 50 and code not in seen:
+            seen.add(code)
+            result.append(code)
+    
+    return result
 
 
 def fetch_issues(
@@ -158,6 +230,33 @@ def classify_issue(labels: list[str]) -> tuple[bool, bool]:
     return is_fp, is_fn
 
 
+def is_confirmed_bug(issue: dict) -> bool:
+    """
+    Check if an issue is a confirmed, fixed bug.
+    
+    Filters out:
+    - Issues closed as "not_planned" (won't fix, not a bug, etc.)
+    - Issues that are still open
+    
+    Only accepts:
+    - Issues with state_reason: "completed" (confirmed and fixed)
+    """
+    state = issue.get("state", "")
+    state_reason = issue.get("state_reason", "")
+    
+    # Must be closed
+    if state != "closed":
+        return False
+    
+    # Must be completed (not "not_planned")
+    # Note: state_reason can be "completed", "not_planned", or null
+    # We accept "completed" and null (older issues don't have state_reason)
+    if state_reason == "not_planned":
+        return False
+    
+    return True
+
+
 def fetch_examples_from_repo(
     checker_name: str,
     repo: str,
@@ -179,10 +278,16 @@ def fetch_examples_from_repo(
         print(f"  No issues found in {repo}")
         return []
     
-    # Shuffle to get variety
-    random.shuffle(issues)
+    # Filter to only confirmed bugs (not "won't fix" or "not planned")
+    confirmed_issues = [i for i in issues if is_confirmed_bug(i)]
+    skipped_count = len(issues) - len(confirmed_issues)
+    if skipped_count > 0:
+        print(f"  Skipped {skipped_count} issues (not_planned/won't fix)")
     
-    for issue in issues:
+    # Shuffle to get variety
+    random.shuffle(confirmed_issues)
+    
+    for issue in confirmed_issues:
         if len(examples) >= max_examples:
             break
         

@@ -6,6 +6,7 @@ use them as seeds, and generate variations that might cause divergences.
 """
 
 import os
+import re
 import subprocess
 from dataclasses import dataclass
 from typing import Optional
@@ -31,6 +32,23 @@ class Example:
     code: str
     metadata: str
     results: dict[str, CheckerResult] | None = None
+    seed_issue: str | None = None  # GitHub issue URL or "original"
+
+
+def extract_seed_issue(metadata: str) -> str | None:
+    """Extract seed_issue URL or reference from metadata."""
+    # Look for "# seed_issue: ..." line
+    match = re.search(r'#\s*seed_issue:\s*(.+)', metadata, re.IGNORECASE)
+    if match:
+        value = match.group(1).strip()
+        # If it's a repo/issue reference like "python/mypy#12345", convert to URL
+        repo_issue_match = re.match(r'(\w+/\w+)#(\d+)', value)
+        if repo_issue_match:
+            repo, issue_num = repo_issue_match.groups()
+            return f"https://github.com/{repo}/issues/{issue_num}"
+        # If it's already a URL or "original", return as-is
+        return value if value.lower() != "original" else None
+    return None
 
 
 def run_checker_on_code(code: str, checker_name: str, command: list[str]) -> CheckerResult:
@@ -182,10 +200,20 @@ def generate_with_filtering(
 
         # Test each example
         for item in parsed:
+            metadata = item.get("metadata", "")
+            seed_issue = extract_seed_issue(metadata)
+            
+            # Skip examples without a valid seed_issue
+            if seed_issue is None:
+                if verbose:
+                    print(f"  ⚠️  {item['id']}: SKIPPED (no seed_issue)")
+                continue
+            
             example = Example(
                 id=item["id"],
                 code=item["code"],
-                metadata=item.get("metadata", ""),
+                metadata=metadata,
+                seed_issue=seed_issue,
             )
             all_generated.append(example)
 
@@ -307,6 +335,7 @@ def save_disagreements(
             {
                 "filename": f"{ex.id}.py",
                 "filepath": os.path.join(source_files_path, f"{ex.id}.py"),
+                "seed_issue": ex.seed_issue,
                 "outputs": {
                     name: result.output
                     for name, result in (ex.results or {}).items()

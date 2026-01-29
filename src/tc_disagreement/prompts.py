@@ -70,13 +70,18 @@ For each example, use this exact format:
 
 # id: <short-kebab-name>
 # category: <pattern category>
-# seed_issue: <repo and issue number this was inspired by, or "original">
+# seed_issue: <repo>#<issue_number> (REQUIRED - must reference a real seed issue from above)
 
 ```python
 <your code here>
 ```
 
-Generate exactly {num_variations} examples. Focus on NOVEL variations, not copies of the seeds.
+IMPORTANT RULES:
+- Generate exactly {num_variations} examples
+- EVERY example MUST have a valid seed_issue referencing one of the GitHub issues shown above
+- Do NOT use "original" - all examples must be inspired by a real issue
+- Focus on NOVEL variations, not copies of the seeds
+- Distribute examples across different seed issues (not all from the same one)
 """
 
 
