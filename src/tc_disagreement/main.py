@@ -91,9 +91,16 @@ Options:
     )
     parser.add_argument(
         "--eval-method",
-        choices=["multi_step", "consensus", "runtime", "all", "deterministic", "llm", "testing"],
-        default="testing",
-        help="Evaluation method (default: testing = runtime testing with Hypothesis/beartype)",
+        choices=["multi_step", "consensus", "runtime", "all", "deterministic", "llm", "testing", "tiered"],
+        default="tiered",
+        help="Evaluation method (default: tiered = multi-level runtime/coverage/mutation testing)",
+    )
+    parser.add_argument(
+        "--max-level",
+        type=int,
+        default=3,
+        choices=[1, 2, 3],
+        help="Maximum evaluation level for tiered method (default: 3)",
     )
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="Verbose output"
@@ -125,7 +132,12 @@ Options:
             print(f"\n[STEP 2/2] Evaluating {len(disagreements)} disagreements...")
             results_path = f"{base_path}/results.json"
             
-            if args.eval_method == "testing":
+            if args.eval_method == "tiered":
+                # Use tiered evaluation (Level 1-3: runtime, coverage, mutation)
+                from tiered_eval import evaluate_results_tiered
+                evaluate_results_tiered(results_path, max_level=args.max_level)
+                eval_path = f"{base_path}/evaluation_tiered.json"
+            elif args.eval_method == "testing":
                 # Use testing-based evaluation (Hypothesis + beartype)
                 from testing_eval import evaluate_results_testing
                 evaluate_results_testing(results_path)
@@ -179,7 +191,11 @@ Options:
                 sys.exit(1)
             results_path = results_files[-1]
             
-            if args.eval_method == "testing":
+            if args.eval_method == "tiered":
+                from tiered_eval import evaluate_results_tiered
+                evaluate_results_tiered(results_path, max_level=args.max_level)
+                eval_path = results_path.replace("results.json", "evaluation_tiered.json")
+            elif args.eval_method == "testing":
                 from testing_eval import evaluate_results_testing
                 evaluate_results_testing(results_path)
                 eval_path = results_path.replace("results.json", "evaluation_testing.json")

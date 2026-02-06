@@ -1,0 +1,1191 @@
+{
+  "method": "tiered",
+  "max_level": 3,
+  "level_distribution": {
+    "1": 1,
+    "2": 6,
+    "3": 4
+  },
+  "summary": {
+    "mypy": {
+      "correct": 2,
+      "incorrect": 8,
+      "uncertain": 1
+    },
+    "pyrefly": {
+      "correct": 6,
+      "incorrect": 4,
+      "uncertain": 1
+    },
+    "zuban": {
+      "correct": 2,
+      "incorrect": 8,
+      "uncertain": 1
+    },
+    "ty": {
+      "correct": 6,
+      "incorrect": 4,
+      "uncertain": 1
+    }
+  },
+  "results": [
+    {
+      "filename": "literal-str-variable-assignment-divergence.py",
+      "level_reached": 3,
+      "level1_bugs": [],
+      "level2_bugs": [],
+      "level3_bugs": [
+        {
+          "line": 4,
+          "type": "MutationKilled",
+          "msg": "Mutation 'Changed arg 0 type in call at line 4' crashed: TypeError: argument of type 'int' is not iterable"
+        }
+      ],
+      "coverage_before": 96.66666666666667,
+      "coverage_after": 96.66666666666667,
+      "mutations_tested": 15,
+      "mutations_killed": 1,
+      "verdicts": {
+        "mypy": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "pyrefly": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "zuban": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "ty": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1 proven bug(s) at level 3",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 4,
+              "type": "MutationKilled",
+              "source": "level3_mutation"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "filename": "typeguard-tvar-refinement.py",
+      "level_reached": 2,
+      "level1_bugs": [
+        {
+          "line": 55,
+          "type": "NameError",
+          "msg": "name 'reveal_type' is not defined"
+        }
+      ],
+      "level2_bugs": [
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In __init__: expected an indented block after 'if' statement on line 110 (<level2_test>, line 112)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In __init__: expected an indented block after 'if' statement on line 110 (<level2_test>, line 112)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In __init__: expected an indented block after 'if' statement on line 110 (<level2_test>, line 112)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In __init__: expected an indented block after 'if' statement on line 110 (<level2_test>, line 112)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In __init__: expected an indented block after 'if' statement on line 110 (<level2_test>, line 112)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In are_all_ints_in_union_list_constrained: expected an indented block after 'if' statement on line 110 (<level2_test>, line 112)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In are_all_ints_in_union_list_constrained: expected an indented block after 'if' statement on line 110 (<level2_test>, line 112)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In are_all_ints_in_union_list_constrained: expected an indented block after 'if' statement on line 110 (<level2_test>, line 112)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In process_items: expected an indented block after 'if' statement on line 110 (<level2_test>, line 112)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In process_items: expected an indented block after 'if' statement on line 110 (<level2_test>, line 112)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In process_items: expected an indented block after 'if' statement on line 110 (<level2_test>, line 112)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In process_items: expected an indented block after 'if' statement on line 110 (<level2_test>, line 112)"
+        }
+      ],
+      "level3_bugs": [],
+      "coverage_before": 42.0,
+      "coverage_after": 42.0,
+      "mutations_tested": 0,
+      "mutations_killed": 0,
+      "verdicts": {
+        "mypy": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 12 proven bug(s) at level 2",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            }
+          ]
+        },
+        "pyrefly": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "zuban": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 12 proven bug(s) at level 2",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            }
+          ]
+        },
+        "ty": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        }
+      }
+    },
+    {
+      "filename": "self-generic-narrowing-with-factory.py",
+      "level_reached": 2,
+      "level1_bugs": [
+        {
+          "line": 48,
+          "type": "NameError",
+          "msg": "name 'reveal_type' is not defined"
+        }
+      ],
+      "level2_bugs": [
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In __init__: expected an indented block after 'if' statement on line 58 (<level2_test>, line 60)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In __init__: expected an indented block after 'if' statement on line 58 (<level2_test>, line 60)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In __init__: expected an indented block after 'if' statement on line 58 (<level2_test>, line 60)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In __init__: expected an indented block after 'if' statement on line 58 (<level2_test>, line 60)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In __init__: expected an indented block after 'if' statement on line 58 (<level2_test>, line 60)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In __init__: expected an indented block after 'if' statement on line 58 (<level2_test>, line 60)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In create_active: expected an indented block after 'if' statement on line 58 (<level2_test>, line 60)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In create_active: expected an indented block after 'if' statement on line 58 (<level2_test>, line 60)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In create_active: expected an indented block after 'if' statement on line 58 (<level2_test>, line 60)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In create_active: expected an indented block after 'if' statement on line 58 (<level2_test>, line 60)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In create_active: expected an indented block after 'if' statement on line 58 (<level2_test>, line 60)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In process_resource: expected an indented block after 'if' statement on line 58 (<level2_test>, line 60)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In process_resource: expected an indented block after 'if' statement on line 58 (<level2_test>, line 60)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In process_resource: expected an indented block after 'if' statement on line 58 (<level2_test>, line 60)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In process_resource: expected an indented block after 'if' statement on line 58 (<level2_test>, line 60)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In process_resource: expected an indented block after 'if' statement on line 58 (<level2_test>, line 60)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In process_resource: expected an indented block after 'if' statement on line 58 (<level2_test>, line 60)"
+        }
+      ],
+      "level3_bugs": [],
+      "coverage_before": 83.78378378378379,
+      "coverage_after": 83.78378378378379,
+      "mutations_tested": 0,
+      "mutations_killed": 0,
+      "verdicts": {
+        "mypy": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 17 proven bug(s) at level 2",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            }
+          ]
+        },
+        "pyrefly": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "zuban": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 17 proven bug(s) at level 2",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            }
+          ]
+        },
+        "ty": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 17 proven bug(s) at level 2",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "filename": "newtype-dummy-var-comprehension.py",
+      "level_reached": 2,
+      "level1_bugs": [],
+      "level2_bugs": [
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In process_items_with_prices: expected an indented block after 'if' statement on line 45 (<level2_test>, line 47)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In process_items_with_prices: expected an indented block after 'if' statement on line 45 (<level2_test>, line 47)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In process_items_with_prices: expected an indented block after 'if' statement on line 45 (<level2_test>, line 47)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In process_items_with_prices: expected an indented block after 'if' statement on line 45 (<level2_test>, line 47)"
+        }
+      ],
+      "level3_bugs": [],
+      "coverage_before": 79.16666666666667,
+      "coverage_after": 79.16666666666667,
+      "mutations_tested": 0,
+      "mutations_killed": 0,
+      "verdicts": {
+        "mypy": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 4 proven bug(s) at level 2",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            }
+          ]
+        },
+        "pyrefly": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 4 proven bug(s) at level 2",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            }
+          ]
+        },
+        "zuban": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 4 proven bug(s) at level 2",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            }
+          ]
+        },
+        "ty": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        }
+      }
+    },
+    {
+      "filename": "typeddict-total-multi-line-instantiation-ignore.py",
+      "level_reached": 3,
+      "level1_bugs": [],
+      "level2_bugs": [],
+      "level3_bugs": [],
+      "coverage_before": 94.73684210526316,
+      "coverage_after": 94.73684210526316,
+      "mutations_tested": 15,
+      "mutations_killed": 0,
+      "verdicts": {
+        "mypy": {
+          "verdict": "UNCERTAIN",
+          "reason": "No bugs found through level 3 testing",
+          "confidence": 0.7,
+          "note": "May be correct or bug not triggerable at runtime"
+        },
+        "pyrefly": {
+          "verdict": "UNCERTAIN",
+          "reason": "Checker reported error but level 3 testing found no runtime proof",
+          "confidence": 0.7,
+          "note": "May be false positive or static-only type issue"
+        },
+        "zuban": {
+          "verdict": "UNCERTAIN",
+          "reason": "No bugs found through level 3 testing",
+          "confidence": 0.7,
+          "note": "May be correct or bug not triggerable at runtime"
+        },
+        "ty": {
+          "verdict": "UNCERTAIN",
+          "reason": "No bugs found through level 3 testing",
+          "confidence": 0.7,
+          "note": "May be correct or bug not triggerable at runtime"
+        }
+      }
+    },
+    {
+      "filename": "paramspec-dummy-var-return-decorator.py",
+      "level_reached": 3,
+      "level1_bugs": [],
+      "level2_bugs": [],
+      "level3_bugs": [
+        {
+          "line": 34,
+          "type": "MutationKilled",
+          "msg": "Mutation 'Changed arg 1 type in call at line 34' crashed: TypeError: unsupported operand type(s) for +: 'int' and 'str'"
+        },
+        {
+          "line": 5,
+          "type": "MutationKilled",
+          "msg": "Mutation 'Changed arg 0 type in call at line 5' crashed: TypeError: typevar() argument 'name' must be str, not int"
+        }
+      ],
+      "coverage_before": 96.96969696969697,
+      "coverage_after": 96.96969696969697,
+      "mutations_tested": 15,
+      "mutations_killed": 2,
+      "verdicts": {
+        "mypy": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "pyrefly": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 2 proven bug(s) at level 3",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 34,
+              "type": "MutationKilled",
+              "source": "level3_mutation"
+            },
+            {
+              "line": 5,
+              "type": "MutationKilled",
+              "source": "level3_mutation"
+            }
+          ]
+        },
+        "zuban": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 2 proven bug(s) at level 3",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 34,
+              "type": "MutationKilled",
+              "source": "level3_mutation"
+            },
+            {
+              "line": 5,
+              "type": "MutationKilled",
+              "source": "level3_mutation"
+            }
+          ]
+        },
+        "ty": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        }
+      }
+    },
+    {
+      "filename": "typeguard-typeddict-soundness.py",
+      "level_reached": 1,
+      "level1_bugs": [
+        {
+          "line": 37,
+          "type": "KeyError",
+          "msg": "KeyError: 'value'"
+        }
+      ],
+      "level2_bugs": [],
+      "level3_bugs": [],
+      "coverage_before": 0.0,
+      "coverage_after": 0.0,
+      "mutations_tested": 0,
+      "mutations_killed": 0,
+      "verdicts": {
+        "mypy": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1 proven bug(s) at level 1",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 37,
+              "type": "KeyError",
+              "source": "level1"
+            }
+          ]
+        },
+        "pyrefly": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "zuban": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1 proven bug(s) at level 1",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 37,
+              "type": "KeyError",
+              "source": "level1"
+            }
+          ]
+        },
+        "ty": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1 proven bug(s) at level 1",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 37,
+              "type": "KeyError",
+              "source": "level1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "filename": "self-generic-dummy-var-abstract-method.py",
+      "level_reached": 2,
+      "level1_bugs": [],
+      "level2_bugs": [
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In get_by_id: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In get_by_id: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In get_by_id: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In get_by_id: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In save: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In save: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In save: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In save: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In save: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In save: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In __init__: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In __init__: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In __init__: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In __init__: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In __init__: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In __init__: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In __init__: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In get_by_id: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In get_by_id: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In get_by_id: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In get_by_id: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In get_by_id: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In get_by_id: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In save: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In save: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In save: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In save: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In save: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In save: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In initialize_repository: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In initialize_repository: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In initialize_repository: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In initialize_repository: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In initialize_repository: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In initialize_repository: expected an indented block after 'if' statement on line 68 (<level2_test>, line 70)"
+        }
+      ],
+      "level3_bugs": [],
+      "coverage_before": 84.0909090909091,
+      "coverage_after": 84.0909090909091,
+      "mutations_tested": 0,
+      "mutations_killed": 0,
+      "verdicts": {
+        "mypy": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 35 proven bug(s) at level 2",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            }
+          ]
+        },
+        "pyrefly": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "zuban": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 35 proven bug(s) at level 2",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            }
+          ]
+        },
+        "ty": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        }
+      }
+    },
+    {
+      "filename": "newtype-nested-multi-line-ignore.py",
+      "level_reached": 2,
+      "level1_bugs": [],
+      "level2_bugs": [
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In parse_inventory: expected an indented block after 'if' statement on line 50 (<level2_test>, line 52)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In parse_inventory: expected an indented block after 'if' statement on line 50 (<level2_test>, line 52)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In parse_inventory: expected an indented block after 'if' statement on line 50 (<level2_test>, line 52)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In parse_inventory: expected an indented block after 'if' statement on line 50 (<level2_test>, line 52)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In parse_inventory: expected an indented block after 'if' statement on line 50 (<level2_test>, line 52)"
+        }
+      ],
+      "level3_bugs": [],
+      "coverage_before": 93.33333333333333,
+      "coverage_after": 93.33333333333333,
+      "mutations_tested": 0,
+      "mutations_killed": 0,
+      "verdicts": {
+        "mypy": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 5 proven bug(s) at level 2",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            }
+          ]
+        },
+        "pyrefly": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 5 proven bug(s) at level 2",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            }
+          ]
+        },
+        "zuban": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 5 proven bug(s) at level 2",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            }
+          ]
+        },
+        "ty": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        }
+      }
+    },
+    {
+      "filename": "typeddict-total-union-field-narrowing.py",
+      "level_reached": 2,
+      "level1_bugs": [
+        {
+          "line": 54,
+          "type": "NameError",
+          "msg": "name 'reveal_type' is not defined"
+        }
+      ],
+      "level2_bugs": [
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In process_item: expected an indented block after 'if' statement on line 62 (<level2_test>, line 64)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In process_item: expected an indented block after 'if' statement on line 62 (<level2_test>, line 64)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In process_item: expected an indented block after 'if' statement on line 62 (<level2_test>, line 64)"
+        },
+        {
+          "line": 0,
+          "type": "BeartypeViolation",
+          "msg": "In process_item: expected an indented block after 'if' statement on line 62 (<level2_test>, line 64)"
+        }
+      ],
+      "level3_bugs": [],
+      "coverage_before": 89.47368421052632,
+      "coverage_after": 89.47368421052632,
+      "mutations_tested": 0,
+      "mutations_killed": 0,
+      "verdicts": {
+        "mypy": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 4 proven bug(s) at level 2",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            }
+          ]
+        },
+        "pyrefly": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "zuban": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 4 proven bug(s) at level 2",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            }
+          ]
+        },
+        "ty": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 4 proven bug(s) at level 2",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            },
+            {
+              "line": 0,
+              "type": "BeartypeViolation",
+              "source": "level2"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "filename": "self-mutation-divergence-refined.py",
+      "level_reached": 3,
+      "level1_bugs": [],
+      "level2_bugs": [],
+      "level3_bugs": [
+        {
+          "line": 3,
+          "type": "MutationKilled",
+          "msg": "Mutation 'Changed arg 0 type in call at line 3' crashed: TypeError: typevar() argument 'name' must be str, not int"
+        },
+        {
+          "line": 64,
+          "type": "MutationKilled",
+          "msg": "Mutation 'Changed arg 0 type in call at line 64' crashed: TypeError: object of type 'int' has no len()"
+        }
+      ],
+      "coverage_before": 97.29729729729729,
+      "coverage_after": 97.29729729729729,
+      "mutations_tested": 15,
+      "mutations_killed": 2,
+      "verdicts": {
+        "mypy": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 2 proven bug(s) at level 3",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 3,
+              "type": "MutationKilled",
+              "source": "level3_mutation"
+            },
+            {
+              "line": 64,
+              "type": "MutationKilled",
+              "source": "level3_mutation"
+            }
+          ]
+        },
+        "pyrefly": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 2 proven bug(s) at level 3",
+          "confidence": 0.95,
+          "bugs_missed": [
+            {
+              "line": 3,
+              "type": "MutationKilled",
+              "source": "level3_mutation"
+            },
+            {
+              "line": 64,
+              "type": "MutationKilled",
+              "source": "level3_mutation"
+            }
+          ]
+        },
+        "zuban": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        },
+        "ty": {
+          "verdict": "CORRECT",
+          "reason": "Correctly identified type issues",
+          "confidence": 0.9
+        }
+      }
+    }
+  ]
+}

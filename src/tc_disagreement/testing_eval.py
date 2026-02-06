@@ -424,6 +424,14 @@ def execute_with_beartype(source_code: str) -> list[TypeBug]:
     """
     Execute code with beartype runtime type checking enabled.
     
+    Uses beartype.claw to automatically decorate ALL functions and classes
+    with @beartype at import time, without modifying the source code.
+    
+    This catches type violations like:
+    - Passing wrong argument types to functions
+    - Returning wrong types from functions
+    - Assigning wrong types to annotated variables
+    
     Returns list of type bugs found by beartype.
     """
     bugs: list[TypeBug] = []
@@ -435,11 +443,15 @@ def execute_with_beartype(source_code: str) -> list[TypeBug]:
         # beartype not installed
         return bugs
     
-    # Instrument code with beartype import
+    # Count lines prepended for line number offset correction
+    # We prepend 3 lines of imports before the source code
+    PREPENDED_LINES = 3
+    
+    # Instrument code with beartype.claw for automatic decoration
+    # beartype_this_package() decorates ALL functions/classes automatically
     instrumented = f"""
-from beartype import beartype
-from beartype.roar import BeartypeCallHintViolation
-
+from beartype.claw import beartype_this_package
+beartype_this_package()
 {source_code}
 """
     
@@ -448,23 +460,24 @@ from beartype.roar import BeartypeCallHintViolation
              contextlib.redirect_stderr(io.StringIO()):
             exec(compile(instrumented, "<beartype_test>", "exec"), {"__name__": "__main__"})
     except Exception as e:
+        # Extract line number from traceback and correct for prepended lines
+        tb = traceback.extract_tb(sys.exc_info()[2])
+        raw_line = tb[-1].lineno if tb else 0
+        # Correct line number by subtracting prepended import lines
+        corrected_line = max(1, raw_line - PREPENDED_LINES)
+        
         if "BeartypeCallHint" in type(e).__name__ or "beartype" in str(type(e)).lower():
-            # Extract line number from traceback
-            tb = traceback.extract_tb(sys.exc_info()[2])
-            line = tb[-1].lineno if tb else 0
             bugs.append(TypeBug(
-                line=line,
+                line=corrected_line,
                 bug_type="BeartypeViolation",
                 message=str(e)[:200],
                 source="beartype",
                 confidence=1.0,
             ))
-        elif isinstance(e, TypeError):
-            tb = traceback.extract_tb(sys.exc_info()[2])
-            line = tb[-1].lineno if tb else 0
+        elif isinstance(e, (TypeError, AttributeError)):
             bugs.append(TypeBug(
-                line=line,
-                bug_type="TypeError",
+                line=corrected_line,
+                bug_type=type(e).__name__,
                 message=str(e)[:200],
                 source="beartype",
                 confidence=1.0,
@@ -529,7 +542,7 @@ def run_hypothesis_tests(source_code: str, signatures: list[FunctionSignature]) 
                 try:
                     fn(**kwargs)
                 except (TypeError, AttributeError, KeyError) as e:
-                    # Found a type bug!
+                    # if found a type bug
                     bugs.append(TypeBug(
                         line=fn_line,
                         bug_type=type(e).__name__,
