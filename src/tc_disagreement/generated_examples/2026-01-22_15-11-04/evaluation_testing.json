@@ -4,23 +4,23 @@
   "proven_bugs": 9,
   "summary": {
     "mypy": {
-      "correct": 2,
-      "incorrect": 3,
+      "correct": 0,
+      "incorrect": 5,
       "uncertain": 4
     },
     "pyrefly": {
-      "correct": 3,
-      "incorrect": 2,
+      "correct": 0,
+      "incorrect": 5,
       "uncertain": 4
     },
     "zuban": {
-      "correct": 3,
-      "incorrect": 2,
+      "correct": 1,
+      "incorrect": 4,
       "uncertain": 4
     },
     "ty": {
-      "correct": 2,
-      "incorrect": 3,
+      "correct": 1,
+      "incorrect": 4,
       "uncertain": 4
     }
   },
@@ -54,8 +54,11 @@
       "verdicts": {
         "mypy": {
           "verdict": "INCORRECT",
-          "reason": "Missed 2 proven type bug(s)",
+          "reason": "Missed 2/2 proven bug(s)",
           "confidence": 1.0,
+          "true_positives": 0,
+          "false_negatives": 2,
+          "extra_errors": 0,
           "missed_bugs": [
             {
               "line": 81,
@@ -67,12 +70,16 @@
               "type": "KeyError",
               "message": "Code expects KeyError (try block at line 68)"
             }
-          ]
+          ],
+          "caught_bugs": []
         },
         "pyrefly": {
           "verdict": "INCORRECT",
-          "reason": "Missed 2 proven type bug(s)",
+          "reason": "Missed 2/2 proven bug(s)",
           "confidence": 1.0,
+          "true_positives": 0,
+          "false_negatives": 2,
+          "extra_errors": 0,
           "missed_bugs": [
             {
               "line": 81,
@@ -84,12 +91,16 @@
               "type": "KeyError",
               "message": "Code expects KeyError (try block at line 68)"
             }
-          ]
+          ],
+          "caught_bugs": []
         },
         "zuban": {
           "verdict": "INCORRECT",
-          "reason": "Missed 2 proven type bug(s)",
+          "reason": "Missed 2/2 proven bug(s)",
           "confidence": 1.0,
+          "true_positives": 0,
+          "false_negatives": 2,
+          "extra_errors": 0,
           "missed_bugs": [
             {
               "line": 81,
@@ -101,12 +112,26 @@
               "type": "KeyError",
               "message": "Code expects KeyError (try block at line 68)"
             }
-          ]
+          ],
+          "caught_bugs": []
         },
         "ty": {
           "verdict": "CORRECT",
-          "reason": "Correctly identified type issues",
-          "confidence": 0.9
+          "reason": "Caught all 2 proven bug(s)",
+          "confidence": 1.0,
+          "true_positives": 2,
+          "false_negatives": 0,
+          "extra_errors": 2,
+          "caught_bugs": [
+            {
+              "line": 81,
+              "type": "KeyError"
+            },
+            {
+              "line": 71,
+              "type": "KeyError"
+            }
+          ]
         }
       }
     },
@@ -132,8 +157,11 @@
       "verdicts": {
         "mypy": {
           "verdict": "INCORRECT",
-          "reason": "Missed 2 proven type bug(s)",
+          "reason": "Missed 2/2 proven bug(s)",
           "confidence": 1.0,
+          "true_positives": 0,
+          "false_negatives": 2,
+          "extra_errors": 0,
           "missed_bugs": [
             {
               "line": 75,
@@ -145,12 +173,16 @@
               "type": "TypeError",
               "message": "Code expects TypeError (try block at line 85)"
             }
-          ]
+          ],
+          "caught_bugs": []
         },
         "pyrefly": {
           "verdict": "INCORRECT",
-          "reason": "Missed 2 proven type bug(s)",
+          "reason": "Missed 2/2 proven bug(s)",
           "confidence": 1.0,
+          "true_positives": 0,
+          "false_negatives": 2,
+          "extra_errors": 0,
           "missed_bugs": [
             {
               "line": 75,
@@ -162,17 +194,50 @@
               "type": "TypeError",
               "message": "Code expects TypeError (try block at line 85)"
             }
-          ]
+          ],
+          "caught_bugs": []
         },
         "zuban": {
-          "verdict": "CORRECT",
-          "reason": "Correctly identified type issues",
-          "confidence": 0.9
+          "verdict": "INCORRECT",
+          "reason": "Missed 2/2 proven bug(s)",
+          "confidence": 1.0,
+          "true_positives": 0,
+          "false_negatives": 2,
+          "extra_errors": 1,
+          "missed_bugs": [
+            {
+              "line": 75,
+              "type": "TypeError",
+              "message": "Code expects TypeError (try block at line 74)"
+            },
+            {
+              "line": 86,
+              "type": "TypeError",
+              "message": "Code expects TypeError (try block at line 85)"
+            }
+          ],
+          "caught_bugs": []
         },
         "ty": {
-          "verdict": "CORRECT",
-          "reason": "Correctly identified type issues",
-          "confidence": 0.9
+          "verdict": "INCORRECT",
+          "reason": "Missed 2/2 proven bug(s)",
+          "confidence": 1.0,
+          "true_positives": 0,
+          "false_negatives": 2,
+          "extra_errors": 1,
+          "missed_bugs": [
+            {
+              "line": 75,
+              "type": "TypeError",
+              "message": "Code expects TypeError (try block at line 74)"
+            },
+            {
+              "line": 86,
+              "type": "TypeError",
+              "message": "Code expects TypeError (try block at line 85)"
+            }
+          ],
+          "caught_bugs": []
         }
       }
     },
@@ -183,24 +248,51 @@
       "verdicts": {
         "mypy": {
           "verdict": "UNCERTAIN",
-          "reason": "No type bugs detected, checker agrees",
-          "confidence": 0.5
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be valid static warnings or bugs not triggered at runtime",
+          "checker_error_lines": [
+            31,
+            39,
+            57,
+            60
+          ]
         },
         "pyrefly": {
           "verdict": "UNCERTAIN",
-          "reason": "No type bugs detected, checker agrees",
-          "confidence": 0.5
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be valid static warnings or bugs not triggered at runtime",
+          "checker_error_lines": [
+            31,
+            39,
+            57,
+            60
+          ]
         },
         "zuban": {
           "verdict": "UNCERTAIN",
-          "reason": "No type bugs detected, checker agrees",
-          "confidence": 0.5
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be valid static warnings or bugs not triggered at runtime",
+          "checker_error_lines": [
+            31,
+            39,
+            57,
+            60
+          ]
         },
         "ty": {
           "verdict": "UNCERTAIN",
           "reason": "Checker reported errors but no runtime proof of bugs",
           "confidence": 0.5,
-          "note": "May be false positive or bug not triggered at runtime"
+          "note": "May be valid static warnings or bugs not triggered at runtime",
+          "checker_error_lines": [
+            31,
+            39,
+            57,
+            60
+          ]
         }
       }
     },
@@ -211,24 +303,46 @@
       "verdicts": {
         "mypy": {
           "verdict": "UNCERTAIN",
-          "reason": "No type bugs detected, checker agrees",
-          "confidence": 0.5
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be valid static warnings or bugs not triggered at runtime",
+          "checker_error_lines": [
+            28,
+            44
+          ]
         },
         "pyrefly": {
           "verdict": "UNCERTAIN",
-          "reason": "No type bugs detected, checker agrees",
-          "confidence": 0.5
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be valid static warnings or bugs not triggered at runtime",
+          "checker_error_lines": [
+            28,
+            44
+          ]
         },
         "zuban": {
           "verdict": "UNCERTAIN",
-          "reason": "No type bugs detected, checker agrees",
-          "confidence": 0.5
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be valid static warnings or bugs not triggered at runtime",
+          "checker_error_lines": [
+            28,
+            44
+          ]
         },
         "ty": {
           "verdict": "UNCERTAIN",
           "reason": "Checker reported errors but no runtime proof of bugs",
           "confidence": 0.5,
-          "note": "May be false positive or bug not triggered at runtime"
+          "note": "May be valid static warnings or bugs not triggered at runtime",
+          "checker_error_lines": [
+            24,
+            28,
+            40,
+            41,
+            44
+          ]
         }
       }
     },
@@ -274,31 +388,68 @@
       "execution_success": false,
       "verdicts": {
         "mypy": {
-          "verdict": "CORRECT",
-          "reason": "Correctly identified type issues",
-          "confidence": 0.9
-        },
-        "pyrefly": {
-          "verdict": "CORRECT",
-          "reason": "Correctly identified type issues",
-          "confidence": 0.9
-        },
-        "zuban": {
-          "verdict": "CORRECT",
-          "reason": "Correctly identified type issues",
-          "confidence": 0.9
-        },
-        "ty": {
           "verdict": "INCORRECT",
-          "reason": "Missed 1 proven type bug(s)",
+          "reason": "Missed 1/1 proven bug(s)",
           "confidence": 1.0,
+          "true_positives": 0,
+          "false_negatives": 1,
+          "extra_errors": 2,
           "missed_bugs": [
             {
               "line": 2970,
               "type": "TypeError",
               "message": "TypedDict does not support instance and class checks"
             }
-          ]
+          ],
+          "caught_bugs": []
+        },
+        "pyrefly": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1/1 proven bug(s)",
+          "confidence": 1.0,
+          "true_positives": 0,
+          "false_negatives": 1,
+          "extra_errors": 2,
+          "missed_bugs": [
+            {
+              "line": 2970,
+              "type": "TypeError",
+              "message": "TypedDict does not support instance and class checks"
+            }
+          ],
+          "caught_bugs": []
+        },
+        "zuban": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1/1 proven bug(s)",
+          "confidence": 1.0,
+          "true_positives": 0,
+          "false_negatives": 1,
+          "extra_errors": 2,
+          "missed_bugs": [
+            {
+              "line": 2970,
+              "type": "TypeError",
+              "message": "TypedDict does not support instance and class checks"
+            }
+          ],
+          "caught_bugs": []
+        },
+        "ty": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1/1 proven bug(s)",
+          "confidence": 1.0,
+          "true_positives": 0,
+          "false_negatives": 1,
+          "extra_errors": 0,
+          "missed_bugs": [
+            {
+              "line": 2970,
+              "type": "TypeError",
+              "message": "TypedDict does not support instance and class checks"
+            }
+          ],
+          "caught_bugs": []
         }
       }
     },
@@ -309,24 +460,28 @@
       "verdicts": {
         "mypy": {
           "verdict": "UNCERTAIN",
-          "reason": "No type bugs detected, checker agrees",
+          "reason": "No proven bugs detected, checker agrees",
           "confidence": 0.5
         },
         "pyrefly": {
           "verdict": "UNCERTAIN",
-          "reason": "No type bugs detected, checker agrees",
+          "reason": "No proven bugs detected, checker agrees",
           "confidence": 0.5
         },
         "zuban": {
           "verdict": "UNCERTAIN",
-          "reason": "No type bugs detected, checker agrees",
+          "reason": "No proven bugs detected, checker agrees",
           "confidence": 0.5
         },
         "ty": {
           "verdict": "UNCERTAIN",
           "reason": "Checker reported errors but no runtime proof of bugs",
           "confidence": 0.5,
-          "note": "May be false positive or bug not triggered at runtime"
+          "note": "May be valid static warnings or bugs not triggered at runtime",
+          "checker_error_lines": [
+            9,
+            13
+          ]
         }
       }
     },
@@ -359,8 +514,11 @@
       "verdicts": {
         "mypy": {
           "verdict": "INCORRECT",
-          "reason": "Missed 3 proven type bug(s)",
+          "reason": "Missed 3/3 proven bug(s)",
           "confidence": 1.0,
+          "true_positives": 0,
+          "false_negatives": 3,
+          "extra_errors": 0,
           "missed_bugs": [
             {
               "line": 66,
@@ -377,17 +535,42 @@
               "type": "ValueError",
               "message": "Code expects ValueError (try block at line 96)"
             }
-          ]
+          ],
+          "caught_bugs": []
         },
         "pyrefly": {
-          "verdict": "CORRECT",
-          "reason": "Correctly identified type issues",
-          "confidence": 0.9
+          "verdict": "INCORRECT",
+          "reason": "Missed 3/3 proven bug(s)",
+          "confidence": 1.0,
+          "true_positives": 0,
+          "false_negatives": 3,
+          "extra_errors": 1,
+          "missed_bugs": [
+            {
+              "line": 66,
+              "type": "TypeError",
+              "message": "Code expects TypeError (try block at line 63)"
+            },
+            {
+              "line": 92,
+              "type": "ValueError",
+              "message": "Code expects ValueError (try block at line 91)"
+            },
+            {
+              "line": 97,
+              "type": "ValueError",
+              "message": "Code expects ValueError (try block at line 96)"
+            }
+          ],
+          "caught_bugs": []
         },
         "zuban": {
           "verdict": "INCORRECT",
-          "reason": "Missed 3 proven type bug(s)",
+          "reason": "Missed 3/3 proven bug(s)",
           "confidence": 1.0,
+          "true_positives": 0,
+          "false_negatives": 3,
+          "extra_errors": 0,
           "missed_bugs": [
             {
               "line": 66,
@@ -404,12 +587,16 @@
               "type": "ValueError",
               "message": "Code expects ValueError (try block at line 96)"
             }
-          ]
+          ],
+          "caught_bugs": []
         },
         "ty": {
           "verdict": "INCORRECT",
-          "reason": "Missed 3 proven type bug(s)",
+          "reason": "Missed 3/3 proven bug(s)",
           "confidence": 1.0,
+          "true_positives": 0,
+          "false_negatives": 3,
+          "extra_errors": 0,
           "missed_bugs": [
             {
               "line": 66,
@@ -426,7 +613,8 @@
               "type": "ValueError",
               "message": "Code expects ValueError (try block at line 96)"
             }
-          ]
+          ],
+          "caught_bugs": []
         }
       }
     },
@@ -437,24 +625,47 @@
       "verdicts": {
         "mypy": {
           "verdict": "UNCERTAIN",
-          "reason": "No type bugs detected, checker agrees",
-          "confidence": 0.5
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be valid static warnings or bugs not triggered at runtime",
+          "checker_error_lines": [
+            29,
+            39,
+            49
+          ]
         },
         "pyrefly": {
           "verdict": "UNCERTAIN",
-          "reason": "No type bugs detected, checker agrees",
-          "confidence": 0.5
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be valid static warnings or bugs not triggered at runtime",
+          "checker_error_lines": [
+            29,
+            39,
+            49
+          ]
         },
         "zuban": {
           "verdict": "UNCERTAIN",
-          "reason": "No type bugs detected, checker agrees",
-          "confidence": 0.5
+          "reason": "Checker reported errors but no runtime proof of bugs",
+          "confidence": 0.5,
+          "note": "May be valid static warnings or bugs not triggered at runtime",
+          "checker_error_lines": [
+            29,
+            39,
+            49
+          ]
         },
         "ty": {
           "verdict": "UNCERTAIN",
           "reason": "Checker reported errors but no runtime proof of bugs",
           "confidence": 0.5,
-          "note": "May be false positive or bug not triggered at runtime"
+          "note": "May be valid static warnings or bugs not triggered at runtime",
+          "checker_error_lines": [
+            29,
+            39,
+            49
+          ]
         }
       }
     },
@@ -472,31 +683,66 @@
       "execution_success": false,
       "verdicts": {
         "mypy": {
-          "verdict": "CORRECT",
-          "reason": "Correctly identified type issues",
-          "confidence": 0.9
-        },
-        "pyrefly": {
-          "verdict": "CORRECT",
-          "reason": "Correctly identified type issues",
-          "confidence": 0.9
-        },
-        "zuban": {
-          "verdict": "CORRECT",
-          "reason": "Correctly identified type issues",
-          "confidence": 0.9
-        },
-        "ty": {
           "verdict": "INCORRECT",
-          "reason": "Missed 1 proven type bug(s)",
+          "reason": "Missed 1/1 proven bug(s)",
           "confidence": 1.0,
+          "true_positives": 0,
+          "false_negatives": 1,
+          "extra_errors": 1,
           "missed_bugs": [
             {
               "line": 70,
               "type": "TypeError",
               "message": "DatabaseConnector.__init__() missing 1 required positional argument: 'db_url'"
             }
+          ],
+          "caught_bugs": []
+        },
+        "pyrefly": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1/1 proven bug(s)",
+          "confidence": 1.0,
+          "true_positives": 0,
+          "false_negatives": 1,
+          "extra_errors": 1,
+          "missed_bugs": [
+            {
+              "line": 70,
+              "type": "TypeError",
+              "message": "DatabaseConnector.__init__() missing 1 required positional argument: 'db_url'"
+            }
+          ],
+          "caught_bugs": []
+        },
+        "zuban": {
+          "verdict": "CORRECT",
+          "reason": "Caught all 1 proven bug(s)",
+          "confidence": 1.0,
+          "true_positives": 1,
+          "false_negatives": 0,
+          "extra_errors": 1,
+          "caught_bugs": [
+            {
+              "line": 70,
+              "type": "TypeError"
+            }
           ]
+        },
+        "ty": {
+          "verdict": "INCORRECT",
+          "reason": "Missed 1/1 proven bug(s)",
+          "confidence": 1.0,
+          "true_positives": 0,
+          "false_negatives": 1,
+          "extra_errors": 0,
+          "missed_bugs": [
+            {
+              "line": 70,
+              "type": "TypeError",
+              "message": "DatabaseConnector.__init__() missing 1 required positional argument: 'db_url'"
+            }
+          ],
+          "caught_bugs": []
         }
       }
     }
